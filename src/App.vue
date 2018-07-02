@@ -109,9 +109,11 @@ import Data from './mixins/Data.vue'
       },1000);
     } else {
       that.getSiteCollections(function(siteCollections){
-        console.log(siteCollections);
+        var i;
+        that.siteCollections = siteCollections;
         that.isLoading = false;
           that.isLoadingSiteCollections.status = false;
+
       }, function(error){
         that.isLoading = false;
         that.isLoadingSiteCollections.status = false;
