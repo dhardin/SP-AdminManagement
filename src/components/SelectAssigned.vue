@@ -12,15 +12,21 @@
     </v-card-title>
     <v-card-text class="grow">
       <v-data-iterator :items="assignedItems" :search="searchAssigned" class="items" must-sort :rows-per-page-items="[{'text':'All', 'value': -1}]" >
+          <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
+        <svg role="img" title="drop down" class="close" >
+          <use xlink:href="/src/assets/svg-sprite-action-symbol.svg#ic_search_24px" :style="{ opacity: disabled == true ? .38 : .87}"/>
+        </svg>
+        </v-flex>
+
         <v-flex slot="item"slot-scope="props" xs12>
-              <v-btn block :ripple="false" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || !selectedItem" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed> {{  props.item.title }} </v-btn>
+              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed> {{  props.item.title }} </v-btn>
         </v-flex>
       </v-data-iterator>
     </v-card-text>
     <v-card-actions>
-     <v-btn block color="red darken-4" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || !selectedItem" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !selectedItem" @click="giveAll">Remove All</v-btn>
-     <v-btn block :disabled="isSaving || isLoading || !isSiteCollectionSelected || !selectedItem" color="red darken-4" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !selectedItem" @click="giveSelected">Remove Selected</v-btn>
-      <v-btn block :disabled="isSaving || isLoading  || !isSiteCollectionSelected || !selectedItem" color="red darken-1" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !selectedItem" @click="clearSelected">Clear Selected</v-btn>
+     <v-btn block color="red darken-4" :disabled="disabled" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Remove All</v-btn>
+     <v-btn block :disabled="disabled" color="red darken-4" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Remove Selected</v-btn>
+      <v-btn block :disabled="disabled" color="red darken-1" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="clearSelected">Clear Selected</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -33,6 +39,10 @@ export default {
     props:{
       assignedItems: {
         type: Array
+      },
+      isItemSelected: {
+        type: Boolean,
+        default: false
       },
       isSaving: {
         type: Boolean,
@@ -54,6 +64,21 @@ export default {
       searchAssigned: '',
       type: 'assigned'
     };
+  },
+  computed: {
+    disabled: function(){
+      return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected;
+    }
   }
 }
 </script>
+
+<style>
+.v-data-iterator__actions__range-controls .v-btn {
+  display: none;
+}
+
+.v-input__icon.v-input__icon--append {
+  display: none;
+}
+</style>

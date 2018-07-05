@@ -5,9 +5,9 @@
         <v-layout fill-height>
           <v-flex xs12 align-end flexbox>
             <v-form>
-              <v-select :disabled="isSaving || isLoading || !isSiteCollectionSelected" @change="itemChanged" :items="items" item-value="displayName" return-object item-text="displayName" label="Select Item" single-line autocomplete clearable attach ></v-select>
-              <v-text-field label="Login Name" readonly disabled v-model="selectedItem.loginname"></v-text-field>
-              <v-text-field label="E-mail" readonly disabled v-model="selectedItem.email"></v-text-field>
+              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="displayName" return-object item-text="displayName" label="Select Item" light inactiveColor="#000"></SearchSelect>
+              <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.loginname: ''"></v-text-field>
+              <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.email : ''"></v-text-field>
             </v-form>
           </v-flex>
         </v-layout>
@@ -16,15 +16,19 @@
 
     <v-card-actions>
       <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.displayName.length == 0">Save</v-btn>
-      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem.displayName.length == 0">Copy</v-btn>
-      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem.displayName.length == 0">Purge</v-btn>
-      <v-btn flat color="pink":disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem.displayName.length == 0" @click="exportData" >Export</v-btn>
+      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Copy</v-btn>
+      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
+      <v-btn flat color="pink":disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" @click="exportData" >Export</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
+import SearchSelect from './SearchSelect'
 export default {
+  components: {
+    SearchSelect: SearchSelect
+  },
  props:{
     items: {
       type: Array
@@ -65,16 +69,16 @@ export default {
       }
     };
   },
+  watch : {
+    selectedItem: {
+      handler: function(newVal, oldVal){
+        this.itemChanged(newVal);
+      },
+      deep: true
+    }
+  },
   methods: {
     itemChanged: function(item){
-      if(item == null){
-        item = {
-          displayName: '',
-          loginname: '',
-          email: ''
-        }
-      }
-      this.selectedItem = Object.assign(this.selectedItem , item);
       this.$emit('item-changed', this.selectedItem);
     },
     save: function(e){
@@ -158,3 +162,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.input-group input:disabled {
+  color: rgba(0,0,0,.9) !important;
+}
+</style>

@@ -35,7 +35,9 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
         options: {
-          objectAssign: 'Object.assign'
+          objectAssign: 'Object.assign',
+          name: '[path][name].[ext]',
+          publicPath: 'assets/'
         }
       },
       {
