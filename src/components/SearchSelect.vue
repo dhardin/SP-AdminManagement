@@ -2,10 +2,10 @@
   <div>
     <v-autocomplete v-model="selectedItem" @select="active=true" @focus="activ=true" @blur="active=false" clear-icon="" append-icon="" :items="items" label="Select"  :item-value="itemValue" :item-text="itemText" single-line autocomplete return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="$emit('input', selectedItem)"></v-autocomplete>
     <svg role="img" title="drop down" class="close" @click="clear" v-if="value != null && !active">
-      <use xlink:href="/src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}"/>
+      <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}"/>
     </svg>
     <svg role="img" title="drop down" class="dropdown" :class="{active: active == true, inactive: active == false}">
-      <use xlink:href="/src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}"/>
+      <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}"/>
     </svg>
   </div>
 </template>

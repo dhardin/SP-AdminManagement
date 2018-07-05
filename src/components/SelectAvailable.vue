@@ -14,7 +14,7 @@
       <v-data-iterator :items="availableItems" :search="searchAvailable" class="items" must-sort :rows-per-page-items="[{'text':'All', 'value': -1}]">
         <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
       <svg role="img" title="drop down" class="close" >
-        <use xlink:href="/src/assets/svg-sprite-action-symbol.svg#ic_search_24px" :style="{ opacity: disabled == true ? .38 : .87}"/>
+        <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" :style="{ opacity: disabled == true ? .38 : .87}"/>
       </svg>
       </v-flex>
         <v-flex slot="item"slot-scope="props" xs12>
