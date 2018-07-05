@@ -100,3 +100,58 @@ export default {
 }
 
 </script>
+<style>
+.console {
+  width: 100%;
+  height: 200px;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  padding: 1em;
+  color: #CFD8DC;
+  overflow-y: auto;
+  font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
+}
+
+
+.blinking-cursor {
+  font-weight: 100;
+  font-size: 1.2em;
+  color: #CFD8DC;
+  -webkit-animation: .8s blinker linear infinite;
+  -moz-animation: .8s blinker linear infinite;
+  -ms-animation: .8s blinker linear infinite;
+  -o-animation: .8s blinker linear infinite;
+  animation: .8 sblinker linear infinite;
+
+}
+
+@keyframes blinker{
+  0% { opacity: 0.0; }
+  49% { opacity: 0.0; }
+  50% { opacity: 1.0; }
+}
+
+@-moz-keyframes blinker {
+  0% { opacity: 0.0; }
+  49% { opacity: 0.0; }
+  50% { opacity: 1.0; }
+}
+
+@-webkit-keyframes blinker {
+  0% { opacity: 0.0; }
+  49% { opacity: 0.0; }
+  50% { opacity: 1.0; }
+}
+
+@-ms-keyframes blinker {
+  0% { opacity: 0.0; }
+  49% { opacity: 0.0; }
+  50% { opacity: 1.0; }
+}
+
+@-o-keyframes blinker {
+  0% { opacity: 0.0; }
+  49% { opacity: 0.0; }
+  50% { opacity: 1.0; }
+}
+
+</style>
