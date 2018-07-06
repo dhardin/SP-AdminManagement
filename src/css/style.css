@@ -50,10 +50,3 @@ svg {
   width: 24px;
   height: 24px;
 }
-
-use.white {
-  fill: white;
-}
-use.black {
-  fill: black;
-}

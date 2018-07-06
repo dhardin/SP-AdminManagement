@@ -6,7 +6,9 @@
         <v-list-tile v-for="item in menuItems" :key="item.title" @click="">
           <router-link :to="item.path">
             <v-list-tile-action>
-              <v-icon>{{ item.icon }}</v-icon>
+              <svg role="img" class="white">
+                <use :href="item.icon"/>
+              </svg>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -17,8 +19,8 @@
     </v-navigation-drawer>
     <v-toolbar app :clipped-left="true" color="blue-grey" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer">
-        <svg role="img" title="Menu" >
-          <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_menu_24px" class="white"/>
+        <svg role="img" title="Menu" class="white">
+          <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_menu_24px"/>
         </svg>
       </v-toolbar-side-icon>
       <v-toolbar-title >SharePoint Admin</v-toolbar-title>
@@ -62,7 +64,7 @@ export default {
       drawer: false,
       toggle_select: 0,
       isSaving: false,
-      isTesting: true,
+      isTesting: false,
       isLoading: false,
       stuff: false,
       isSiteCollectionDropdownActive: false,
@@ -74,7 +76,7 @@ export default {
       saveProgress: 0,
       savingIndex: 0,
       updateProgressInterval: false,
-      siteCollection: {title: '', url: ''},
+      siteCollection: null,
       isSiteCollectionSelected: false,
       type: {users: true, groups: false},
       selectedItem: false,
@@ -87,8 +89,8 @@ export default {
         text: 'Data loaded successfully'
       },
       menuItems: [
-        { title: 'Home', icon: 'dashboard', path: '/' },
-        { title: 'About', icon: 'question_answer', path: '/about' }
+        { title: 'User/Group Management', icon: 'src/assets/svg-sprite-social-symbol.svg#ic_group_add_24px', path: '/' },
+        { title: 'About', icon: 'src/assets/svg-sprite-action-symbol.svg#ic_help_24px', path: '/about' }
       ],
       siteCollections: []
     };
@@ -177,4 +179,14 @@ export default {
   width:100%;
 }
 
+svg.white{
+  background-color: transparent !important;
+  fill: white;
+}
+
+.v-list__tile.v-list__tile--link * {
+  display: flex;
+  text-decoration: none;
+  color: white;
+}
 </style>

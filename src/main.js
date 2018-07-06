@@ -7,6 +7,7 @@ import './css/sprite-navigation-black.css'
 import 'babel-polyfill'
 import './assets/svg-sprite-navigation-symbol.svg'
 import './assets/svg-sprite-action-symbol.svg'
+import './assets/svg-sprite-social-symbol.svg'
 
 // index.js or main.js
 
