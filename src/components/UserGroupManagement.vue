@@ -194,10 +194,14 @@ export default {
             //trigger select change for selected item if it exists, else clear selected item
             var rand = Math.random();
 
-            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback([{displayName:'Foo Bar', loginname: 'foo.bar', email: 'foo.bar@example.com'},{displayName:'Joe Schmoe', loginname: 'joe.schmoe', email: 'joe.schmoe@example.com'}]);
+            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback([{Title:'Foo Bar', LoginName: 'foo.bar', Email: 'foo.bar@example.com'},{Title:'Joe Schmoe', LoginName: 'joe.schmoe', Email: 'joe.schmoe@example.com'}]);
           },1000);
         } else {
-
+          that.getUsers(that.siteCollection, false, function(users){
+            return callback(users);
+          }, function(error){
+            return errorCalback(error);
+          });
         }
       })(this);
     },
@@ -244,7 +248,7 @@ export default {
         this.selectedItem = null;
         this.isItemSelected = false;
       } else {
-        this.selectedItem = item.displayName.length > 0 ? item : false;
+        this.selectedItem = item.Title.length > 0 ? item : false;
         i = this.assignedItems.length;
         while(i--){
           this.originalAssignedItems.push(JSON.parse(JSON.stringify(this.assignedItems[i])));
@@ -254,7 +258,7 @@ export default {
       }
     },
     getItem: function(){
-      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', target: this.selectedItem.displayName, type: 'warning'});
+      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', target: this.selectedItem.Title, type: 'warning'});
       this.isLoading = true;
       (function(that){
         if(that.isTesting){
@@ -268,7 +272,7 @@ export default {
                 return that.$lodash.find(that.assignedItems, o) === undefined;
               })[0];
             }
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.displayName, type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, type: 'info'});
             that.isLoading = false;
           },1000);
         } else {
@@ -410,18 +414,18 @@ export default {
     save: function(){
       this.isSaving = true;
       this.saveProgress = 0;
-      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.displayName, type: 'warning'});
+      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.Title, type: 'warning'});
       this.saveIndex = 0;
       (function(that){
         that.updateProgressInterval = setInterval(function(){
           that.saveProgress += 100/that.newItems.length;
           var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
           var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
-          that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].title, preposition: preposition, target: that.selectedItem.displayName,type: 'success'});
+          that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].title, preposition: preposition, target: that.selectedItem.Title,type: 'success'});
           that.saveIndex++;
           if(that.saveProgress >= 100){
             that.isSaving = false;
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.displayName,type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title,type: 'info'});
             that.newItems = [];
             clearInterval(  that.updateProgressInterval);
             //update originating Items

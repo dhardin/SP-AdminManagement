@@ -5,9 +5,9 @@
         <v-layout fill-height>
           <v-flex xs12 align-end flexbox>
             <v-form>
-              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="displayName" return-object item-text="displayName" label="Select Item" light inactiveColor="#000"></SearchSelect>
-              <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.loginname: ''"></v-text-field>
-              <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.email : ''"></v-text-field>
+              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" label="Select Item" light inactiveColor="#000"></SearchSelect>
+              <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
+              <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
             </v-form>
           </v-flex>
         </v-layout>
@@ -63,9 +63,10 @@ export default {
   data: function(){
     return {
       selectedItem: {
-        displayName: '',
-        loginname: '',
-        email: ''
+        Title: '',
+        LoginName: '',
+        Email: '',
+        Id: 0
       }
     };
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-autocomplete ref="autocomplete" v-model="selectedItem" :item-text="itemText" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true" @blur="active=false" clear-icon="" append-icon="" :items="items" label="Select"  :item-value="itemValue"  autocomplete return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-if="hasSlot">
+    <v-autocomplete ref="autocomplete" v-model="selectedItem" :item-text="itemText" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true" @blur="active=false" clear-icon="" append-icon="" :items="items" label="Select"  :item-value="itemValue"  autocomplete return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-if="hasSlot" :filter="customFilter">
       <template slot="item" slot-scope="{ item, tile, parent }">
             <slot name="foo" :item="item"></slot>
       </template>
@@ -23,6 +23,14 @@ export default {
     hasSlot: {
       type: Boolean,
       default: false
+    },
+    hasCustomFilter: {
+      type: Boolean,
+      default: false
+    },
+    filterProperties: {
+      type: Array,
+      default: null
     },
     value: {
       type: Object,
@@ -66,6 +74,11 @@ export default {
       default: 'white'
     }
   },
+  computed: {
+    filterMethod: function(){
+        return this.hasFilters ? this.customFilter : null;
+    }
+  },
   data: function() {
     return {
       active: {
@@ -79,6 +92,22 @@ export default {
     onChange: function(selectedItem){
       this.active = false;
       this.$emit('input', selectedItem);
+    },
+    customFilter: function(item, queryText, itemText){
+        var i;
+        var property;
+        var searchText = queryText.toLowerCase();
+        if(!this.hasCustomFilter){
+          return itemText.toLowerCase().indexOf(searchText);
+        }
+        for(i = 0; i < this.filterProperties.length; i++){
+          property = this.filterProperties[i];
+          if(item.hasOwnProperty(property) && item[property].toLowerCase().indexOf(searchText) > -1){
+            return true;
+          }
+        }
+        return false;
+
     },
     clear: function(){
          this.selectedItem = null;

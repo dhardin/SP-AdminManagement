@@ -26,7 +26,7 @@
       <v-toolbar-title >SharePoint Admin</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs" v-if="$route.name == 'Home'">
-        <SearchSelect @input="onChange" item-value="title" item-text="title" item-subtitle="url" :style="{marginTop: '10px', marginRight: '10px', minWidth: '225px'}" dark v-model="siteCollection" :items="siteCollections" :disabled="isSaving || isLoading" :has-slot="true">
+        <SearchSelect @input="onChange" item-value="title" item-text="title" item-subtitle="url" :style="{marginTop: '10px', marginRight: '10px', minWidth: '225px'}" dark v-model="siteCollection" :items="siteCollections" :disabled="isSaving || isLoading" :has-slot="true" :has-custom-filter="true" :filterProperties="['title', 'url']">
                   <v-list-tile-content slot="foo" slot-scope="item">
                   <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
                     <v-list-tile-sub-title>{{item.item.url}}</v-list-tile-sub-title>
@@ -134,7 +134,7 @@ export default {
           //populate items for current type and populate availabe items for the opposing type
           //re-select previously selected item if its available
           //trigger select change for selected item if it exists, else clear selected item
-          that.siteCollections = [{title:'Home', url: '/'},{title:  'Site1', url: '/sites/site1'}, {title: 'Site2', url: '/sites/site2'}];
+          that.siteCollections = [{title:'Home', url: '/'},{title:  'Engineering', url: '/sites/eng'}, {title: 'Quality Assurance', url: '/sites/qa'}];
           that.isLoading = false;
           that.isLoadingSiteCollections.status = false;
         },1000);
