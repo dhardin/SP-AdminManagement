@@ -3,7 +3,7 @@ import axios from 'axios'
   export default {
   methods: {
     getSiteCollections: function(callback, errorCallback){
-      return axios.get("/_api/search/query?querytext='contentclass=STS_Site'&rowlimit='200'&selectproperties='Title,Path'",
+      return axios.get("/_api/search/query?querytext='(contentclass=STS_Site) AND (path:"+window.location.origin+")'&rowlimit='200'&selectproperties='Title,Path'",
       {
       headers: {
         "accept": "application/json;odata=verbose"
