@@ -69,7 +69,7 @@ export default {
       drawer: false,
       toggle_select: 0,
       isSaving: false,
-      isTesting: true,
+      isTesting: false,
       isLoading: false,
       stuff: false,
       isSiteCollectionDropdownActive: false,
