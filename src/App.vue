@@ -26,7 +26,12 @@
       <v-toolbar-title >SharePoint Admin</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs" v-if="$route.name == 'Home'">
-        <SearchSelect @input="onChange" item-value="title" item-text="title" :style="{marginTop: '10px', marginRight: '10px', minWidth: '225px'}" dark v-model="siteCollection" :items="siteCollections" :disabled="isSaving || isLoading"></SearchSelect>
+        <SearchSelect @input="onChange" item-value="title" item-text="title" item-subtitle="url" :style="{marginTop: '10px', marginRight: '10px', minWidth: '225px'}" dark v-model="siteCollection" :items="siteCollections" :disabled="isSaving || isLoading" :has-slot="true">
+                  <v-list-tile-content slot="foo" slot-scope="item">
+                  <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
+                    <v-list-tile-sub-title>{{item.item.url}}</v-list-tile-sub-title>
+                  </v-list-tile-content>
+        </SearchSelect>
       <!--  <v-autocomplete v-model="siteCollection" @select="isSiteCollectionDropdownActive=true" @focus="isSiteCollectionDropdownActive=true" @blur="isSiteCollectionDropdownActive=false" :items="siteCollections" label="Select"  item-value="title" item-text="title" single-line autocomplete return-object clearable attach  :disabled="isSaving || isLoading"></v-autocomplete>
         <svg role="img" title="drop down" class="dropdown" :class="{active: isSiteCollectionDropdownActive, inactive: !isSiteCollectionDropdownActive}">
           <use xlink:href="/src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" class="white"/>
@@ -64,7 +69,7 @@ export default {
       drawer: false,
       toggle_select: 0,
       isSaving: false,
-      isTesting: false,
+      isTesting: true,
       isLoading: false,
       stuff: false,
       isSiteCollectionDropdownActive: false,

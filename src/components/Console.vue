@@ -8,11 +8,11 @@
             <v-layout fill-height>
                 <v-flex xs12 align-end flexbox>
                     <div class="console blue-grey darken-4" ref="consoleMessages">
-                        <span> To start, please select a site collection. <span v-if="messages.length == 0" class="blinking-cursor">|</span></span>
+                        <span class="message"> To start, please select a site collection. <span v-if="messages.length == 0" class="blinking-cursor">|</span></span>
                         <v-list dark class="blue-grey darken-4">
                             <template v-for="(item, index) in messages">
                                 <v-list-tile-content>
-                                    <div>
+                                    <div class="message">
                                       [{{item.date.getHours()}}:{{item.date.getMinutes()}}:{{item.date.getSeconds()}}]
                                       <span :class="getClassObject(item)">{{item.verb}}</span>
                                       <span class="purple--text text--accent-1">{{item.text}}</span>
@@ -102,7 +102,6 @@ export default {
 </script>
 <style>
 .console {
-  width: 100%;
   height: 200px;
   box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
   padding: 1em;
@@ -111,6 +110,10 @@ export default {
   font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
 }
 
+.console .message {
+  display: block;
+  width: 100%;
+}
 
 .blinking-cursor {
   font-weight: 100;
