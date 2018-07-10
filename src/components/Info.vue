@@ -35,6 +35,12 @@ export default {
     items: {
       type: Array
     },
+    type: {
+      type: Object,
+      default: function(){
+        return {users: true, groups: false}
+      }
+    },
     isSaving: {
       type: Boolean,
       default: false
