@@ -223,7 +223,11 @@ export default {
 
           },1000);
         } else {
-
+          that.getGroups(that.siteCollection, false, function(groups){
+            callback(groups);
+          }, function(error){
+            errorCallback(error);
+          });
         }
       })(this);
     },
@@ -277,7 +281,7 @@ export default {
           },1000);
         } else {
           if(that.type.users){
-            that.getUserGroups(that.siteCollection, that.selectedItem.Id, function(groups){
+            that.getGroups(that.siteCollection, that.selectedItem.Id, function(groups){
               console.log(groups);
               that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
               that.isLoading = false;
