@@ -1,5 +1,5 @@
 <template>
-  <v-card class="flexcard" height="447px">
+  <v-card class="flexcard" height="480px">
     <v-card-text class="grow">
       <v-container fill-height fluid>
         <v-layout fill-height>

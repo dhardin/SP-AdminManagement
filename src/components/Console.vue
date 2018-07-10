@@ -1,11 +1,11 @@
 <template>
-<v-card class="flexcard" height="447px">
+<v-card class="flexcard" height="480px">
     <v-card-title primary-title>
         <h3 class="grey--text text--darken-2">Console</h3>
     </v-card-title>
     <v-card-text class="grow">
-        <v-container fill-height fluid>
-            <v-layout fill-height>
+        <v-container fluid>
+            <v-layout >
                 <v-flex xs12 align-end flexbox>
                     <div class="console blue-grey darken-4" ref="consoleMessages">
                         <span class="message"> To start, please select a site collection. <span v-if="messages.length == 0" class="blinking-cursor">|</span></span>
@@ -31,8 +31,8 @@
                 </v-flex>
             </v-layout>
         </v-container>
-        <v-container fill-height fluid>
-            <v-layout fill-height>
+        <v-container fluid>
+            <v-layout >
                 <v-flex xs12 align-end flexbox>
                     <v-progress-linear v-model="saveProgress" :color="saveProgress >= 100 ? 'success' : 'info'"></v-progress-linear>
                 </v-flex>

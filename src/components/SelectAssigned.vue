@@ -11,7 +11,7 @@
       ></v-text-field>
     </v-card-title>
     <v-card-text class="grow">
-      <v-data-iterator :items="assignedItems" :search="searchAssigned" class="items" must-sort :rows-per-page-items="[{'text':'All', 'value': -1}]" >
+      <v-data-iterator :pagination.sync="pagination" :items="assignedItems" :search="searchAssigned" class="items" must-sort :rows-per-page-items="[50, 100, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
           <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
         <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87}">
           <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
@@ -21,7 +21,20 @@
         <v-flex slot="item"slot-scope="props" xs12>
               <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed> {{  props.item.Title }} </v-btn>
         </v-flex>
+        <template slot="footer">
+          <div class="footer">
+          <v-btn flat @click="pagination.page--" :disabled="pagination.page == 1" class="pagination">
+            <svg role="img" title="Prev" :style="{ opacity: disabled == true || pagination.page == 1 ? .38 : .87}">
+              <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_left_24px"/>
+            </svg></v-btn>
+          <v-btn flat @click="pagination.page++" :disabled="pagination.page == pages" class="pagination">
+            <svg role="img" title="Next"  :style="{ opacity: disabled == true || (pagination.page == pages || pages == 0) ? .38 : .87}">
+              <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_right_24px"/>
+            </svg></v-btn>
+          </div>
+        </template>
       </v-data-iterator>
+
     </v-card-text>
     <v-card-actions>
      <v-btn block color="red darken-4" :disabled="disabled" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Remove All</v-btn>
@@ -62,23 +75,43 @@ export default {
   data: function(){
     return {
       searchAssigned: '',
-      type: 'assigned'
+      type: 'assigned',
+      pagination: {
+      }
     };
   },
   computed: {
     disabled: function(){
       return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected;
+    },
+    pages () {
+      if (this.pagination.rowsPerPage == null ||
+        this.pagination.totalItems == null
+      ) return 0
+
+      return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
     }
   }
 }
 </script>
 
 <style>
-.v-data-iterator__actions__range-controls .v-btn {
-  display: none;
+.footer {
+  text-align: right;
+  margin-bottom: -48px;
 }
-
 .v-input__icon.v-input__icon--append {
   display: none;
+}
+.v-btn.pagination {
+
+  display: inline-block;
+}
+.v-btn.pagination, .v-btn.pagination .v-btn__content {
+  width: 36px !important;
+  height: 36px;
+  padding: 0 !important;
+  margin: 0;
+  min-width: 36px;
 }
 </style>

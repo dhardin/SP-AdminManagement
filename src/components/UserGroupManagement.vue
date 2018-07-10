@@ -218,16 +218,19 @@ export default {
             //trigger select change for selected item if it exists, else clear selected item
             var rand = Math.random();
 
-            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback([{title: 'Perm1', subtitle: "", selected: false },
-            {title: 'Perm2', subtitle: "", selected: false },
-            { title: 'Perm3', subtitle: "", selected: false },
-            {title: 'Perm4', subtitle: "", selected: false },
-            {title: 'Perm5', subtitle: "", selected: false },
-            { title: 'Perm6', subtitle: "", selected: false }]);
+            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback([{Title: 'Perm1', subtitle: "" },
+            {Title: 'Perm2', subtitle: "" },
+            { Title: 'Perm3', subtitle: "" },
+            {Title: 'Perm4', subtitle: "" },
+            {Title: 'Perm5', subtitle: ""},
+            { Title: 'Perm6', subtitle: "" }]);
 
           },1000);
         } else {
           that.getGroups(that.siteCollection, false, function(groups){
+            for(var i = 0; i < groups.length; i++){
+              groups[i].selected = false;
+            }
             callback(groups);
           }, function(error){
             errorCallback(error);
@@ -272,9 +275,9 @@ export default {
         if(that.isTesting){
           setTimeout(function(){
             if(that.type.users){
-              that.assignedItems =  [{title: 'Perm4', subtitle: "", selected: false },
-              {title: 'Perm5', subtitle: "", selected: false },
-              { title: 'Perm6', subtitle: "", selected: false }];
+              that.assignedItems =  [{Title: 'Perm4', subtitle: "", selected: false },
+              {Title: 'Perm5', subtitle: "", selected: false },
+              { Title: 'Perm6', subtitle: "", selected: false }];
               //remove assigned items from available
               that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
                 return that.$lodash.find(that.assignedItems, o) === undefined;
@@ -286,9 +289,12 @@ export default {
         } else {
           if(that.type.users){
             that.getGroups(that.siteCollection, that.selectedItem.Id, function(groups){
-              console.log(groups);
+              for(var i = 0; i < groups.length; i++){
+                groups[i].selected = false;
+              }
               that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
               that.isLoading = false;
+              that.assignedItems = groups;
             }, function(error){
               that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;
