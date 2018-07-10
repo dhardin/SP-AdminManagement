@@ -276,7 +276,16 @@ export default {
             that.isLoading = false;
           },1000);
         } else {
-
+          if(that.type.users){
+            that.getUserGroups(that.siteCollection, that.selectedItem.Id, function(groups){
+              console.log(groups);
+              that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
+              that.isLoading = false;
+            }, function(error){
+              that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+              that.isLoading = false;
+            });
+          }
         }
       })(this);
     },

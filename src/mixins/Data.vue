@@ -49,6 +49,44 @@ import axios from 'axios'
         }
       });
     },
+    getGroups: function(siteCollection, userId, callback, errorCallback){
+        return axios.get(siteCollection.url + "/_api/web/" + (userId !== false ? 'sitegroups('+groupId+')/users' : 'sitegroups'),
+        {
+        headers: {
+          "accept": "application/json;odata=verbose"
+        }
+      }).then(function (response) {
+      // handle success
+          var users = response.data.d;
+          if (callback) {
+            callback(users);
+          }
+      }).catch(function(error) {
+        error = error != undefined ? error : {message: 'unspecified error'};
+        if (errorCallback) {
+          errorCallback(error);
+        }
+      });
+    },
+    getUserGroups: function(siteCollection, userId, callback, errorCallback){
+      return axios.get(siteCollection.url + "/_api/web/getuserbyid("+userId+")/Groups",
+      {
+      headers: {
+        "accept": "application/json;odata=verbose"
+      }
+    }).then(function (response) {
+    // handle success
+        var groups = response.data.d;
+        if (callback) {
+          callback(groups);
+        }
+    }).catch(function(error) {
+      error = error != undefined ? error : {message: 'unspecified error'};
+      if (errorCallback) {
+        errorCallback(error);
+      }
+    });
+    },
       getDigest: function(callback, errorCallback){
         return axios({
           url: this.site +  "/_api/contextinfo",
