@@ -11,14 +11,14 @@
       ></v-text-field>
     </v-card-title>
     <v-card-text class="grow">
-      <v-data-iterator :pagination.sync="pagination" :items="availableItems" :search="searchAvailable" class="items" must-sort :rows-per-page-items="[50, 100, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
+      <v-data-iterator :pagination.sync="pagination" :items="availableItems" :search="searchAvailable" class="items" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
         <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
       <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87}">
         <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
       </svg>
       </v-flex>
         <v-flex slot="item"slot-scope="props" xs12>
-          <v-btn block :disabled="isSaving || isLoading  || !isSiteCollectionSelected || !isItemSelected" :ripple="false" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed>  {{  props.item.Title + props.item.selected}} </v-btn>
+          <v-btn block :disabled="isSaving || isLoading  || !isSiteCollectionSelected || !isItemSelected" :ripple="false" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed>  {{  props.item.Title }} </v-btn>
         </v-flex>
         <template slot="footer">
           <div class="footer">
@@ -35,8 +35,8 @@
       </v-data-iterator>
     </v-card-text>
     <v-card-actions>
-      <v-btn block color="blue-grey darken-1" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" :disabled="disabled" @click="clearSelected">Clear Selected</v-btn>
-      <v-btn block :disabled="disabled" color="blue-grey darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Give Selected</v-btn>
+      <v-btn block color="blue-grey darken-1" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected</v-btn>
+      <v-btn block :disabled="disabled || !isAnySelected" color="blue-grey darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Give Selected</v-btn>
       <v-btn block :disabled="disabled" color="blue-grey darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Give All</v-btn>
     </v-card-actions>
   </v-card>
@@ -52,6 +52,10 @@ export default {
       type: Array
     },
     isItemSelected: {
+      type: Boolean,
+      default: false
+    },
+    isAnySelected: {
       type: Boolean,
       default: false
     },

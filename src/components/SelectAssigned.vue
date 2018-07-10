@@ -11,7 +11,7 @@
       ></v-text-field>
     </v-card-title>
     <v-card-text class="grow">
-      <v-data-iterator :pagination.sync="pagination" :items="assignedItems" :search="searchAssigned" class="items" must-sort :rows-per-page-items="[50, 100, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
+      <v-data-iterator :pagination.sync="pagination" :items="assignedItems" :search="searchAssigned" class="items" must-sort  :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
           <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
         <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87}">
           <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
@@ -38,8 +38,8 @@
     </v-card-text>
     <v-card-actions>
      <v-btn block color="red darken-4" :disabled="disabled" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Remove All</v-btn>
-     <v-btn block :disabled="disabled" color="red darken-4" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Remove Selected</v-btn>
-      <v-btn block :disabled="disabled" color="red darken-1" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="clearSelected">Clear Selected</v-btn>
+     <v-btn block :disabled="disabled || !isAnySelected" color="red darken-4" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Remove Selected</v-btn>
+      <v-btn block :disabled="disabled || !isAnySelected" color="red darken-1" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="clearSelected">Clear Selected</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -54,6 +54,10 @@ export default {
         type: Array
       },
       isItemSelected: {
+        type: Boolean,
+        default: false
+      },
+      isAnySelected: {
         type: Boolean,
         default: false
       },

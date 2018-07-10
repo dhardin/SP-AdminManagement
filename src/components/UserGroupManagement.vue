@@ -8,10 +8,10 @@
         <Console :is-saving="isSaving" :is-loading="isLoading" :save-progress="saveProgress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole"></Console>
       </v-flex>
       <v-flex xs6>
-        <SelectAvailable :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :available-items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
+        <SelectAvailable :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :available-items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
       </v-flex>
       <v-flex xs6>
-        <SelectAssigned :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :assigned-items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
+        <SelectAssigned  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :assigned-items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -73,6 +73,18 @@ export default {
     }
   },
   watch: {
+    selectedAvailable: {
+      handler: function(newVal, oldVal){
+        this.isAnyAvailableSelected = Object.keys(newVal).length > 0;
+      },
+      deep: true
+    },
+    selectedAssigned: {
+      handler: function(newVal, oldVal){
+        this.isAnyAssignedSelected = Object.keys(newVal).length > 0;
+      },
+      deep: true
+    },
     isSiteCollectionSelected: {
       handler: function(){
       }
@@ -103,6 +115,8 @@ export default {
   },
   data: function() {
     return {
+      isAnyAvailableSelected: false,
+      isAnyAssignedSelected: false,
       drawer: false,
       toggle_select: 0,
       isSaving: false,
@@ -228,9 +242,7 @@ export default {
           },1000);
         } else {
           that.getGroups(that.siteCollection, false, function(groups){
-            for(var i = 0; i < groups.length; i++){
-              groups[i].selected = false;
-            }
+
             callback(groups);
           }, function(error){
             errorCallback(error);
@@ -306,13 +318,14 @@ export default {
     selectItem: function(type, item, index){
       var selectedItems = type == 'available' ? this.selectedAvailable : this.selectedAssigned;
       var items = type == 'available' ? this.availableItems : this.assignedItems;
-      items[index].selected = items[index].selected !== undefined ? !items[index].selected : true;
+      this.$set(items[index], 'selected', items[index].selected !== undefined ? !items[index].selected : true);
+      //items[index].selected = items[index].selected !== undefined ? !items[index].selected : true;
       if(  items[index].selected){
-        selectedItems[item.title] =  items[index];
+        this.$set(selectedItems, item.Title, items[index]);
         //set index so we can easily find this item when we "give/remove" it
-        selectedItems[item.title].index = index;
+        selectedItems[item.Title].index = index;
       } else {
-        delete selectedItems[item.title];
+        delete selectedItems[item.Title];
       }
     },
     giveAll: function(sourceType){
