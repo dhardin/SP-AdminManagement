@@ -156,6 +156,8 @@ export default {
             if(that.type.users){
               that.items = data;
             }
+            console.log('Users');
+            console.log(data);
             that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Users', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
             resolve();
           }, function(error){
@@ -172,6 +174,8 @@ export default {
                 that.originalAvailableItems = data;
                 that.assignedItems = []
               }
+              console.log('Groups');
+              console.log(data);
               that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Groups', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
               resolve();
             }, function(error){

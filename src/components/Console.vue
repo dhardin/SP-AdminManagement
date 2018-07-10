@@ -112,6 +112,7 @@ export default {
 
 .console .message {
   display: block;
+  word-wrap: break-word;
   width: 100%;
 }
 

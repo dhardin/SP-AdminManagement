@@ -50,16 +50,16 @@ import axios from 'axios'
       });
     },
     getGroups: function(siteCollection, userId, callback, errorCallback){
-        return axios.get(siteCollection.url + "/_api/web/" + (userId !== false ? 'sitegroups('+groupId+')/users' : 'sitegroups'),
+        return axios.get(siteCollection.url + "/_api/web/" + (userId !== false ? 'getuserbyid('+userId+')/Groups' : 'sitegroups'),
         {
         headers: {
           "accept": "application/json;odata=verbose"
         }
       }).then(function (response) {
       // handle success
-          var users = response.data.d;
+          var groups = response.data.d;
           if (callback) {
-            callback(users);
+            callback(groups);
           }
       }).catch(function(error) {
         error = error != undefined ? error : {message: 'unspecified error'};
