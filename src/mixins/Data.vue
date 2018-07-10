@@ -38,7 +38,7 @@ import axios from 'axios'
         }
       }).then(function (response) {
       // handle success
-          var data = response.data.d;
+          var users = response.data.d;
           if (callback) {
             callback(users);
           }
