@@ -28,7 +28,6 @@ import SelectAssigned from './SelectAssigned.vue'
 import SelectAvailable from './SelectAvailable.vue'
 import Data from '../mixins/Data.vue'
 
-
 export default {
   mixins: [Data],
   components: {
@@ -169,9 +168,12 @@ export default {
           that.getUsersForSiteCollection(function(data){
             if(that.type.users){
               that.items = data;
+            } else {
+              that.availableItems = data;
+              that.originalAvailableItems = data;
+              that.assignedItems = []
             }
-            console.log('Users');
-            console.log(data);
+
             that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Users', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
             resolve();
           }, function(error){
@@ -187,9 +189,10 @@ export default {
                 that.availableItems = data;
                 that.originalAvailableItems = data;
                 that.assignedItems = []
+              } else {
+                that.items = data;
               }
-              console.log('Groups');
-              console.log(data);
+
               that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Groups', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
               resolve();
             }, function(error){
@@ -301,12 +304,24 @@ export default {
         } else {
           if(that.type.users){
             that.getGroups(that.siteCollection, that.selectedItem.Id, function(groups){
-              for(var i = 0; i < groups.length; i++){
-                groups[i].selected = false;
-              }
               that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
               that.isLoading = false;
               that.assignedItems = groups;
+              that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
+                return that.$lodash.find(that.assignedItems, o) === undefined;
+              })[0];
+            }, function(error){
+              that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+              that.isLoading = false;
+            });
+          } else {
+            that.getUsers(that.siteCollection, that.selectedItem.Id, function(users){
+              that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
+              that.isLoading = false;
+              that.assignedItems = users;
+              that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
+                return that.$lodash.find(that.assignedItems, o) === undefined;
+              })[0];
             }, function(error){
               that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;

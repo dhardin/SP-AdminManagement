@@ -6,8 +6,10 @@
           <v-flex xs12 align-end flexbox>
             <v-form>
               <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" label="Select Item" light inactiveColor="#000"></SearchSelect>
-              <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
-              <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
+              <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''" v-if="type.user"></v-text-field>
+              <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''" v-if="type.user"></v-text-field>
+              <v-text-field label="Description" readonly disabled :value="selectedItem !== null ? selectedItem.Description: ''" v-if="type.group"></v-text-field>
+              <v-text-field label="Owner" readonly disabled :value="selectedItem !== null ? selectedItem.Owner: ''" v-if="type.group"></v-text-field>
             </v-form>
           </v-flex>
         </v-layout>
@@ -65,6 +67,8 @@ export default {
       selectedItem: {
         Title: '',
         LoginName: '',
+        Description: '',
+        Owner: '',
         Email: '',
         Id: 0
       }
