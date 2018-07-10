@@ -38,7 +38,7 @@ import axios from 'axios'
         }
       }).then(function (response) {
       // handle success
-          var users = response.data.d;
+          var users = response.data.d.results;
           if (callback) {
             callback(users);
           }
@@ -57,7 +57,7 @@ import axios from 'axios'
         }
       }).then(function (response) {
       // handle success
-          var groups = response.data.d;
+          var groups = response.data.d.results;
           if (callback) {
             callback(groups);
           }
@@ -76,7 +76,7 @@ import axios from 'axios'
       }
     }).then(function (response) {
     // handle success
-        var groups = response.data.d;
+        var groups = response.data.d.results;
         if (callback) {
           callback(groups);
         }
