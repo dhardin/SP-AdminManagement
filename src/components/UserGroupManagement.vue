@@ -300,7 +300,7 @@ export default {
     selectItem: function(type, item, index){
       var selectedItems = type == 'available' ? this.selectedAvailable : this.selectedAssigned;
       var items = type == 'available' ? this.availableItems : this.assignedItems;
-      items[index].selected = !items[index].selected;
+      items[index].selected = items[index].selected !== undefined ? !items[index].selected : true;
       if(  items[index].selected){
         selectedItems[item.title] =  items[index];
         //set index so we can easily find this item when we "give/remove" it

@@ -18,7 +18,7 @@
       </svg>
       </v-flex>
         <v-flex slot="item"slot-scope="props" xs12>
-          <v-btn block :disabled="isSaving || isLoading  || !isSiteCollectionSelected || !isItemSelected" :ripple="false" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed>  {{  props.item.title }} </v-btn>
+          <v-btn block :disabled="isSaving || isLoading  || !isSiteCollectionSelected || !isItemSelected" :ripple="false" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed>  {{  props.item.Title }} </v-btn>
         </v-flex>
       </v-data-iterator>
     </v-card-text>
