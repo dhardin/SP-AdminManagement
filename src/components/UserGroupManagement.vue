@@ -203,16 +203,14 @@ export default {
           });
         }).then(function(result){
           return new Promise(function(resolve, reject){
-            var hasCurrentItem = false;
-            hasCurrentItem = _.find(that.items, function(o){
+            var hasCurrentItem = that.selectedItem === null ? false : _.find(that.items, function(o){
               return o.Id == that.selectedItem.Id;
             });
             if(hasCurrentItem){
-          new Promise(function(resolve, reject){
-           return that.getItem();
-          }).then(function(result){
+
+              that.getItem( function(){
                 resolve();
-          });
+              });
             } else {
               //clear currenly selected item if it doesn't exist
               that.selectedItem = null;
@@ -234,7 +232,7 @@ export default {
             //trigger select change for selected item if it exists, else clear selected item
             var rand = Math.random();
 
-            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback([{Title:'Foo Bar', LoginName: 'foo.bar', Email: 'foo.bar@example.com'},{Title:'Joe Schmoe', LoginName: 'joe.schmoe', Email: 'joe.schmoe@example.com'}]);
+            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback([{Id: 1, Title:'Foo Bar', LoginName: 'foo.bar', Email: 'foo.bar@example.com'},{Id: 2, Title:'Joe Schmoe', LoginName: 'joe.schmoe', Email: 'joe.schmoe@example.com'}]);
           },1000);
         } else {
           that.getUsers(that.siteCollection, false, function(users){
@@ -302,7 +300,7 @@ export default {
         this.getItem();
       }
     },
-    getItem: function(){
+    getItem: function(callback){
       this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', target: this.selectedItem.Title, type: 'warning'});
       this.isLoading = true;
       (function(that){
@@ -318,7 +316,10 @@ export default {
               })[0];
             }
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, type: 'info'});
-            that.isLoading = false;
+            that.isLoading = false
+            if(callback){
+              callback();
+            }
           },1000);
         } else {
           if(that.type.users){
@@ -341,6 +342,9 @@ export default {
               that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
                 return that.$lodash.find(that.assignedItems, o) === undefined;
               })[0];
+              if(callback){
+                callback();
+              }
             }, function(error){
               that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;
