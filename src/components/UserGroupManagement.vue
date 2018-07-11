@@ -99,6 +99,7 @@ export default {
         if(this.siteCollection == null){
           return;
         }
+
         this.getData();
       },
       deep: true
@@ -199,6 +200,20 @@ export default {
               that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Groups', hasError: true, error: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;
             });
+          });
+        }).then(function(result){
+          return new Promise(function(resolve, reject){
+            var hasCurrentItem = false;
+            hasCurrentItem = _.find(that.items, function(item){
+              return item.Id == that.selectedItem.Id;
+            });
+            if(hasCurrentItem){
+              that.getItem();
+            } else {
+              //clear currenly selected item if it doesn't exist
+              that.selectedItem = null;
+              resolve();
+            }
           });
         }).then(function(result){
           that.isLoading = false;
