@@ -208,7 +208,7 @@ export default {
             if(that.selectedItem !== null){
               currentItem = _.find(that.items, function(o){
               if(o !== undefined && o.hasOwnProperty('Id')){
-                if(o.Id == that.selectedItem.Id){
+                if(o.LoginName == that.selectedItem.LoginName){
                   console.log('Matched!');
                   console.log(that.selectedItem);
                   console.log(o);
@@ -225,6 +225,7 @@ export default {
                 resolve();
               });
             } else {
+              that.items.push(that.selectedItem);
               that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
             resolve();
             }
