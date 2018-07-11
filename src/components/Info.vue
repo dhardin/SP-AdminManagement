@@ -53,6 +53,10 @@ export default {
       type: Boolean,
       default: false
     },
+    siteCollectionHasUser: {
+      type: Boolean,
+      default: false
+    },
     isSiteCollectionSelected: {
       type: Boolean,
       default: false
@@ -68,23 +72,20 @@ export default {
   },
   data: function(){
     return {
-      selectedItem: {
-        Title: '',
-        LoginName: '',
-        Description: '',
-        Owner: '',
-        Email: '',
-        Id: 0
-      }
+      selectedItem: null
     };
   },
   watch : {
     selectedItem: {
       handler: function(newVal, oldVal){
-        console.log('Item Changed!' + newVal);
         this.itemChanged(newVal);
       },
       deep: true
+    },
+    siteCollectionHasUser: function(newVal, oldVal){
+      if(!newVal){
+        this.selectedItem = null;
+      }
     }
   },
   methods: {

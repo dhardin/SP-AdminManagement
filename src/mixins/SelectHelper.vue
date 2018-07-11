@@ -1,5 +1,31 @@
 <script>
   export default {
+    props: {
+      siteCollectionHasUser: {
+        type: Boolean,
+        default: false
+      },
+      isItemSelected: {
+        type: Boolean,
+        default: false
+      },
+      isAnySelected: {
+        type: Boolean,
+        default: false
+      },
+      isSaving: {
+        type: Boolean,
+        default: false
+      },
+      isSiteCollectionSelected: {
+        type: Boolean,
+        default: false
+      },
+      isLoading: {
+        type: Boolean,
+        default: false
+      }
+    },
   methods: {
     selectItem: function(item, index){
       this.$emit('select-item', this.type, item, index);

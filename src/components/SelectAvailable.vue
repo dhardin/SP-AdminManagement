@@ -51,26 +51,6 @@ export default {
     availableItems: {
       type: Array
     },
-    isItemSelected: {
-      type: Boolean,
-      default: false
-    },
-    isAnySelected: {
-      type: Boolean,
-      default: false
-    },
-    isSaving: {
-      type: Boolean,
-      default: false
-    },
-    isSiteCollectionSelected: {
-      type: Boolean,
-      default: false
-    },
-    isLoading: {
-      type: Boolean,
-      default: false
-    },
     selectedItem: {
 
     }
@@ -86,7 +66,7 @@ export default {
   },
   computed: {
     disabled: function(){
-      return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected;
+      return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasUser;
     },
     pages () {
       if (this.pagination.rowsPerPage == null ||

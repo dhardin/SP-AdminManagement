@@ -2,16 +2,16 @@
   <v-container fluid grid-list-md>
     <v-layout row wrap class="full-height">
       <v-flex xs6>
-        <Info :type="type" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged"></Info>
+        <Info :type="type" :site-collection-has-user="siteCollectionHasUser" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged"></Info>
       </v-flex>
       <v-flex xs6>
         <Console :is-saving="isSaving" :is-loading="isLoading" :save-progress="saveProgress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole"></Console>
       </v-flex>
       <v-flex xs6>
-        <SelectAvailable :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :available-items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
+        <SelectAvailable :site-collection-has-user="siteCollectionHasUser"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :available-items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
       </v-flex>
       <v-flex xs6>
-        <SelectAssigned  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :assigned-items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
+        <SelectAssigned :site-collection-has-user="siteCollectionHasUser"  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :assigned-items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -126,6 +126,7 @@ export default {
       savingIndex: 0,
       updateProgressInterval: false,
       selectedItem: null,
+      siteCollectionHasUser: true,
       snackbar: {
         show: false,
         y: 'top',
@@ -178,7 +179,7 @@ export default {
             that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Users', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
             resolve();
           }, function(error){
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Users',  hasError: true, error: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Users',  hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
             that.isLoading = false;
 
           });
@@ -197,13 +198,12 @@ export default {
               that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Groups', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
               resolve();
             }, function(error){
-              that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Groups', hasError: true, error: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
+              that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Groups', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;
             });
           });
         }).then(function(result){
           return new Promise(function(resolve, reject){
-            var hasCurrentItem = false;
             var currentItem;
             if(that.selectedItem !== null){
               currentItem = _.find(that.items, function(o){
@@ -213,17 +213,19 @@ export default {
                 return false;
               }
               });
-            }
-            hasCurrentItem = that.selectedItem !== null && currentItem !== undefined;
-            if(hasCurrentItem){
+
+            that.siteCollectionHasUser = that.selectedItem !== null && currentItem !== undefined;
+            if(  that.siteCollectionHasUser){
               that.getItem( function(){
                 resolve();
               });
             } else {
-              //clear currenly selected item if it doesn't exist
-              that.$set(that, 'selectedItem', null);
-              resolve();
+              that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+            resolve();
             }
+          } else {
+            resolve();
+          }
           });
         }).then(function(result){
           that.isLoading = false;
@@ -305,6 +307,7 @@ export default {
           this.originalAssignedItems.push(JSON.parse(JSON.stringify(this.assignedItems[i])));
         }
         this.isItemSelected = true;
+        this.siteCollectionHasUser = true;
         this.getItem();
       }
     },
@@ -344,7 +347,7 @@ export default {
                 error.message = error.error.message.value;
               }
               console.log(error);
-              that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+              that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, message: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;
             });
           } else {
@@ -359,7 +362,7 @@ export default {
                 callback();
               }
             }, function(error){
-              that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+              that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, message: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;
             });
           }
