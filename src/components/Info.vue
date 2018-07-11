@@ -81,6 +81,7 @@ export default {
   watch : {
     selectedItem: {
       handler: function(newVal, oldVal){
+        console.log('Item Changed!' + newVal);
         this.itemChanged(newVal);
       },
       deep: true

@@ -296,7 +296,7 @@ export default {
         this.newItems = [];
         this.selectedAvailable = {};
         this.selectedAssigned = {};
-        this.selectedItem = null;
+        this.$set(this, 'selectedItem', null);
         this.isItemSelected = false;
       } else {
         this.selectedItem = item.Title.length > 0 ? item : false;
