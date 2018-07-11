@@ -221,7 +221,7 @@ export default {
               });
             } else {
               //clear currenly selected item if it doesn't exist
-              that.$set(selectedItem, null);
+              that.$set(that, 'selectedItem', null);
               resolve();
             }
           });
