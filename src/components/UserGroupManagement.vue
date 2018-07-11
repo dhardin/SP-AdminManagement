@@ -221,12 +221,11 @@ export default {
               });
             } else {
               //clear currenly selected item if it doesn't exist
-              that.selectedItem = null;
+              that.$set(selectedItem, null);
               resolve();
             }
           });
         }).then(function(result){
-            console.log(that.selectedItem);
           that.isLoading = false;
           that.$emit('site-collection-selected', true);
         });
