@@ -206,6 +206,9 @@ export default {
               console.log(that.selectedItem);
             var hasCurrentItem = that.selectedItem === null ? false : _.find(that.items, function(o){
               if(o !== undefined && o.hasOwnProperty('Id')){
+                if(o.Id == that.selectedItem.Id){
+                  console.log('match found!: ' + that.selectedItem);
+                }
                 return o.Id == that.selectedItem.Id;
               } else {
                 return false;
@@ -214,13 +217,11 @@ export default {
             if(hasCurrentItem !== false){
               console.log(that.selectedItem);
               that.getItem( function(){
-                  console.log(that.selectedItem);
                 resolve();
               });
             } else {
               //clear currenly selected item if it doesn't exist
               that.selectedItem = null;
-              console.log('clearing selected item');
               resolve();
             }
           });
@@ -339,6 +340,10 @@ export default {
                 return that.$lodash.find(that.assignedItems, o) === undefined;
               })[0];
             }, function(error){
+              var message = '';
+              if(error.hasOwnProperty('error') && error.error.hasOwnProperty('message')){
+                error.message = error.error.message.value;
+              }
               that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;
             });
