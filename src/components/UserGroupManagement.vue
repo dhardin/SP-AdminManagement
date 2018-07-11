@@ -203,14 +203,16 @@ export default {
           });
         }).then(function(result){
           return new Promise(function(resolve, reject){
-            var currentItem = that.selectedItem === null ? false : _.find(that.items, function(o){
+            var hasCurrentItem = false;
+            var currentItem = _.find(that.items, function(o){
               if(o !== undefined && o.hasOwnProperty('Id')){
                 return o.Id == that.selectedItem.Id;
               } else {
                 return false;
               }
             });
-            if(currentItem !== undefined){
+            hasCurrentItem = that.selectedItem !== null && currentItem !== undefined;
+            if(hasCurrentItem){
               that.getItem( function(){
                 resolve();
               });
