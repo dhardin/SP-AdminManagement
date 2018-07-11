@@ -203,25 +203,29 @@ export default {
           });
         }).then(function(result){
           return new Promise(function(resolve, reject){
+              console.log(that.selectedItem);
             var hasCurrentItem = that.selectedItem === null ? false : _.find(that.items, function(o){
               if(o !== undefined && o.hasOwnProperty('Id')){
-                  console.log(o);
                 return o.Id == that.selectedItem.Id;
               } else {
                 return false;
               }
             });
-            if(hasCurrentItem){
+            if(hasCurrentItem !== false){
+              console.log(that.selectedItem);
               that.getItem( function(){
+                  console.log(that.selectedItem);
                 resolve();
               });
             } else {
               //clear currenly selected item if it doesn't exist
               that.selectedItem = null;
+              console.log('clearing selected item');
               resolve();
             }
           });
         }).then(function(result){
+            console.log(that.selectedItem);
           that.isLoading = false;
           that.$emit('site-collection-selected', true);
         });
