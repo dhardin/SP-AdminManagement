@@ -209,7 +209,8 @@ export default {
               currentItem = _.find(that.items, function(o){
               if(o !== undefined && o.hasOwnProperty('Id')){
                 if(o.Id == that.selectedItem.Id){
-                  console.log('Matched! -- ' + that.selectedItem);
+                  console.log('Matched!');
+                  console.log(that.selectedItem);
                 }
                 return o.Id == that.selectedItem.Id;
               } else {
