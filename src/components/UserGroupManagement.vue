@@ -204,13 +204,16 @@ export default {
         }).then(function(result){
           return new Promise(function(resolve, reject){
             var hasCurrentItem = false;
-            var currentItem = _.find(that.items, function(o){
+            var currentItem;
+            if(that.selectedItem !== null){
+              currentItem = _.find(that.items, function(o){
               if(o !== undefined && o.hasOwnProperty('Id')){
                 return o.Id == that.selectedItem.Id;
               } else {
                 return false;
               }
-            });
+              });
+            }
             hasCurrentItem = that.selectedItem !== null && currentItem !== undefined;
             if(hasCurrentItem){
               that.getItem( function(){
