@@ -81,11 +81,6 @@ export default {
         this.itemChanged(newVal);
       },
       deep: true
-    },
-    siteCollectionHasUser: function(newVal, oldVal){
-      if(!newVal){
-        this.selectedItem = null;
-      }
     }
   },
   methods: {
