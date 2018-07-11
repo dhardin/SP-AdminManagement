@@ -211,6 +211,7 @@ export default {
                 if(o.Id == that.selectedItem.Id){
                   console.log('Matched!');
                   console.log(that.selectedItem);
+                  console.log(o);
                 }
                 return o.Id == that.selectedItem.Id;
               } else {
