@@ -203,7 +203,10 @@ export default {
           });
         }).then(function(result){
           return new Promise(function(resolve, reject){
+            console.log(that.items);
+            console.log(that.selectedItem);
             var hasCurrentItem = that.selectedItem === null ? false : _.find(that.items, function(o){
+              console.log(o);
               return o.Id == that.selectedItem.Id;
             });
             if(hasCurrentItem){
