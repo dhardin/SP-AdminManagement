@@ -203,19 +203,14 @@ export default {
           });
         }).then(function(result){
           return new Promise(function(resolve, reject){
-              console.log(that.selectedItem);
-            var hasCurrentItem = that.selectedItem === null ? false : _.find(that.items, function(o){
+            var currentItem = that.selectedItem === null ? false : _.find(that.items, function(o){
               if(o !== undefined && o.hasOwnProperty('Id')){
-                if(o.Id == that.selectedItem.Id){
-                  console.log('match found!: ' + that.selectedItem);
-                }
                 return o.Id == that.selectedItem.Id;
               } else {
                 return false;
               }
             });
-            if(hasCurrentItem !== false){
-              console.log(that.selectedItem);
+            if(currentItem !== undefined){
               that.getItem( function(){
                 resolve();
               });
@@ -344,6 +339,7 @@ export default {
               if(error.hasOwnProperty('error') && error.error.hasOwnProperty('message')){
                 error.message = error.error.message.value;
               }
+              console.log(error);
               that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, error: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
               that.isLoading = false;
             });
