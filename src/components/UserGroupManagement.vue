@@ -204,11 +204,15 @@ export default {
         }).then(function(result){
           return new Promise(function(resolve, reject){
             var hasCurrentItem = false;
-            hasCurrentItem = _.find(that.items, function(item){
-              return item.Id == that.selectedItem.Id;
+            hasCurrentItem = _.find(that.items, function(o){
+              return o.Id == that.selectedItem.Id;
             });
             if(hasCurrentItem){
-              that.getItem();
+          new Promise(function(resolve, reject){
+           return that.getItem();
+          }).then(function(result){
+                resolve();
+          });
             } else {
               //clear currenly selected item if it doesn't exist
               that.selectedItem = null;
