@@ -2,7 +2,7 @@
   <v-container fluid grid-list-md>
     <v-layout row wrap class="full-height">
       <v-flex xs6>
-        <Info :type="type" :site-collection-has-user="siteCollectionHasUser" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged"></Info>
+        <Info :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-user="siteCollectionHasUser" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged"></Info>
       </v-flex>
       <v-flex xs6>
         <Console :is-saving="isSaving" :is-loading="isLoading" :save-progress="saveProgress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole"></Console>
@@ -115,6 +115,7 @@ export default {
   },
   data: function() {
     return {
+      updateSelectedItem: null,
       isAnyAvailableSelected: false,
       isAnyAssignedSelected: false,
       drawer: false,
@@ -221,7 +222,9 @@ export default {
               //since we found a match, we'll update the selected user to the current items
               //this is due to the user IDs not being the same between site collections
               if(currentItem != undefined){
+                that.updateSelectedItem = currentItem;
                 that.selectedItem = currentItem;
+                console.log('updated selected item with match.');
               }
             that.siteCollectionHasUser = that.selectedItem !== null && currentItem !== undefined;
             if(  that.siteCollectionHasUser){

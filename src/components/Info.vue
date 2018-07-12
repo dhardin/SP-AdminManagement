@@ -68,6 +68,10 @@ export default {
     newItems: {
       type: Array,
       default: []
+    },
+    updateSelectedItem: {
+      type: Object,
+      default: null
     }
   },
   data: function(){
@@ -79,6 +83,12 @@ export default {
     selectedItem: {
       handler: function(newVal, oldVal){
         this.itemChanged(newVal);
+      },
+      deep: true
+    },
+    updateSelectedItem: {
+      handler: function(newVal, oldVal){
+        this.selectedItem = newVal;
       },
       deep: true
     }
