@@ -35,9 +35,9 @@
       </v-data-iterator>
     </v-card-text>
     <v-card-actions>
-      <v-btn block color="green darken-4" outline :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected</v-btn>
-      <v-btn block :disabled="disabled || !isAnySelected" color="green darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Give Selected</v-btn>
-      <v-btn block :disabled="disabled" color="green darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Give All</v-btn>
+      <v-btn block color="green darken-4" outline :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected</v-btn>
+      <v-btn block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="green darken-3"  @click="giveSelected">Give Selected</v-btn>
+      <v-btn block :disabled="disabled" color="green darken-3" :dark="!disabled"  @click="giveAll">Give All</v-btn>
     </v-card-actions>
   </v-card>
 </template>

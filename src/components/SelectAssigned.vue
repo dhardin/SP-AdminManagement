@@ -37,9 +37,9 @@
 
     </v-card-text>
     <v-card-actions>
-     <v-btn block color="red darken-4" :disabled="disabled" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Remove All</v-btn>
-     <v-btn block :disabled="disabled || !isAnySelected" color="red darken-4" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Remove Selected</v-btn>
-      <v-btn block outline :disabled="disabled || !isAnySelected" color="red darken-4" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="clearSelected">Clear Selected</v-btn>
+     <v-btn block color="red darken-4" :disabled="disabled" :dark="!disabled"  @click="giveAll">Remove All</v-btn>
+     <v-btn block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="red darken-4" @click="giveSelected">Remove Selected</v-btn>
+      <v-btn block outline :disabled="disabled || !isAnySelected" color="red darken-4" @click="clearSelected">Clear Selected</v-btn>
     </v-card-actions>
   </v-card>
 </template>
