@@ -69,7 +69,7 @@ export default {
       drawer: false,
       toggle_select: 0,
       isSaving: false,
-      isTesting: true,
+      isTesting: window.location.hostname == 'localhost',
       isLoading: false,
       stuff: false,
       isSiteCollectionDropdownActive: false,
