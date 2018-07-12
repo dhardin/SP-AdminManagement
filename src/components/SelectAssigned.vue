@@ -11,7 +11,7 @@
       ></v-text-field>
     </v-card-title>
     <v-card-text class="grow">
-      <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAssigned" class="items" must-sort  :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
+      <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAssigned" class="items" must-sort  :rows-per-page-items="[1, 2, 3, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
           <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
         <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87}">
           <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
@@ -19,7 +19,7 @@
         </v-flex>
 
         <v-flex slot="item"slot-scope="props" xs12>
-              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light> {{  props.item.Title }} </v-btn>
+              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index )" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light> {{  props.item.Title }} </v-btn>
         </v-flex>
         <template slot="footer">
           <div class="footer">
