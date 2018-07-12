@@ -221,7 +221,7 @@ export default {
               //since we found a match, we'll update the selected user to the current items
               //this is due to the user IDs not being the same between site collections
               if(currentItem != undefined){
-                that.selectedItem.Id = currentItem;
+                that.selectedItem = currentItem;
               }
             that.siteCollectionHasUser = that.selectedItem !== null && currentItem !== undefined;
             if(  that.siteCollectionHasUser){
