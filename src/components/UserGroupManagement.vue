@@ -229,9 +229,7 @@ export default {
               }
             that.siteCollectionHasUser = that.selectedItem !== null && currentItem !== undefined;
             if(  that.siteCollectionHasUser){
-              that.getItem( function(){
-                resolve();
-              });
+              resolve();
             } else {
               that.items.push(that.selectedItem);
               that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
@@ -326,7 +324,7 @@ export default {
       }
     },
     getItem: function(callback){
-      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', target: this.selectedItem.Title, type: 'warning'});
+      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'warning'});
       this.isLoading = true;
       (function(that){
         if(that.isTesting){
@@ -340,7 +338,7 @@ export default {
                 return that.$lodash.find(that.assignedItems, o) === undefined;
               })[0];
             }
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url,  type: 'info'});
             that.isLoading = false
             if(callback){
               callback();
