@@ -214,7 +214,7 @@ export default {
                   console.log(that.selectedItem);
                   console.log(o);
                 }
-                return o.Id == that.selectedItem.Id;
+                return o.LoginName == that.selectedItem.LoginName;
               } else {
                 return false;
               }
@@ -225,6 +225,7 @@ export default {
                 that.updateSelectedItem = currentItem;
                 that.selectedItem = currentItem;
                 console.log('updated selected item with match.');
+                console.log(that.selectedItem);
               }
             that.siteCollectionHasUser = that.selectedItem !== null && currentItem !== undefined;
             if(  that.siteCollectionHasUser){
