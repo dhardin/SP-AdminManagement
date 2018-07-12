@@ -19,7 +19,7 @@
         </v-flex>
 
         <v-flex slot="item"slot-scope="props" xs12>
-              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed> {{  props.item.Title }} </v-btn>
+              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light> {{  props.item.Title }} </v-btn>
         </v-flex>
         <template slot="footer">
           <div class="footer">
@@ -39,7 +39,7 @@
     <v-card-actions>
      <v-btn block color="red darken-4" :disabled="disabled" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Remove All</v-btn>
      <v-btn block :disabled="disabled || !isAnySelected" color="red darken-4" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Remove Selected</v-btn>
-      <v-btn block :disabled="disabled || !isAnySelected" color="red darken-1" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="clearSelected">Clear Selected</v-btn>
+      <v-btn block outline :disabled="disabled || !isAnySelected" color="red darken-4" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="clearSelected">Clear Selected</v-btn>
     </v-card-actions>
   </v-card>
 </template>

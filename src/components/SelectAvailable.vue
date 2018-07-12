@@ -18,7 +18,7 @@
       </svg>
       </v-flex>
         <v-flex slot="item"slot-scope="props" xs12>
-          <v-btn block :disabled="isSaving || isLoading  || !isSiteCollectionSelected || !isItemSelected" :ripple="false" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'blue-grey lighten-4' : 'undefined'" :outline="!props.item.selected" depressed>  {{  props.item.Title }} </v-btn>
+          <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, props.index)" :color="props.item.selected ? 'green lighten-1' : 'green lighten-4'"  depressed light> {{  props.item.Title }} </v-btn>
         </v-flex>
         <template slot="footer">
           <div class="footer">
@@ -35,9 +35,9 @@
       </v-data-iterator>
     </v-card-text>
     <v-card-actions>
-      <v-btn block color="blue-grey darken-1" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected</v-btn>
-      <v-btn block :disabled="disabled || !isAnySelected" color="blue-grey darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Give Selected</v-btn>
-      <v-btn block :disabled="disabled" color="blue-grey darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Give All</v-btn>
+      <v-btn block color="green darken-4" outline :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected</v-btn>
+      <v-btn block :disabled="disabled || !isAnySelected" color="green darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveSelected">Give Selected</v-btn>
+      <v-btn block :disabled="disabled" color="green darken-3" :dark="!isSaving || !isLoading  || !isSiteCollectionSelected || !isItemSelected" @click="giveAll">Give All</v-btn>
     </v-card-actions>
   </v-card>
 </template>
