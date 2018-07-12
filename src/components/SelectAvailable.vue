@@ -11,7 +11,7 @@
       ></v-text-field>
     </v-card-title>
     <v-card-text class="grow">
-      <v-data-iterator :pagination.sync="pagination" :items="availableItems" :search="searchAvailable" class="items" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
+      <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAvailable" class="items" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
         <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
       <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87}">
         <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
@@ -22,11 +22,11 @@
         </v-flex>
         <template slot="footer">
           <div class="footer">
-          <v-btn flat @click="pagination.page--" :disabled="pagination.page == 1" class="pagination">
+          <v-btn flat @click="pagination.page == 1 ? '' : pagination.page--" :disabled="pagination.page == 1" class="pagination">
             <svg role="img" title="Prev" :style="{ opacity: disabled == true || pagination.page == 1 ? .38 : .87}">
               <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_left_24px"/>
             </svg></v-btn>
-          <v-btn flat @click="pagination.page++" :disabled="pagination.page == pages" class="pagination">
+          <v-btn flat @click="pagination.page == pages ? '' : pagination.page++" :disabled="pagination.page == pages" class="pagination">
             <svg role="img" title="Next"  :style="{ opacity: disabled == true || (pagination.page == pages || pages == 0) ? .38 : .87}">
               <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_right_24px"/>
             </svg></v-btn>
@@ -67,6 +67,11 @@ export default {
   computed: {
     disabled: function(){
       return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasUser;
+    },
+    sortedItems: function(){
+      return _.sortBy(this.availableItems, function(o){
+        return o.Title;
+      });
     },
     pages () {
       if (this.pagination.rowsPerPage == null ||
