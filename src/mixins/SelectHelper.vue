@@ -24,6 +24,13 @@
       isLoading: {
         type: Boolean,
         default: false
+      },
+      items: {
+        type: Array,
+        default: []
+      },
+      selectedItem: {
+
       }
     },
   methods: {
@@ -39,6 +46,23 @@
     giveAll: function(e){
         this.$emit('give-all', this.type);
     }
+  },
+  computed: {
+    disabled: function(){
+      return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasUser;
+    },
+    sortedItems: function(){
+      return _.sortBy(this.items, function(o){
+        return o.Title;
+      });
+    },
+    pages () {
+      if (this.pagination.rowsPerPage == null ||
+        this.pagination.totalItems == null
+      ) return 0
+
+      return Math.ceil(this.sortedItems.length / this.pagination.rowsPerPage)
     }
+  }
   };
 </script>

@@ -49,13 +49,6 @@ import SelectHelper from '../mixins/SelectHelper.vue'
 
 export default {
   mixins: [SelectHelper],
-    props:{
-      assignedItems: {
-        type: Array
-      },
-      selectedItem: {
-      }
-    },
   data: function(){
     return {
       searchAssigned: '',
@@ -63,23 +56,6 @@ export default {
       pagination: {
       }
     };
-  },
-  computed: {
-    disabled: function(){
-      return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasUser;
-    },
-    sortedItems: function(){
-      return _.sortBy(this.availableItems, function(o){
-        return o.Title;
-      });
-    },
-    pages () {
-      if (this.pagination.rowsPerPage == null ||
-        this.pagination.totalItems == null
-      ) return 0
-
-      return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
-    }
   }
 }
 </script>

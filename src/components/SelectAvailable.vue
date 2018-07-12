@@ -22,11 +22,11 @@
         </v-flex>
         <template slot="footer">
           <div class="footer">
-          <v-btn flat @click="pagination.page == 1 ? '' : pagination.page--" :disabled="pagination.page == 1" class="pagination">
+          <v-btn flat @click="pagination.page--" :disabled="pagination.page == 1" class="pagination">
             <svg role="img" title="Prev" :style="{ opacity: disabled == true || pagination.page == 1 ? .38 : .87}">
               <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_left_24px"/>
             </svg></v-btn>
-          <v-btn flat @click="pagination.page == pages ? '' : pagination.page++" :disabled="pagination.page == pages" class="pagination">
+          <v-btn flat @click="pagination.page++" :disabled="pagination.page == pages" class="pagination">
             <svg role="img" title="Next"  :style="{ opacity: disabled == true || (pagination.page == pages || pages == 0) ? .38 : .87}">
               <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_right_24px"/>
             </svg></v-btn>
@@ -47,14 +47,6 @@ import SelectHelper from '../mixins/SelectHelper.vue'
 
 export default {
   mixins: [SelectHelper],
-  props:{
-    availableItems: {
-      type: Array
-    },
-    selectedItem: {
-
-    }
-  },
   data: function(){
     return {
       searchAvailable: '',
@@ -63,23 +55,6 @@ export default {
       pagination: {
       }
     };
-  },
-  computed: {
-    disabled: function(){
-      return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasUser;
-    },
-    sortedItems: function(){
-      return _.sortBy(this.availableItems, function(o){
-        return o.Title;
-      });
-    },
-    pages () {
-      if (this.pagination.rowsPerPage == null ||
-        this.pagination.totalItems == null
-      ) return 0
-
-      return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
-    }
   }
 };
 </script>
