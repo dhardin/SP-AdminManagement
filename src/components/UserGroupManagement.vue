@@ -218,7 +218,11 @@ export default {
                 return false;
               }
               });
-
+              //since we found a match, we'll update the selected user to the current items
+              //this is due to the user IDs not being the same between site collections
+              if(currentItem != undefined){
+                that.selectedItem.Id = currentItem;
+              }
             that.siteCollectionHasUser = that.selectedItem !== null && currentItem !== undefined;
             if(  that.siteCollectionHasUser){
               that.getItem( function(){
