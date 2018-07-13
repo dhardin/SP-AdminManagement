@@ -55,7 +55,9 @@ export default {
     },
     items: {
       type: Array,
-      default: []
+      default: function(){
+        return []
+      }
     },
     color: {
       type: String,
@@ -72,11 +74,21 @@ export default {
     inactiveColor: {
       type: String,
       default: 'white'
-    }
+    },
+    value: null
   },
   computed: {
     filterMethod: function(){
         return this.hasFilters ? this.customFilter : null;
+    }
+  },
+  watch: {
+    value: {
+      handler: function(newVal, oldVal){
+        this.selectedItem = newVal;
+        this.$emit('input', newVal);
+      },
+      deep: true
     }
   },
   data: function() {

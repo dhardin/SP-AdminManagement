@@ -49,7 +49,7 @@
     </v-toolbar>
     <v-content>
       <transition name="slide">
-        <router-view class="view" :isLoadingSiteCollections="isLoadingSiteCollections" @site-collection-selected="siteCollectionSelected" :is-testing="isTesting" :type="type" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected"></router-view>
+        <router-view class="view" @select-site-collection="selectSiteCollection" :site-collections="siteCollections" :isLoadingSiteCollections="isLoadingSiteCollections" @site-collection-selected="siteCollectionSelected" :is-testing="isTesting" :type="type" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected"></router-view>
       </transition>
     </v-content>
   </v-app>
@@ -112,6 +112,9 @@ export default {
     }
   },
   methods: {
+    selectSiteCollection: function(siteCollection){
+      this.$set(this, 'siteCollection', siteCollection);
+    },
     siteCollectionSelected: function(isSiteCollectionSelected){
       this.isSiteCollectionSelected = isSiteCollectionSelected;
     },

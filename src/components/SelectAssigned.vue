@@ -11,7 +11,7 @@
       ></v-text-field>
     </v-card-title>
     <v-card-text class="grow">
-      <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAssigned" class="items" must-sort  :rows-per-page-items="[1, 2, 3, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
+      <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAssigned" class="items" must-sort  :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
           <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
         <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87}">
           <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />

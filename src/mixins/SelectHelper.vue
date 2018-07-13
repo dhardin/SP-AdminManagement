@@ -1,7 +1,7 @@
 <script>
   export default {
     props: {
-      siteCollectionHasUser: {
+      siteCollectionHasItem: {
         type: Boolean,
         default: false
       },
@@ -27,7 +27,9 @@
       },
       items: {
         type: Array,
-        default: []
+        default: function(){
+          return []
+        }
       },
       selectedItem: {
 
@@ -49,12 +51,12 @@
   },
   computed: {
     disabled: function(){
-      return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasUser;
+      return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasItem;
     },
     sortedItems: function(){
-      return _.sortBy(this.items, function(o){
-        return o.Title;
-      });
+      return this.$lodash.sortBy(this.items, [function(o){
+        return o.Title.toLowerCase();
+      }]);
     },
     pages () {
       if (this.pagination.rowsPerPage == null ||

@@ -8,9 +8,15 @@ Vue.use(VueRouter);
 export default new VueRouter({
   routes: [
     {
-      path: '/',
+    path: '',
     component: UserGroupManagement,
-    name: 'Home'
+    name: 'Home',
+    props: (function (route){
+      return{
+        url: route.query.url,
+        loginname: route.query.loginname
+      };
+    })
     },
     {
       path: '/about',

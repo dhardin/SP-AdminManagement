@@ -2,16 +2,16 @@
   <v-container fluid grid-list-md>
     <v-layout row wrap class="full-height">
       <v-flex xs6>
-        <Info :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-user="siteCollectionHasUser" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged"></Info>
+        <Info :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged"></Info>
       </v-flex>
       <v-flex xs6>
         <Console :is-saving="isSaving" :is-loading="isLoading" :save-progress="saveProgress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole"></Console>
       </v-flex>
       <v-flex xs6>
-        <SelectAvailable :site-collection-has-user="siteCollectionHasUser"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
+        <SelectAvailable :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
       </v-flex>
       <v-flex xs6>
-        <SelectAssigned :site-collection-has-user="siteCollectionHasUser"  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
+        <SelectAssigned :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -27,9 +27,10 @@ import Info from './Info.vue'
 import SelectAssigned from './SelectAssigned.vue'
 import SelectAvailable from './SelectAvailable.vue'
 import Data from '../mixins/Data.vue'
+import TestData from '../mixins/TestData.vue'
 
 export default {
-  mixins: [Data],
+  mixins: [Data, TestData],
   components: {
     Console: Console,
     Info: Info,
@@ -56,6 +57,12 @@ export default {
         }
       }
     },
+    siteCollections: {
+      type: Array,
+      default: function(){
+        return [];
+      }
+    },
     isTesting: {
       type: Boolean,
       default: false
@@ -69,7 +76,9 @@ export default {
       default: function(){
         return {users: true, groups: false}
       }
-    }
+    },
+    url: '',
+    loginname: ''
   },
   watch: {
     selectedAvailable: {
@@ -85,7 +94,8 @@ export default {
       deep: true
     },
     isSiteCollectionSelected: {
-      handler: function(){
+      handler: function(newVal, oldVal){
+
       }
     },
     isLoadingSiteCollections: {
@@ -97,10 +107,20 @@ export default {
     siteCollection: {
       handler: function(newVal, oldVal){
         if(this.siteCollection == null){
+          delete this.$route.query;
           return;
         }
 
+      this.$router.push({ query: { url: this.siteCollection !== null ? this.siteCollection.url : '',loginname: this.selectedItem !== null ? this.selectedItem.LoginName : ''}});
+
+
         this.getData();
+      },
+      deep: true
+    },
+    selectedItem: {
+      handler: function(newVal, oldVal){
+            this.$router.push({ query: { url: this.siteCollection.url,loginname: this.selectedItem !== null ? this.selectedItem.LoginName : ''}});
       },
       deep: true
     },
@@ -127,7 +147,8 @@ export default {
       savingIndex: 0,
       updateProgressInterval: false,
       selectedItem: null,
-      siteCollectionHasUser: true,
+      siteCollectionHasItem: true,
+
       snackbar: {
         show: false,
         y: 'top',
@@ -157,10 +178,22 @@ export default {
   },
   methods: {
     getIsLoadingSiteCollections(val){
+      var siteCollectionSelected;
       if(this.isLoadingSiteCollections.status){
         this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
       } else {
         this.messages.push({date: new Date(), verb: this.actions.Finished, preposition: ' ', hasError: this.isLoadingSiteCollections.hasError, message: this.isLoadingSiteCollections.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
+        if(this.url != ''){
+          //double check that site collection exists
+          (function(that){
+            siteCollectionSelected = that.$lodash.find(that.siteCollections, function(o){
+              return o.url == that.url;
+            });
+            })(this);
+          if(siteCollectionSelected){
+            this.$emit('select-site-collection', siteCollectionSelected);
+          }
+        }
       }
     },
     getData: function(){
@@ -204,16 +237,14 @@ export default {
             });
           });
         }).then(function(result){
+          //now we'll go ahead and try and match the currently selected user
+          //with the one that exists in the new site collection.
+          //We'll go ahead and just resolve if the type that we're working with is group.
           return new Promise(function(resolve, reject){
             var currentItem;
-            if(that.selectedItem !== null){
-              currentItem = _.find(that.items, function(o){
+            if(that.selectedItem !== null && that.type.users){
+              currentItem = that.$lodash.find(that.items, function(o){
               if(o !== undefined && o.hasOwnProperty('Id')){
-                if(o.LoginName == that.selectedItem.LoginName){
-                  console.log('Matched!');
-                  console.log(that.selectedItem);
-                  console.log(o);
-                }
                 return o.LoginName == that.selectedItem.LoginName;
               } else {
                 return false;
@@ -224,11 +255,9 @@ export default {
               if(currentItem != undefined){
                 that.updateSelectedItem = currentItem;
                 that.selectedItem = currentItem;
-                console.log('updated selected item with match.');
-                console.log(that.selectedItem);
               }
-            that.siteCollectionHasUser = that.selectedItem !== null && currentItem !== undefined;
-            if(  that.siteCollectionHasUser){
+            that.siteCollectionHasItem = that.selectedItem !== null && currentItem !== undefined;
+            if(  that.siteCollectionHasItem){
               resolve();
             } else {
               that.items.push(that.selectedItem);
@@ -254,7 +283,7 @@ export default {
             //trigger select change for selected item if it exists, else clear selected item
             var rand = Math.random();
 
-            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback([{Id: 1, Title:'Foo Bar', LoginName: 'foo.bar', Email: 'foo.bar@example.com'},{Id: 2, Title:'Joe Schmoe', LoginName: 'joe.schmoe', Email: 'joe.schmoe@example.com'}]);
+            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback(that.testUsers);
           },1000);
         } else {
           that.getUsers(that.siteCollection, false, function(users){
@@ -274,12 +303,7 @@ export default {
             //trigger select change for selected item if it exists, else clear selected item
             var rand = Math.random();
 
-            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback([{Title: 'Perm1', subtitle: "" },
-            {Title: 'Perm2', subtitle: "" },
-            { Title: 'Perm3', subtitle: "" },
-            {Title: 'Perm4', subtitle: "" },
-            {Title: 'Perm5', subtitle: ""},
-            { Title: 'Perm6', subtitle: "" }]);
+            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback(that.testGroups);
 
           },1000);
         } else {
@@ -296,10 +320,12 @@ export default {
       var key;
       var selectedItems = type == 'available' ? this.selectedAvailable : this.selectedAssigned;
       var items = type == 'available' ? this.availableItems : this.assignedItems;
+      var isAnySelected = type == 'available' ? this.isAnyAvailableSelected : this.isAnyAssignedSelected;
       for(key in selectedItems){
         items[selectedItems[key].index].selected = false;
         delete selectedItems[key];
       }
+      isAnySelected = false;
     },
     itemChanged: function(item){
       var i;
@@ -319,7 +345,7 @@ export default {
           this.originalAssignedItems.push(JSON.parse(JSON.stringify(this.assignedItems[i])));
         }
         this.isItemSelected = true;
-        this.siteCollectionHasUser = true;
+        this.siteCollectionHasItem = true;
         this.getItem();
       }
     },
@@ -329,15 +355,11 @@ export default {
       (function(that){
         if(that.isTesting){
           setTimeout(function(){
-            if(that.type.users){
-              that.assignedItems =  [{Title: 'Perm4', subtitle: "", selected: false },
-              {Title: 'Perm5', subtitle: "", selected: false },
-              { Title: 'Perm6', subtitle: "", selected: false }];
+              that.assignedItems =  that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
               //remove assigned items from available
               that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
                 return that.$lodash.find(that.assignedItems, o) === undefined;
               })[0];
-            }
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url,  type: 'info'});
             that.isLoading = false
             if(callback){
@@ -384,15 +406,23 @@ export default {
     selectItem: function(type, item, index){
       var selectedItems = type == 'available' ? this.selectedAvailable : this.selectedAssigned;
       var items = type == 'available' ? this.availableItems : this.assignedItems;
+          var isAnySelected = type == 'available' ? this.isAnyAvailableSelected : this.isAnyAssignedSelected;
+    /*  selectedItems = this.$lodash.sortBy(selectedItems, [function(o){
+        return o.Title;
+      }]);
+    */  items = this.$lodash.sortBy(items, [function(o){
+        return o.Title.toLowerCase();
+      }]);
       this.$set(items[index], 'selected', items[index].selected !== undefined ? !items[index].selected : true);
       //items[index].selected = items[index].selected !== undefined ? !items[index].selected : true;
       if(  items[index].selected){
-        this.$set(selectedItems, item.Title, items[index]);
+        this.$set(selectedItems, item.LoginName, items[index]);
         //set index so we can easily find this item when we "give/remove" it
-        selectedItems[item.Title].index = index;
+        selectedItems[item.LoginName].index = index;
       } else {
-        delete selectedItems[item.Title];
+        delete selectedItems[item.LoginName];
       }
+      this.$set(this, type == 'available' ? 'selectedAvailable' : 'selectedAssigned', selectedItems);
     },
     giveAll: function(sourceType){
       var sourceSelectedItems;
@@ -475,6 +505,9 @@ export default {
         sourceItems = this.assignedItems;
         targetItems =  this.availableItems;
       }
+      sourceItems = this.$lodash.sortBy(sourceItems, [function(o){
+        return o.Title.toLowerCase();
+      }]);
 
       //move items from selected into target lists
       for(key in sourceSelectedItems){
@@ -483,7 +516,7 @@ export default {
         targetItems.push(JSON.parse(JSON.stringify(sourceItems[sourceSelectedItems[key].index])));
         //delete targetItems[targetItems.length -1].index;
         itemIndex = this.$lodash.findIndex(this.originalAssignedItems, function(o){
-          return o.title == sourceSelectedItems[key].title
+          return o.LoginName == sourceSelectedItems[key].LoginName
         });
         isOriginalItem = itemIndex > -1;
         if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
@@ -491,7 +524,7 @@ export default {
           this.newItems[this.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
         } else {
           newItemIndex = this.$lodash.findIndex(this.newItems, function(o){
-            return o.title == sourceSelectedItems[key].title
+            return o.LoginName == sourceSelectedItems[key].LoginName
           });
           this.newItems.splice(newItemIndex, 1);
         }
@@ -503,6 +536,8 @@ export default {
         sourceItems.splice(sourceSelectedItems[key].index - modIndex, 1);
         indexRemovedArr.push(sourceSelectedItems[key].index);
       }
+
+      this.$set(this, sourceType == 'available' ? 'availableItems' : 'assignedItems', sourceItems);
 
       //merge the selected items into the target selected items (maintains previously selected items)
       //    targetSelectedItems = Object.assign(targetSelectedItems, sourceSelectedItems);
@@ -516,18 +551,18 @@ export default {
     save: function(){
       this.isSaving = true;
       this.saveProgress = 0;
-      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.Title, type: 'warning'});
+      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.Title,  url: this.siteCollection.url,  type: 'warning'});
       this.saveIndex = 0;
       (function(that){
         that.updateProgressInterval = setInterval(function(){
           that.saveProgress += 100/that.newItems.length;
           var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
           var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
-          that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].title, preposition: preposition, target: that.selectedItem.Title,type: 'success'});
+          that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].LoginName, preposition: preposition, target: that.selectedItem.LoginName,  url: that.siteCollection.url, type: 'success'});
           that.saveIndex++;
           if(that.saveProgress >= 100){
             that.isSaving = false;
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title,type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
             that.newItems = [];
             clearInterval(  that.updateProgressInterval);
             //update originating Items

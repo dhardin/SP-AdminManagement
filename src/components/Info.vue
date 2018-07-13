@@ -21,7 +21,7 @@
     </v-card-text>
 
     <v-card-actions>
-      <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.displayName.length == 0">Save</v-btn>
+      <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
       <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Copy</v-btn>
       <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
       <v-btn flat color="pink":disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" @click="exportData" >Export</v-btn>
@@ -53,7 +53,7 @@ export default {
       type: Boolean,
       default: false
     },
-    siteCollectionHasUser: {
+    siteCollectionHasItem: {
       type: Boolean,
       default: false
     },
@@ -91,6 +91,21 @@ export default {
         this.selectedItem = newVal;
       },
       deep: true
+    },
+    type: {
+      handler: function(newVal, oldVal){
+          //clear out selected since type changed
+          this.selectedItem = null;
+      },
+      deep: true
+    },
+    siteCollectionHasItem: {
+      handler: function(newVal, oldVal){
+        //clear current item if group and site collection doesn't have a match
+        if(this.isSiteCollectionSelected && !newVal && this.type.groups){
+          this.selectedItem = null;
+        }
+      }
     }
   },
   methods: {
