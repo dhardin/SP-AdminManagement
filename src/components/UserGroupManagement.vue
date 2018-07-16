@@ -111,16 +111,30 @@ export default {
           return;
         }
 
-      this.$router.push({ query: { url: this.siteCollection !== null ? this.siteCollection.url : '',loginname: this.selectedItem !== null ? this.selectedItem.LoginName : ''}});
 
-
-        this.getData();
+        if(this.siteCollection !== null){
+        (function(that){
+          new Promise(function(resolve, reject){
+            that.getData(function(){
+              resolve();
+            });
+          }).then(function(result){
+            if(that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '')){
+              that.getItem(function(){
+                that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : '', loginname: that.selectedItem !== null ? that.selectedItem.LoginName : ''}});
+              });
+            } else {
+              that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : ''}});
+            }
+          });
+        })(this);
+        }
       },
       deep: true
     },
     selectedItem: {
       handler: function(newVal, oldVal){
-            this.$router.push({ query: { url: this.siteCollection.url,loginname: this.selectedItem !== null ? this.selectedItem.LoginName : ''}});
+        this.$router.push({ query: { url: this.siteCollection.url,loginname: this.selectedItem !== null ? this.selectedItem.LoginName : ''}});
       },
       deep: true
     },
@@ -177,7 +191,36 @@ export default {
     };
   },
   methods: {
-    getIsLoadingSiteCollections(val){
+    checkIfUserExists: function(loginName){
+      var currentItem;
+      if(loginName.length > 0){
+        currentItem = this.$lodash.find(this.items, function(o){
+          if(o !== undefined && o.hasOwnProperty('Id')){
+            return o.LoginName == loginName;
+          } else {
+            return false;
+          }
+        });
+        //since we found a match, we'll update the selected user to the current items
+        //this is due to the user IDs not being the same between site collections
+        if(currentItem != undefined){
+          this.updateSelectedItem = currentItem;
+          this.selectedItem = currentItem;
+        }
+        if(this.selectedItem !== null){
+          this.siteCollectionHasItem = currentItem !== undefined;
+          if(  this.siteCollectionHasItem){
+            return true;
+          } else {
+            this.items.push(this.selectedItem);
+            this.messages.push({date: new Date(), verb: this.actions.Failed, text:  'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
+            return false;
+          }
+        }
+      }
+      return false;
+    },
+    getIsLoadingSiteCollections: function(val){
       var siteCollectionSelected;
       if(this.isLoadingSiteCollections.status){
         this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
@@ -189,14 +232,14 @@ export default {
             siteCollectionSelected = that.$lodash.find(that.siteCollections, function(o){
               return o.url == that.url;
             });
-            })(this);
+          })(this);
           if(siteCollectionSelected){
             this.$emit('select-site-collection', siteCollectionSelected);
           }
         }
       }
     },
-    getData: function(){
+    getData: function(callback){
       this.isLoading = true;
       (function(that){
         new Promise(function(resolve, reject){
@@ -243,34 +286,16 @@ export default {
           return new Promise(function(resolve, reject){
             var currentItem;
             if(that.selectedItem !== null && that.type.users){
-              currentItem = that.$lodash.find(that.items, function(o){
-              if(o !== undefined && o.hasOwnProperty('Id')){
-                return o.LoginName == that.selectedItem.LoginName;
-              } else {
-                return false;
-              }
-              });
-              //since we found a match, we'll update the selected user to the current items
-              //this is due to the user IDs not being the same between site collections
-              if(currentItem != undefined){
-                that.updateSelectedItem = currentItem;
-                that.selectedItem = currentItem;
-              }
-            that.siteCollectionHasItem = that.selectedItem !== null && currentItem !== undefined;
-            if(  that.siteCollectionHasItem){
-              resolve();
-            } else {
-              that.items.push(that.selectedItem);
-              that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
-            resolve();
+              that.checkIfUserExists(that.selectedItem.LoginName);
             }
-          } else {
             resolve();
-          }
           });
         }).then(function(result){
           that.isLoading = false;
           that.$emit('site-collection-selected', true);
+          if(callback){
+            callback();
+          }
         });
       })(this);
     },
@@ -321,6 +346,10 @@ export default {
       var selectedItems = type == 'available' ? this.selectedAvailable : this.selectedAssigned;
       var items = type == 'available' ? this.availableItems : this.assignedItems;
       var isAnySelected = type == 'available' ? this.isAnyAvailableSelected : this.isAnyAssignedSelected;
+      items = this.$lodash.sortBy(items, [function(o){
+        return o.Title.toLowerCase();
+      }]);
+
       for(key in selectedItems){
         items[selectedItems[key].index].selected = false;
         delete selectedItems[key];
@@ -355,11 +384,11 @@ export default {
       (function(that){
         if(that.isTesting){
           setTimeout(function(){
-              that.assignedItems =  that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
-              //remove assigned items from available
-              that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
-                return that.$lodash.find(that.assignedItems, o) === undefined;
-              })[0];
+            that.assignedItems =  that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
+            //remove assigned items from available
+            that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
+              return that.$lodash.find(that.assignedItems, o) === undefined;
+            })[0];
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url,  type: 'info'});
             that.isLoading = false
             if(callback){
@@ -406,184 +435,184 @@ export default {
     selectItem: function(type, item, index){
       var selectedItems = type == 'available' ? this.selectedAvailable : this.selectedAssigned;
       var items = type == 'available' ? this.availableItems : this.assignedItems;
-          var isAnySelected = type == 'available' ? this.isAnyAvailableSelected : this.isAnyAssignedSelected;
-    /*  selectedItems = this.$lodash.sortBy(selectedItems, [function(o){
-        return o.Title;
-      }]);
+      var isAnySelected = type == 'available' ? this.isAnyAvailableSelected : this.isAnyAssignedSelected;
+      /*  selectedItems = this.$lodash.sortBy(selectedItems, [function(o){
+      return o.Title;
+    }]);
     */  items = this.$lodash.sortBy(items, [function(o){
-        return o.Title.toLowerCase();
-      }]);
-      this.$set(items[index], 'selected', items[index].selected !== undefined ? !items[index].selected : true);
-      //items[index].selected = items[index].selected !== undefined ? !items[index].selected : true;
-      if(  items[index].selected){
-        this.$set(selectedItems, item.LoginName, items[index]);
-        //set index so we can easily find this item when we "give/remove" it
-        selectedItems[item.LoginName].index = index;
-      } else {
-        delete selectedItems[item.LoginName];
-      }
-      this.$set(this, type == 'available' ? 'selectedAvailable' : 'selectedAssigned', selectedItems);
-    },
-    giveAll: function(sourceType){
-      var sourceSelectedItems;
-      var targetSelectedItems;
-      var sourceItems;
-      var key;
-      var index = 0;
-      var targetItems;
-      var isOriginalItem;
-      var itemIndex;
-      var newItemIndex;
-      var i;
-      if(sourceType == 'available'){
-        sourceSelectedItems = this.selectedAvailable;
-        targetSelectedItems = this.selectedAssigned;
-        sourceItems = this.availableItems;
-        targetItems =  this.assignedItems;
-      } else {
-        sourceSelectedItems = this.selectedAssigned;
-        targetSelectedItems = this.selectedAvailable;
-        sourceItems = this.assignedItems;
-        targetItems =  this.availableItems;
-      }
-      if(sourceType == 'assigned'){
-        this.newItems = [];
-      }
-      //move items from selected into target lists
-      i = sourceItems.length;
-      while(i--){
-        //push item to target
-        sourceItems[i].selected = false;
-        targetItems.push(JSON.parse(JSON.stringify(sourceItems[i])));
-        itemIndex = this.$lodash.findIndex(this.originalAssignedItems, function(o){
-          return o.title == sourceItems[i].title
-        });
-        isOriginalItem = itemIndex > -1;
-        if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
-          this.newItems.push(JSON.parse(JSON.stringify(sourceItems[i])));
-          this.newItems[this.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
-        } else {
-          newItemIndex = this.$lodash.findIndex(this.newItems, function(o){
-            return o.title == sourceItems[i].title
-          });
-          this.newItems.splice(newItemIndex, 1);
-        }
-        sourceItems.splice(i, 1);
-      }
-
-
-      //merge the selected items into the target selected items (maintains previously selected items)
-      //      targetSelectedItems = Object.assign(targetSelectedItems, sourceSelectedItems);
-      //now that the target selected items are merged, delete
-      //index = targetItems.length - Object.keys(sourceSelectedItems).length;
-      for(key in sourceSelectedItems){
-        //    targetSelectedItems[key].index = this.$lodash.findIndex(targetItems, function(o) { return o.title == key});
-        delete sourceSelectedItems[key];
-        //  index++;
-      }
-    },
-    giveSelected: function(sourceType){
-      var sourceSelectedItems;
-      var targetSelectedItems;
-      var sourceItems;
-      var isOriginalItem = false;
-      var key;
-      var index = 0;
-      var itemIndex;
-      var newItemIndex;
-      var targetItems;
-      var modIndex = 0;
-      var indexRemovedArr = [];
-      if(sourceType == 'available'){
-        sourceSelectedItems = this.selectedAvailable;
-        targetSelectedItems = this.selectedAssigned;
-        sourceItems = this.availableItems;
-        targetItems =  this.assignedItems;
-      } else {
-        sourceSelectedItems = this.selectedAssigned;
-        targetSelectedItems = this.selectedAvailable;
-        sourceItems = this.assignedItems;
-        targetItems =  this.availableItems;
-      }
-      sourceItems = this.$lodash.sortBy(sourceItems, [function(o){
-        return o.Title.toLowerCase();
-      }]);
-
-      //move items from selected into target lists
-      for(key in sourceSelectedItems){
-        sourceItems[sourceSelectedItems[key].index].selected = false;
-        //push item to target
-        targetItems.push(JSON.parse(JSON.stringify(sourceItems[sourceSelectedItems[key].index])));
-        //delete targetItems[targetItems.length -1].index;
-        itemIndex = this.$lodash.findIndex(this.originalAssignedItems, function(o){
-          return o.LoginName == sourceSelectedItems[key].LoginName
-        });
-        isOriginalItem = itemIndex > -1;
-        if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
-          this.newItems.push(JSON.parse(JSON.stringify(sourceItems[sourceSelectedItems[key].index])));
-          this.newItems[this.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
-        } else {
-          newItemIndex = this.$lodash.findIndex(this.newItems, function(o){
-            return o.LoginName == sourceSelectedItems[key].LoginName
-          });
-          this.newItems.splice(newItemIndex, 1);
-        }
-      }
-
-      for(key in sourceSelectedItems){
-        //remove item from source
-        modIndex = this.$lodash.filter(indexRemovedArr, function(indexNum){ return indexNum < sourceSelectedItems[key].index }).length;
-        sourceItems.splice(sourceSelectedItems[key].index - modIndex, 1);
-        indexRemovedArr.push(sourceSelectedItems[key].index);
-      }
-
-      this.$set(this, sourceType == 'available' ? 'availableItems' : 'assignedItems', sourceItems);
-
-      //merge the selected items into the target selected items (maintains previously selected items)
-      //    targetSelectedItems = Object.assign(targetSelectedItems, sourceSelectedItems);
-      //  index = targetItems.length - Object.keys(sourceSelectedItems).length;
-      for(key in sourceSelectedItems){
-        //    targetSelectedItems[key].index = index;
-        delete sourceSelectedItems[key];
-        index++;
-      }
-    },
-    save: function(){
-      this.isSaving = true;
-      this.saveProgress = 0;
-      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.Title,  url: this.siteCollection.url,  type: 'warning'});
-      this.saveIndex = 0;
-      (function(that){
-        that.updateProgressInterval = setInterval(function(){
-          that.saveProgress += 100/that.newItems.length;
-          var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
-          var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
-          that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].LoginName, preposition: preposition, target: that.selectedItem.LoginName,  url: that.siteCollection.url, type: 'success'});
-          that.saveIndex++;
-          if(that.saveProgress >= 100){
-            that.isSaving = false;
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
-            that.newItems = [];
-            clearInterval(  that.updateProgressInterval);
-            //update originating Items
-            var i = 0;
-            that.originalAssignedItems = [];
-            that.newItems = [];
-            for(i = 0; i < that.assignedItems.length; i++){
-              that.originalAssignedItems.push(JSON.parse(JSON.stringify(that.assignedItems[i])));
-            }
-          }
-        }, 100);
-      })(this);
-    },
-    clearConsole: function(){
-      this.messages = [];
-    }
-  },
-  created: function(){
-    this.toggle_select = this.type.users ? 0 : 1;
-    this.getIsLoadingSiteCollections();
+    return o.Title.toLowerCase();
+  }]);
+  this.$set(items[index], 'selected', items[index].selected !== undefined ? !items[index].selected : true);
+  //items[index].selected = items[index].selected !== undefined ? !items[index].selected : true;
+  if(  items[index].selected){
+    this.$set(selectedItems, item.LoginName, items[index]);
+    //set index so we can easily find this item when we "give/remove" it
+    selectedItems[item.LoginName].index = index;
+  } else {
+    delete selectedItems[item.LoginName];
   }
+  this.$set(this, type == 'available' ? 'selectedAvailable' : 'selectedAssigned', selectedItems);
+},
+giveAll: function(sourceType){
+  var sourceSelectedItems;
+  var targetSelectedItems;
+  var sourceItems;
+  var key;
+  var index = 0;
+  var targetItems;
+  var isOriginalItem;
+  var itemIndex;
+  var newItemIndex;
+  var i;
+  if(sourceType == 'available'){
+    sourceSelectedItems = this.selectedAvailable;
+    targetSelectedItems = this.selectedAssigned;
+    sourceItems = this.availableItems;
+    targetItems =  this.assignedItems;
+  } else {
+    sourceSelectedItems = this.selectedAssigned;
+    targetSelectedItems = this.selectedAvailable;
+    sourceItems = this.assignedItems;
+    targetItems =  this.availableItems;
+  }
+  if(sourceType == 'assigned'){
+    this.newItems = [];
+  }
+  //move items from selected into target lists
+  i = sourceItems.length;
+  while(i--){
+    //push item to target
+    sourceItems[i].selected = false;
+    targetItems.push(JSON.parse(JSON.stringify(sourceItems[i])));
+    itemIndex = this.$lodash.findIndex(this.originalAssignedItems, function(o){
+      return o.title == sourceItems[i].title
+    });
+    isOriginalItem = itemIndex > -1;
+    if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
+      this.newItems.push(JSON.parse(JSON.stringify(sourceItems[i])));
+      this.newItems[this.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
+    } else {
+      newItemIndex = this.$lodash.findIndex(this.newItems, function(o){
+        return o.title == sourceItems[i].title
+      });
+      this.newItems.splice(newItemIndex, 1);
+    }
+    sourceItems.splice(i, 1);
+  }
+
+
+  //merge the selected items into the target selected items (maintains previously selected items)
+  //      targetSelectedItems = Object.assign(targetSelectedItems, sourceSelectedItems);
+  //now that the target selected items are merged, delete
+  //index = targetItems.length - Object.keys(sourceSelectedItems).length;
+  for(key in sourceSelectedItems){
+    //    targetSelectedItems[key].index = this.$lodash.findIndex(targetItems, function(o) { return o.title == key});
+    delete sourceSelectedItems[key];
+    //  index++;
+  }
+},
+giveSelected: function(sourceType){
+  var sourceSelectedItems;
+  var targetSelectedItems;
+  var sourceItems;
+  var isOriginalItem = false;
+  var key;
+  var index = 0;
+  var itemIndex;
+  var newItemIndex;
+  var targetItems;
+  var modIndex = 0;
+  var indexRemovedArr = [];
+  if(sourceType == 'available'){
+    sourceSelectedItems = this.selectedAvailable;
+    targetSelectedItems = this.selectedAssigned;
+    sourceItems = this.availableItems;
+    targetItems =  this.assignedItems;
+  } else {
+    sourceSelectedItems = this.selectedAssigned;
+    targetSelectedItems = this.selectedAvailable;
+    sourceItems = this.assignedItems;
+    targetItems =  this.availableItems;
+  }
+  sourceItems = this.$lodash.sortBy(sourceItems, [function(o){
+    return o.Title.toLowerCase();
+  }]);
+
+  //move items from selected into target lists
+  for(key in sourceSelectedItems){
+    sourceItems[sourceSelectedItems[key].index].selected = false;
+    //push item to target
+    targetItems.push(JSON.parse(JSON.stringify(sourceItems[sourceSelectedItems[key].index])));
+    //delete targetItems[targetItems.length -1].index;
+    itemIndex = this.$lodash.findIndex(this.originalAssignedItems, function(o){
+      return o.LoginName == sourceSelectedItems[key].LoginName
+    });
+    isOriginalItem = itemIndex > -1;
+    if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
+      this.newItems.push(JSON.parse(JSON.stringify(sourceItems[sourceSelectedItems[key].index])));
+      this.newItems[this.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
+    } else {
+      newItemIndex = this.$lodash.findIndex(this.newItems, function(o){
+        return o.LoginName == sourceSelectedItems[key].LoginName
+      });
+      this.newItems.splice(newItemIndex, 1);
+    }
+  }
+
+  for(key in sourceSelectedItems){
+    //remove item from source
+    modIndex = this.$lodash.filter(indexRemovedArr, function(indexNum){ return indexNum < sourceSelectedItems[key].index }).length;
+    sourceItems.splice(sourceSelectedItems[key].index - modIndex, 1);
+    indexRemovedArr.push(sourceSelectedItems[key].index);
+  }
+
+  this.$set(this, sourceType == 'available' ? 'availableItems' : 'assignedItems', sourceItems);
+
+  //merge the selected items into the target selected items (maintains previously selected items)
+  //    targetSelectedItems = Object.assign(targetSelectedItems, sourceSelectedItems);
+  //  index = targetItems.length - Object.keys(sourceSelectedItems).length;
+  for(key in sourceSelectedItems){
+    //    targetSelectedItems[key].index = index;
+    delete sourceSelectedItems[key];
+    index++;
+  }
+},
+save: function(){
+  this.isSaving = true;
+  this.saveProgress = 0;
+  this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.Title,  url: this.siteCollection.url,  type: 'warning'});
+  this.saveIndex = 0;
+  (function(that){
+    that.updateProgressInterval = setInterval(function(){
+      that.saveProgress += 100/that.newItems.length;
+      var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
+      var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
+      that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].LoginName, preposition: preposition, target: that.selectedItem.LoginName,  url: that.siteCollection.url, type: 'success'});
+      that.saveIndex++;
+      if(that.saveProgress >= 100){
+        that.isSaving = false;
+        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+        that.newItems = [];
+        clearInterval(  that.updateProgressInterval);
+        //update originating Items
+        var i = 0;
+        that.originalAssignedItems = [];
+        that.newItems = [];
+        for(i = 0; i < that.assignedItems.length; i++){
+          that.originalAssignedItems.push(JSON.parse(JSON.stringify(that.assignedItems[i])));
+        }
+      }
+    }, 100);
+  })(this);
+},
+clearConsole: function(){
+  this.messages = [];
+}
+},
+created: function(){
+  this.toggle_select = this.type.users ? 0 : 1;
+  this.getIsLoadingSiteCollections();
+}
 }
 </script>
 
