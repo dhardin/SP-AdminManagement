@@ -87,6 +87,48 @@ import axios from 'axios'
       }
     });
     },
+    removeUserFromGroup: function(siteCollection, groupId, user, callback, errorCallback){
+        return axios.post(siteCollection.url + '/_api/web/sitegroups('+groupId+')/users/removebyid('+user.Id+')',
+         {headers: { "X-HTTP-Method": "DELETE" }}
+        ).then(function (response) {
+          // handle success
+          var results = response.data.d.results;
+          if (callback) {
+            callback(results);
+          }
+      }).catch(function(error) {
+        error = error != undefined ? error : {message: 'unspecified error'};
+        if (errorCallback) {
+          errorCallback(error);
+        }
+      });
+    },
+    addUserToGroup: function(siteCollection, groupId, user, callback, errorCallback){
+        return axios.post(siteCollection.url + '/_api/web/sitegroups('+groupId+')/users',
+        {
+        data: {
+              __metadata: {
+                type: 'SP.User',
+                LoginName: user.LoginName
+              }
+        },
+        headers: {
+          "accept": "application/json; odata=verbose",
+          "content-type": "application/json; odata=verbose"
+        }
+      }).then(function (response) {
+      // handle success
+          var results = response.data.d.results;
+          if (callback) {
+            callback(results);
+          }
+      }).catch(function(error) {
+        error = error != undefined ? error : {message: 'unspecified error'};
+        if (errorCallback) {
+          errorCallback(error);
+        }
+      });
+    },
       getDigest: function(callback, errorCallback){
         return axios({
           url: this.site +  "/_api/contextinfo",

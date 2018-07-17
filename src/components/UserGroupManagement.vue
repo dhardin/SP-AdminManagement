@@ -113,21 +113,21 @@ export default {
 
 
         if(this.siteCollection !== null){
-        (function(that){
-          new Promise(function(resolve, reject){
-            that.getData(function(){
-              resolve();
-            });
-          }).then(function(result){
-            if(that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '')){
-              that.getItem(function(){
-                that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : '', loginname: that.selectedItem !== null ? that.selectedItem.LoginName : ''}});
+          (function(that){
+            new Promise(function(resolve, reject){
+              that.getData(function(){
+                resolve();
               });
-            } else {
-              that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : ''}});
-            }
-          });
-        })(this);
+            }).then(function(result){
+              if(that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '')){
+                that.getItem(function(){
+                  that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : '', loginname: that.selectedItem !== null ? that.selectedItem.LoginName : ''}});
+                });
+              } else {
+                that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : ''}});
+              }
+            });
+          })(this);
         }
       },
       deep: true
@@ -215,6 +215,7 @@ export default {
             this.items.push(this.selectedItem);
             this.messages.push({date: new Date(), verb: this.actions.Failed, text:  'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
             return false;
+
           }
         }
       }
@@ -583,26 +584,57 @@ save: function(){
   this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.Title,  url: this.siteCollection.url,  type: 'warning'});
   this.saveIndex = 0;
   (function(that){
-    that.updateProgressInterval = setInterval(function(){
-      that.saveProgress += 100/that.newItems.length;
-      var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
-      var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
-      that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].LoginName, preposition: preposition, target: that.selectedItem.LoginName,  url: that.siteCollection.url, type: 'success'});
-      that.saveIndex++;
-      if(that.saveProgress >= 100){
-        that.isSaving = false;
-        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
-        that.newItems = [];
-        clearInterval(  that.updateProgressInterval);
-        //update originating Items
-        var i = 0;
-        that.originalAssignedItems = [];
-        that.newItems = [];
-        for(i = 0; i < that.assignedItems.length; i++){
-          that.originalAssignedItems.push(JSON.parse(JSON.stringify(that.assignedItems[i])));
-        }
+    var promiseArr = [];
+    var i;
+    if(!that.isTesting){
+      for(i = 0; i < that.newItems.length; i++){
+        promiseArr.push(new Promise(function(resolve, reject){
+          that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.type.users ? that.newItems[i].Id : that.selectedItem.Id, that.type.groups ? that.newItems[i] : that.selectedItem,function(results){
+            var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
+            var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
+            that.messages.push({
+              date: new Date(),
+              verb: that.actions.Success,
+              text:operationText + ' ' + that.newItems[i].LoginName,
+              preposition: preposition,
+              target: that.selectedItem.LoginName,
+              url: that.siteCollection.url,
+              type: 'success'
+            });
+            resolve();
+            that.saveProgress += 100/that.newItems.length;
+          }, function(error){
+            var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
+            var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
+            that.messages.push({date: new Date(), verb: this.actions.Failed, text:  operationText + (this.type.users ? 'Groups' : 'Users'), preposition: preposition, hasError: true, message: error.message, target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
+            that.saveProgress += 100/that.newItems.length;
+          })
+        }));
+        Promise.all(promiseArr).then(function(){
+          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+        });
       }
-    }, 100);
+    } else {
+      that.updateProgressInterval = setInterval(function(){
+        that.saveProgress += 100/that.newItems.length;
+
+        that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].LoginName, preposition: preposition, target: that.selectedItem.LoginName,  url: that.siteCollection.url, type: 'success'});
+        that.saveIndex++;
+        if(that.saveIndex == that.newItems.length){
+          that.isSaving = false;
+          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+          that.newItems = [];
+          clearInterval(  that.updateProgressInterval);
+          //update originating Items
+          var i = 0;
+          that.originalAssignedItems = [];
+          that.newItems = [];
+          for(i = 0; i < that.assignedItems.length; i++){
+            that.originalAssignedItems.push(JSON.parse(JSON.stringify(that.assignedItems[i])));
+          }
+        }
+      }, 100);
+    }
   })(this);
 },
 clearConsole: function(){
