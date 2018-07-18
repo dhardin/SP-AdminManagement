@@ -87,7 +87,7 @@ import axios from 'axios'
       }
     });
     },
-    removeUserFromGroup: function(siteCollection, groupId, user, callback, errorCallback){
+    removeUserFromGroup: function(siteCollection, digest, groupId, user, callback, errorCallback){
         return axios.post(siteCollection.url + '/_api/web/sitegroups('+groupId+')/users/removebyid('+user.Id+')',
          {headers: { "X-HTTP-Method": "DELETE" }}
         ).then(function (response) {
@@ -103,7 +103,7 @@ import axios from 'axios'
         }
       });
     },
-    addUserToGroup: function(siteCollection, groupId, user, callback, errorCallback){
+    addUserToGroup: function(siteCollection, digest, groupId, user, callback, errorCallback){
         return axios.post(siteCollection.url + '/_api/web/sitegroups('+groupId+')/users',
         {
         data: {
@@ -114,13 +114,14 @@ import axios from 'axios'
         },
         headers: {
           "accept": "application/json; odata=verbose",
-          "content-type": "application/json; odata=verbose"
+          "content-type": "application/json; odata=verbose",
+          "X-RequestDigest": digest
         }
       }).then(function (response) {
       // handle success
           var results = response.data.d.results;
           if (callback) {
-            callback(results);
+          callback(results);
           }
       }).catch(function(error) {
         error = error != undefined ? error : {message: 'unspecified error'};
@@ -129,9 +130,9 @@ import axios from 'axios'
         }
       });
     },
-      getDigest: function(callback, errorCallback){
+      getDigest: function(siteCollection, callback, errorCallback){
         return axios({
-          url: this.site +  "/_api/contextinfo",
+          url: siteCollection.url +  "/_api/contextinfo",
           method: "post",
           headers: {
             "Accept": "application/json; odata=verbose"

@@ -161,6 +161,7 @@ export default {
       savingIndex: 0,
       updateProgressInterval: false,
       selectedItem: null,
+      digest: null,
       siteCollectionHasItem: true,
 
       snackbar: {
@@ -587,9 +588,19 @@ save: function(){
     var promiseArr = [];
     var i;
     if(!that.isTesting){
+    new Promise(function(resolve, reject){
+      that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
+      that.getDigest(function(digest){
+        that.digest = digest;
+        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
+        resolve();
+      }, function(error){
+        this.messages.push({date: new Date(), verb: this.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: this.siteCollection.url,  type: 'error'});
+      });
+    }).then(function(result){
       for(i = 0; i < that.newItems.length; i++){
         promiseArr.push(new Promise(function(resolve, reject){
-          that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.type.users ? that.newItems[i].Id : that.selectedItem.Id, that.type.groups ? that.newItems[i] : that.selectedItem,function(results){
+          that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? that.newItems[i].Id : that.selectedItem.Id, that.type.groups ? that.newItems[i] : that.selectedItem,function(results){
             var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
             var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
             that.messages.push({
@@ -610,10 +621,11 @@ save: function(){
             that.saveProgress += 100/that.newItems.length;
           })
         }));
-        Promise.all(promiseArr).then(function(){
-          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
-        });
       }
+      Promise.all(promiseArr).then(function(){
+        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+      });
+        });
     } else {
       that.updateProgressInterval = setInterval(function(){
         that.saveProgress += 100/that.newItems.length;
