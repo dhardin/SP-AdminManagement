@@ -595,7 +595,8 @@ save: function(){
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
         resolve();
       }, function(error){
-        this.messages.push({date: new Date(), verb: this.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: this.siteCollection.url,  type: 'error'});
+        that.messages.push({date: new Date(), verb: this.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: this.siteCollection.url,  type: 'error'});
+        resolve();
       });
     }).then(function(result){
       for(i = 0; i < that.newItems.length; i++){
