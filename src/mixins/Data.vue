@@ -138,7 +138,7 @@ import axios from 'axios'
             "Accept": "application/json; odata=verbose"
           },
         }).then(function(response) {
-          var digest = response.data.d.GetContextWebInformation.FormDigestValue;
+          var digest = response.d.GetContextWebInformation.FormDigestValue;
           if(callback){
             callback(digest);
           }
