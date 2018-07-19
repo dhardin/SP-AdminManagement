@@ -592,6 +592,7 @@ save: function(){
       that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
       that.getDigest(that.siteCollection, function(digest){
         that.digest = digest;
+        conole.log(that.digest);
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
         resolve();
       }, function(error){
@@ -612,6 +613,7 @@ save: function(){
             url: that.siteCollection.url,
             type: 'info'
           });
+          console.log(that.digest);
           that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? that.newItems[i].Id : that.selectedItem.Id, that.type.groups ? that.newItems[i] : that.selectedItem,function(results){
             var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
             var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
