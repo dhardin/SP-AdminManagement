@@ -592,7 +592,7 @@ save: function(){
       that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
       that.getDigest(that.siteCollection, function(digest){
         that.digest = digest;
-        conole.log(that.digest);
+        console.log(that.digest);
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
         resolve();
       }, function(error){
