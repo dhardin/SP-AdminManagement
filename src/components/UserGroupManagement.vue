@@ -629,10 +629,10 @@ save: function(){
           }, function(error){
             console.log(error);
             console.log("index: " + that.saveIndex);
-            console.log("length: " + that.newItems.length);
+            console.log(that.newItems);
             var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
             var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
-            that.messages.push({date: new Date(), verb: this.actions.Failed, text:  operationText + (this.type.users ? 'Groups' : 'Users'), preposition: preposition, hasError: true, message: error.message, target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + (that.type.users ? 'Groups' : 'Users'), preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
             that.saveProgress += 100/that.newItems.length;
               resolve();
           })
