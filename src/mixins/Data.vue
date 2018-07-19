@@ -126,6 +126,7 @@ import axios from 'axios'
       }).catch(function(error) {
         error = error != undefined ? error : {message: 'unspecified error'};
         if (errorCallback) {
+          console.log(error);
           errorCallback(error);
         }
       });

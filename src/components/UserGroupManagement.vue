@@ -620,11 +620,13 @@ save: function(){
             var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
             that.messages.push({date: new Date(), verb: this.actions.Failed, text:  operationText + (this.type.users ? 'Groups' : 'Users'), preposition: preposition, hasError: true, message: error.message, target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
             that.saveProgress += 100/that.newItems.length;
+              resolve();
           })
         }));
       }
       Promise.all(promiseArr).then(function(){
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+        that.isSaving = false;
       });
         });
     } else {
