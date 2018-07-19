@@ -141,9 +141,9 @@ import axios from 'axios'
           try{
           var digest;
           console.log(response);
-          console.log(response.d);
-          console.log(response.d.GetContextWebInformation);
-          digest = response.d.GetContextWebInformation.FormDigestValue;
+          console.log(response.data);
+          console.log(response.data.d.GetContextWebInformation);
+          digest = response.data.d.GetContextWebInformation.FormDigestValue;
           console.log(digest);
           if(callback){
             callback(digest);
