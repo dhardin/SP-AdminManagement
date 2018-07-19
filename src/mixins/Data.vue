@@ -104,8 +104,9 @@ import axios from 'axios'
       });
     },
     addUserToGroup: function(siteCollection, digest, groupId, user, callback, errorCallback){
-        return axios.post(siteCollection.url + '/_api/web/sitegroups('+groupId+')/users',
-        {
+        return axios({
+          url: siteCollection.url + '/_api/web/sitegroups('+groupId+')/users',
+        method: 'post',
         data: {
               __metadata: {
                 type: 'SP.User',
