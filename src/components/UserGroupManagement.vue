@@ -595,12 +595,24 @@ save: function(){
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
         resolve();
       }, function(error){
+          console.log(error);
         that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: that.siteCollection.url,  type: 'error'});
         resolve();
       });
     }).then(function(result){
       for(i = 0; i < that.newItems.length; i++){
         promiseArr.push(new Promise(function(resolve, reject){
+          var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
+          var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
+          that.messages.push({
+            date: new Date(),
+            verb: that.actions.Starting,
+            text:operationText + ' ' + that.newItems[i].LoginName,
+            preposition: preposition,
+            target: that.selectedItem.LoginName,
+            url: that.siteCollection.url,
+            type: 'info'
+          });
           that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? that.newItems[i].Id : that.selectedItem.Id, that.type.groups ? that.newItems[i] : that.selectedItem,function(results){
             var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
             var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
