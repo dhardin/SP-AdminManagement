@@ -138,16 +138,12 @@ import axios from 'axios'
             "Accept": "application/json; odata=verbose"
           },
         }).then(function(response) {
-          try{
-          var digest;
-          console.log(response);
-          console.log(response.data);
-          console.log(response.data.d.GetContextWebInformation);
-          digest = response.data.d.GetContextWebInformation.FormDigestValue;
-          console.log(digest);
-          if(callback){
-            callback(digest);
-          }
+          try {
+            var digest;
+            digest = response.data.d.GetContextWebInformation.FormDigestValue;
+            if(callback){
+              callback(digest);
+            }
           }
           catch(error){
             console.log(error);

@@ -590,7 +590,7 @@ save: function(){
     if(!that.isTesting){
     new Promise(function(resolve, reject){
       that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
-      that.getDigest(function(digest){
+      that.getDigest(that.siteCollection, function(digest){
         that.digest = digest;
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
         resolve();
