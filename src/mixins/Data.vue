@@ -109,9 +109,9 @@ import axios from 'axios'
         method: 'post',
         data: {
               __metadata: {
-                type: 'SP.User',
+                type: 'SP.User'
+              },
                 LoginName: user.LoginName
-              }
         },
         headers: {
           "accept": "application/json; odata=verbose",
