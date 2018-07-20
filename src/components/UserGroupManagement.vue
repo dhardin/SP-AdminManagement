@@ -592,7 +592,6 @@ save: function(){
       that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
       that.getDigest(that.siteCollection, function(digest){
         that.digest = digest;
-        console.log(that.digest);
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
         resolve();
       }, function(error){
@@ -600,7 +599,7 @@ save: function(){
         resolve();
       });
     }).then(function(result){
-      for(i = 0; i < that.newItems.length; i++){
+      for(that.saveIndex = 0; i < that.newItems.length; that.saveIndex++){
         promiseArr.push(new Promise(function(resolve, reject){
           var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
           var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
@@ -613,14 +612,18 @@ save: function(){
             url: that.siteCollection.url,
             type: 'info'
           });
-          console.log(that.digest);
+
           that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? that.newItems[i].Id : that.selectedItem.Id, that.type.groups ? that.newItems[i] : that.selectedItem,function(results){
+            console.log(results);
+            console.log("index: " + that.saveIndex);
+            console.log(that.newItems);
+            console.log(that.newItems[that.saveIndex]);
             var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
             var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
             that.messages.push({
               date: new Date(),
               verb: that.actions.Success,
-              text:operationText + ' ' + that.newItems[i].LoginName,
+              text:operationText + ' ' + that.newItems[that.saveIndex].LoginName,
               preposition: preposition,
               target: that.selectedItem.LoginName,
               url: that.siteCollection.url,
@@ -634,26 +637,25 @@ save: function(){
             console.log(that.newItems);
             var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
             var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + (that.type.users ? 'Groups' : 'Users'), preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + that.newItems[i].LoginName, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
             that.saveProgress += 100/that.newItems.length;
               resolve();
           })
         }));
       }
       Promise.all(promiseArr).then(function(){
-        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
         that.isSaving = false;
       });
         });
     } else {
       that.updateProgressInterval = setInterval(function(){
         that.saveProgress += 100/that.newItems.length;
-
         that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].LoginName, preposition: preposition, target: that.selectedItem.LoginName,  url: that.siteCollection.url, type: 'success'});
         that.saveIndex++;
         if(that.saveIndex == that.newItems.length){
           that.isSaving = false;
-          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
           that.newItems = [];
           clearInterval(  that.updateProgressInterval);
           //update originating Items
