@@ -598,30 +598,31 @@ save: function(){
       });
     }).then(function(result){
       for(that.saveIndex = 0; that.saveIndex < that.newItems.length; that.saveIndex++){
+      (function(saveIndex){
         promiseArr.push(new Promise(function(resolve, reject){
-          var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
-          var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
+          var operationText = that.newItems[saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[saveIndex].operation.slice(1);
+          var preposition = that.newItems[saveIndex].operation == 'add' ? 'to' : 'from';
           that.messages.push({
             date: new Date(),
             verb: that.actions.Starting,
-            text:operationText + ' ' + that.newItems[that.saveIndex].LoginName,
+            text:operationText + ' ' + that.newItems[saveIndex].LoginName,
             preposition: preposition,
             target: that.selectedItem.LoginName,
             url: that.siteCollection.url,
             type: 'info'
           });
 
-          that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? that.newItems[that.saveIndex].Id : that.selectedItem.Id, that.type.groups ? that.newItems[that.saveIndex] : that.selectedItem,function(results){
+          that[that.newItems[saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? that.newItems[saveIndex].Id : that.selectedItem.Id, that.type.groups ? that.newItems[saveIndex] : that.selectedItem,function(results){
             console.log(results);
-            console.log("index: " + that.saveIndex);
+            console.log("index: " + saveIndex);
             console.log(that.newItems);
-            console.log(that.newItems[that.saveIndex]);
-            var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
-            var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
+            console.log(that.newItems[saveIndex]);
+            var operationText = that.newItems[saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[saveIndex].operation.slice(1);
+            var preposition = that.newItems[saveIndex].operation == 'add' ? 'to' : 'from';
             that.messages.push({
               date: new Date(),
               verb: that.actions.Success,
-              text:operationText + ' ' + that.newItems[that.saveIndex].LoginName,
+              text:operationText + ' ' + that.newItems[saveIndex].LoginName,
               preposition: preposition,
               target: that.selectedItem.LoginName,
               url: that.siteCollection.url,
@@ -631,16 +632,17 @@ save: function(){
             resolve();
           }, function(error){
             console.log(error);
-            console.log("index: " + that.saveIndex);
+            console.log("index: " + saveIndex);
             console.log(that.newItems);
-              console.log(that.newItems[that.saveIndex]);
-            var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
-            var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + that.newItems[i].LoginName, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+              console.log(that.newItems[saveIndex]);
+            var operationText = that.newItems[saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[saveIndex].operation.slice(1);
+            var preposition = that.newItems[saveIndex].operation == 'add' ? 'to' : 'from';
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + that.newItems[saveIndex].LoginName, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
             that.saveProgress += 100/that.newItems.length;
               resolve();
           })
         }));
+        })(that.saveIndex)
       }
       Promise.all(promiseArr).then(function(){
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
