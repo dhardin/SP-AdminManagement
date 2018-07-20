@@ -223,7 +223,7 @@ export default {
     getIsLoadingSiteCollections: function(val){
       var siteCollectionSelected;
       if(this.isLoadingSiteCollections.status){
-        this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
+        this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
       } else {
         this.messages.push({date: new Date(), verb: this.actions.Finished, preposition: ' ', hasError: this.isLoadingSiteCollections.hasError, message: this.isLoadingSiteCollections.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
         if(this.url != ''){
@@ -604,14 +604,14 @@ save: function(){
           that.messages.push({
             date: new Date(),
             verb: that.actions.Starting,
-            text:operationText + ' ' + that.newItems[i].LoginName,
+            text:operationText + ' ' + that.newItems[that.saveIndex].LoginName,
             preposition: preposition,
             target: that.selectedItem.LoginName,
             url: that.siteCollection.url,
             type: 'info'
           });
 
-          that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? that.newItems[i].Id : that.selectedItem.Id, that.type.groups ? that.newItems[i] : that.selectedItem,function(results){
+          that[that.newItems[that.saveIndex].operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? that.newItems[that.saveIndex].Id : that.selectedItem.Id, that.type.groups ? that.newItems[that.saveIndex] : that.selectedItem,function(results){
             console.log(results);
             console.log("index: " + that.saveIndex);
             console.log(that.newItems);
