@@ -120,9 +120,7 @@ export default {
               });
             }).then(function(result){
               if(that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '')){
-                that.getItem(function(){
                   that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : '', loginname: that.selectedItem !== null ? that.selectedItem.LoginName : ''}});
-                });
               } else {
                 that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : ''}});
               }
@@ -599,7 +597,7 @@ save: function(){
         resolve();
       });
     }).then(function(result){
-      for(that.saveIndex = 0; i < that.newItems.length; that.saveIndex++){
+      for(that.saveIndex = 0; that.saveIndex < that.newItems.length; that.saveIndex++){
         promiseArr.push(new Promise(function(resolve, reject){
           var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
           var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
