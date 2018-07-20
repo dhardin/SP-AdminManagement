@@ -120,7 +120,7 @@ import axios from 'axios'
         }
       }).then(function (response) {
       // handle success
-          var results = response.data.d.results;
+          var results = response.data.d;
           if (callback) {
           callback(results);
           }

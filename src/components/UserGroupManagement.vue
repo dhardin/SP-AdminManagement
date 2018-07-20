@@ -635,6 +635,7 @@ save: function(){
             console.log(error);
             console.log("index: " + that.saveIndex);
             console.log(that.newItems);
+              console.log(that.newItems[that.saveIndex]);
             var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
             var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
             that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + that.newItems[i].LoginName, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
