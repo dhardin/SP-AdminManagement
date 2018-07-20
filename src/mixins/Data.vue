@@ -88,9 +88,14 @@ import axios from 'axios'
     });
     },
     removeUserFromGroup: function(siteCollection, digest, groupId, user, callback, errorCallback){
-        return axios.post(siteCollection.url + '/_api/web/sitegroups('+groupId+')/users/removebyid('+user.Id+')',
-         {headers: { "X-HTTP-Method": "DELETE" }}
-        ).then(function (response) {
+        return axios({
+          url: siteCollection.url + '/_api/web/sitegroups('+groupId+')/users/removebyid('+user.Id+')',
+          method: 'post',
+          headers: {
+           "X-HTTP-Method": "DELETE",
+           "X-RequestDigest": digest
+          }
+       }).then(function (response) {
           // handle success
           var results = response.data.d.results;
           if (callback) {
