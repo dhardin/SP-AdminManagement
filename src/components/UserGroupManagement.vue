@@ -385,6 +385,7 @@ export default {
         if(that.isTesting){
           setTimeout(function(){
             that.assignedItems =  that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
+            that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
             //remove assigned items from available
             that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
               return that.$lodash.find(that.assignedItems, o) === undefined;
@@ -647,10 +648,15 @@ save: function(){
       Promise.all(promiseArr).then(function(){
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
         that.isSaving = false;
+        that.newItems = [];
+        that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
+        that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
       });
         });
     } else {
       that.updateProgressInterval = setInterval(function(){
+      var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
+      var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
         that.saveProgress += 100/that.newItems.length;
         that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].LoginName, preposition: preposition, target: that.selectedItem.LoginName,  url: that.siteCollection.url, type: 'success'});
         that.saveIndex++;
@@ -661,11 +667,12 @@ save: function(){
           clearInterval(  that.updateProgressInterval);
           //update originating Items
           var i = 0;
-          that.originalAssignedItems = [];
           that.newItems = [];
-          for(i = 0; i < that.assignedItems.length; i++){
+          that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
+          that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
+        /*  for(i = 0; i < that.assignedItems.length; i++){
             that.originalAssignedItems.push(JSON.parse(JSON.stringify(that.assignedItems[i])));
-          }
+          }*/
         }
       }, 100);
     }
