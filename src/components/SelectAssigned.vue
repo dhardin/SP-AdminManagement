@@ -19,7 +19,12 @@
         </v-flex>
 
         <v-flex slot="item"slot-scope="props" xs12>
-              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index )" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light> {{  props.item.Title }} </v-btn>
+              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index )" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light>
+                <svg role="img" v-if="props.item.hasError">
+                  <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_report_problem_24px" />
+                </svg>
+                 {{  props.item.Title }}
+             </v-btn>
         </v-flex>
         <template slot="footer">
           <div class="footer">
