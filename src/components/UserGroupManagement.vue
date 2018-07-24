@@ -306,9 +306,7 @@ export default {
             //populate items for current type and populate availabe items for the opposing type
             //re-select previously selected item if its available
             //trigger select change for selected item if it exists, else clear selected item
-            var rand = Math.random();
-
-            return rand == 0 ? errorCallback({message: 'Bad Stuff Happened'}) : callback(that.testUsers);
+            callback(that.testUsers);
           },1000);
         } else {
           that.getUsers(that.siteCollection, false, function(users){
@@ -486,19 +484,24 @@ giveAll: function(sourceType){
   while(i--){
     //push item to target
     sourceItems[i].selected = false;
-    targetItems.push(JSON.parse(JSON.stringify(sourceItems[i])));
+    targetItems.push(sourceItems[i]);
     itemIndex = this.$lodash.findIndex(this.originalAssignedItems, function(o){
-      return o.title == sourceItems[i].title
+      return o.LoginName == sourceItems[i].LoginName
     });
     isOriginalItem = itemIndex > -1;
     if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
-      this.newItems.push(JSON.parse(JSON.stringify(sourceItems[i])));
+      this.newItems.push(sourceItems[i]);
       this.newItems[this.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
-    } else {
+      //targetItems[targetItems.length - 1].isNew = true;
+      this.newItems[this.newItems.length - 1].isNew = true;
+    } else if(this.newItems.length > 0){
       newItemIndex = this.$lodash.findIndex(this.newItems, function(o){
-        return o.title == sourceItems[i].title
+        return o.LoginName == sourceItems[i].LoginName
       });
+      targetItems[targetItems.length - 1].isNew = false;
+      this.newItems[newItemIndex].isNew = false;
       this.newItems.splice(newItemIndex, 1);
+
     }
     sourceItems.splice(i, 1);
   }
@@ -521,10 +524,14 @@ giveSelected: function(sourceType){
   var isOriginalItem = false;
   var key;
   var index = 0;
+  var sourceItemIndex;
+  var deleteMap = {};
   var itemIndex;
   var newItemIndex;
   var targetItems;
   var modIndex = 0;
+  var i;
+
   var indexRemovedArr = [];
   if(sourceType == 'available'){
     sourceSelectedItems = this.selectedAvailable;
@@ -542,32 +549,55 @@ giveSelected: function(sourceType){
   }]);
 
   //move items from selected into target lists
-  for(key in sourceSelectedItems){
-    sourceItems[sourceSelectedItems[key].index].selected = false;
+  (function(that){
+    i = sourceItems.length - 1;
+    var o;
+    while(i >= 0){
+      o = sourceItems[i];
+      if(!o.selected){
+        i--;
+      continue;
+      }
+    /*sourceItemIndex = this.$lodash.findIndex(sourceItems, function(o){
+      return o.LoginName == sourceSelectedItems[o.LoginName].LoginName;
+    });*/
+    o.selected = false;
+    targetItems.push(o);
+  //  sourceSelectedItems[sourceItemIndex].Selected = false;
+    //sourceItems[sourceSelectedItems[key].index].selected = false;
     //push item to target
-    targetItems.push(JSON.parse(JSON.stringify(sourceItems[sourceSelectedItems[key].index])));
+    //targetItems.push(JSON.parse(JSON.stringify()));
+  //  targetItems.push(  sourceSelectedItems[sourceItemIndex])
     //delete targetItems[targetItems.length -1].index;
-    itemIndex = this.$lodash.findIndex(this.originalAssignedItems, function(o){
-      return o.LoginName == sourceSelectedItems[key].LoginName
+    itemIndex = that.$lodash.findIndex(that.originalAssignedItems, function(originallyAssignedItem){
+      return originallyAssignedItem.LoginName == o.LoginName
     });
     isOriginalItem = itemIndex > -1;
     if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
-      this.newItems.push(JSON.parse(JSON.stringify(sourceItems[sourceSelectedItems[key].index])));
-      this.newItems[this.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
-    } else {
-      newItemIndex = this.$lodash.findIndex(this.newItems, function(o){
-        return o.LoginName == sourceSelectedItems[key].LoginName
+      that.newItems.push(o);
+      that.newItems[that.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
+      that.newItems[that.newItems.length - 1].isNew = true;
+    } else if(that.newItems.length > 0){
+      newItemIndex = that.$lodash.findIndex(that.newItems, function(newItem){
+        return newItem.LoginName == o.LoginName
       });
-      this.newItems.splice(newItemIndex, 1);
+      that.newItems[newItemIndex].isNew = false;
+      that.newItems.splice(newItemIndex, 1);
     }
-  }
 
-  for(key in sourceSelectedItems){
+    sourceItems.splice(i, 1);
+/*  for(key in sourceSelectedItems){
     //remove item from source
-    modIndex = this.$lodash.filter(indexRemovedArr, function(indexNum){ return indexNum < sourceSelectedItems[key].index }).length;
-    sourceItems.splice(sourceSelectedItems[key].index - modIndex, 1);
-    indexRemovedArr.push(sourceSelectedItems[key].index);
-  }
+    //modIndex = this.$lodash.filter(indexRemovedArr, function(indexNum){ return indexNum < sourceSelectedItems[key].index }).length;
+    sourceItemIndex = this.$lodash.findIndex(sourceItems, function(o){
+      return o.LoginName == sourceSelectedItems[o.LoginName].LoginName;
+    });
+    sourceItems.splice(sourceItemIndex);
+    //indexRemovedArr.push(sourceSelectedItems[key].index);
+  }*/
+  i--;
+}
+})(this);
 
   this.$set(this, sourceType == 'available' ? 'availableItems' : 'assignedItems', sourceItems);
 
@@ -613,9 +643,9 @@ save: function(){
           that.messages.push({
             date: new Date(),
             verb: that.actions.Starting,
-            text:operationText + ' ' + that.newItems[saveIndex].LoginName,
+            text:operationText + ' ' + that.newItems[saveIndex].Title,
             preposition: preposition,
-            target: that.selectedItem.LoginName,
+            target: that.selectedItem.Title,
             url: that.siteCollection.url,
             type: 'info'
           });
@@ -626,9 +656,9 @@ save: function(){
             that.messages.push({
               date: new Date(),
               verb: that.actions.Success,
-              text:operationText + ' ' + that.newItems[saveIndex].LoginName,
+              text:operationText + ' ' + that.newItems[saveIndex].Title,
               preposition: preposition,
-              target: that.selectedItem.LoginName,
+              target: that.selectedItem.Title,
               url: that.siteCollection.url,
               type: 'success'
             });
@@ -639,7 +669,7 @@ save: function(){
             var preposition = that.newItems[saveIndex].operation == 'add' ? 'to' : 'from';
             that.newItems[saveIndex].hasError = true;
             that.failedItems.push(that.newItems[saveIndex]);
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + that.newItems[saveIndex].LoginName, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + that.newItems[saveIndex].Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
             that.saveProgress += 100/that.newItems.length;
               resolve();
           })
@@ -650,7 +680,7 @@ save: function(){
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
         that.isSaving = false;
         //set new items to failed items as these are still "new" and need to be processed.
-        that.newItems = JSON.parse(JSON.stringify(that.failedItems));
+        that.newItems = that.failedItems;
         that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
         that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
       });
@@ -660,18 +690,22 @@ save: function(){
       var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
       var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
         that.saveProgress += 100/that.newItems.length;
-        that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].LoginName, preposition: preposition, target: that.selectedItem.LoginName,  url: that.siteCollection.url, type: 'success'});
-        //  that.$set(that.newItems[that.saveIndex], 'hasError', true);
+
+        if(Math.round(Math.random()) == 0){
+          that.newItems[that.saveIndex].hasError = true;
+          that.failedItems.push(that.newItems[that.saveIndex]);
+          that.messages.push({date: new Date(), verb: that.actions.Error, text:operationText + ' ' + that.newItems[that.saveIndex].Title, hasError: true, message: 'darn.', preposition: preposition, target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'error'});
+        } else {
+          that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].Title, preposition: preposition, target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'success'});
+        }
         that.saveIndex++;
 
         if(that.saveIndex == that.newItems.length){
           that.isSaving = false;
-          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
-          that.newItems = [];
-          clearInterval(  that.updateProgressInterval);
+          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'info'});
+          that.newItems = that.failedItems;
+          clearInterval(that.updateProgressInterval);
           //update originating Items
-          var i = 0;
-          that.newItems = [];
           that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
           that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
         /*  for(i = 0; i < that.assignedItems.length; i++){

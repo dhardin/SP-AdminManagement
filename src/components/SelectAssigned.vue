@@ -20,10 +20,19 @@
 
         <v-flex slot="item"slot-scope="props" xs12>
               <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index )" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light>
-                <svg role="img" v-if="props.item.hasError">
+                <v-container>
+               <v-layout row wrap>
+                 <v-flex xs1>
+                       <v-chip small dark color="red lighten-1" text-color="white" class="font-weight-thin" v-if="props.item.isNew">New</v-chip>
+                <svg role="img" v-if="props.item.hasError" class="icon-error">
                   <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_report_problem_24px" />
                 </svg>
+              </v-flex>
+              <v-flex xs11>
                  {{  props.item.Title }}
+               </v-flex>
+             </v-layout>
+           </v-container>
              </v-btn>
         </v-flex>
         <template slot="footer">
@@ -84,4 +93,15 @@ export default {
   margin: 0;
   min-width: 36px;
 }
+.v-btn .container {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.icon-error {
+  margin-bottom: -5px;
+  width: 24px;
+  height: 24px;
+  fill: #E53935;
+}
+
 </style>
