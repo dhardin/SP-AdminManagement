@@ -397,7 +397,7 @@ export default {
               that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
               that.isLoading = false;
               that.assignedItems = groups;
-              that.originalAssignedItems = groups;
+              that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
               that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
                 return that.$lodash.find(that.assignedItems, o) === undefined;
               })[0];
@@ -495,6 +495,7 @@ giveSelected: function(sourceType){
       continue;
       }
     o.selected = false;
+    o.hasError = false;
     targetItems.push(o);
     itemIndex = that.$lodash.findIndex(that.originalAssignedItems, function(originallyAssignedItem){
       return originallyAssignedItem.LoginName == o.LoginName
@@ -575,6 +576,7 @@ save: function(){
               url: that.siteCollection.url,
               type: 'success'
             });
+            that.newItems[saveIndex].isNew = false;
             that.saveProgress += 100/that.newItems.length;
             resolve();
           }, function(error){
@@ -610,6 +612,7 @@ save: function(){
           that.messages.push({date: new Date(), verb: that.actions.Error, text:operationText + ' ' + that.newItems[that.saveIndex].Title, hasError: true, message: 'darn.', preposition: preposition, target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'error'});
         } else {
           that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].Title, preposition: preposition, target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'success'});
+          that.newItems[that.saveIndex].isNew = false;
         }
         that.saveIndex++;
 
@@ -619,7 +622,10 @@ save: function(){
           that.newItems = that.failedItems;
           clearInterval(that.updateProgressInterval);
           //update originating Items
-          that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
+          that.$lodash.partition(that.assignedItems, function(o){
+            return that.$lodash.find(that.assignedItems, o) === undefined;
+          })[0];
+          that.originalAssignedItems = JSON.parse(JSON.stringify(that.$lodash.find(that.assignedItems, function(o){ return !o.isNew && !o.hasError})));
           that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
         }
       }, 100);
