@@ -577,6 +577,7 @@ save: function(){
               type: 'success'
             });
             that.newItems[saveIndex].isNew = false;
+            that.newItems[saveIndex].hasError = false;
             that.saveProgress += 100/that.newItems.length;
             resolve();
           }, function(error){
@@ -613,6 +614,7 @@ save: function(){
         } else {
           that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].Title, preposition: preposition, target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'success'});
           that.newItems[that.saveIndex].isNew = false;
+          that.newItems[that.saveIndex].hasError = false;
         }
         that.saveIndex++;
 
