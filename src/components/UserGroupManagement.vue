@@ -8,10 +8,10 @@
         <Console :is-saving="isSaving" :is-loading="isLoading" :save-progress="saveProgress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole"></Console>
       </v-flex>
       <v-flex xs6>
-        <SelectAvailable :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
+        <SelectAvailable :num-selected="itemsSelected.available" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
       </v-flex>
       <v-flex xs6>
-        <SelectAssigned :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
+        <SelectAssigned :num-selected="itemsSelected.assigned" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -156,6 +156,10 @@ export default {
       isLoading: false,
       saveProgress: 0,
       isItemSelected: false,
+      itemsSelected: {
+        available: 0,
+        assigned: 0
+      },
       savingIndex: 0,
       updateProgressInterval: false,
       selectedItem: null,
@@ -341,18 +345,11 @@ export default {
     },
     clearSelected: function(type){
       var key;
-      var selectedItems = type == 'available' ? this.selectedAvailable : this.selectedAssigned;
       var items = type == 'available' ? this.availableItems : this.assignedItems;
-      var isAnySelected = type == 'available' ? this.isAnyAvailableSelected : this.isAnyAssignedSelected;
-      items = this.$lodash.sortBy(items, [function(o){
-        return o.Title.toLowerCase();
-      }]);
-
-      for(key in selectedItems){
-        items[selectedItems[key].index].selected = false;
-        delete selectedItems[key];
-      }
-      isAnySelected = false;
+      this.$lodash.forEach(items, function(o){
+         o.selected = false;
+      });
+      itemsSelected[type] = 0;
     },
     itemChanged: function(item){
       var i;
@@ -382,7 +379,7 @@ export default {
       (function(that){
         if(that.isTesting){
           setTimeout(function(){
-            that.assignedItems =  that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
+            that.assignedItems =  [];//that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
             that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
             //remove assigned items from available
             that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
@@ -433,89 +430,26 @@ export default {
         }
       })(this);
     },
-    selectItem: function(type, item, index){
-      var selectedItems = type == 'available' ? this.selectedAvailable : this.selectedAssigned;
-      var items = type == 'available' ? this.availableItems : this.assignedItems;
-      var isAnySelected = type == 'available' ? this.isAnyAvailableSelected : this.isAnyAssignedSelected;
-      /*  selectedItems = this.$lodash.sortBy(selectedItems, [function(o){
-      return o.Title;
-    }]);
-    */  items = this.$lodash.sortBy(items, [function(o){
-    return o.Title.toLowerCase();
-  }]);
-  this.$set(items[index], 'selected', items[index].selected !== undefined ? !items[index].selected : true);
-  //items[index].selected = items[index].selected !== undefined ? !items[index].selected : true;
-  if(  items[index].selected){
-    this.$set(selectedItems, item.LoginName, items[index]);
-    //set index so we can easily find this item when we "give/remove" it
-    selectedItems[item.LoginName].index = index;
-  } else {
-    delete selectedItems[item.LoginName];
-  }
-  this.$set(this, type == 'available' ? 'selectedAvailable' : 'selectedAssigned', selectedItems);
-},
+    selectItem: function(type, item){
+    this.$set(item, 'selected', item.hasOwnProperty('selected') ? !item.selected : true);
+    this.itemsSelected[type] += (item.selected ? 1 : -1);
+  },
 giveAll: function(sourceType){
-  var sourceSelectedItems;
-  var targetSelectedItems;
   var sourceItems;
-  var key;
-  var index = 0;
-  var targetItems;
-  var isOriginalItem;
-  var itemIndex;
-  var newItemIndex;
-  var i;
+
   if(sourceType == 'available'){
-    sourceSelectedItems = this.selectedAvailable;
-    targetSelectedItems = this.selectedAssigned;
     sourceItems = this.availableItems;
-    targetItems =  this.assignedItems;
   } else {
-    sourceSelectedItems = this.selectedAssigned;
-    targetSelectedItems = this.selectedAvailable;
     sourceItems = this.assignedItems;
-    targetItems =  this.availableItems;
-  }
-  if(sourceType == 'assigned'){
-    this.newItems = [];
-  }
-  //move items from selected into target lists
-  i = sourceItems.length;
-  while(i--){
-    //push item to target
-    sourceItems[i].selected = false;
-    targetItems.push(sourceItems[i]);
-    itemIndex = this.$lodash.findIndex(this.originalAssignedItems, function(o){
-      return o.LoginName == sourceItems[i].LoginName
-    });
-    isOriginalItem = itemIndex > -1;
-    if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
-      this.newItems.push(sourceItems[i]);
-      this.newItems[this.newItems.length - 1].operation = sourceType == 'available' ? 'add' : 'delete';
-      //targetItems[targetItems.length - 1].isNew = true;
-      this.newItems[this.newItems.length - 1].isNew = true;
-    } else if(this.newItems.length > 0){
-      newItemIndex = this.$lodash.findIndex(this.newItems, function(o){
-        return o.LoginName == sourceItems[i].LoginName
-      });
-      targetItems[targetItems.length - 1].isNew = false;
-      this.newItems[newItemIndex].isNew = false;
-      this.newItems.splice(newItemIndex, 1);
-
-    }
-    sourceItems.splice(i, 1);
   }
 
+  //select all items in current list
+  this.$lodash.forEach(sourceItems, function(o){
+    o.selected = true;
+  });
 
-  //merge the selected items into the target selected items (maintains previously selected items)
-  //      targetSelectedItems = Object.assign(targetSelectedItems, sourceSelectedItems);
-  //now that the target selected items are merged, delete
-  //index = targetItems.length - Object.keys(sourceSelectedItems).length;
-  for(key in sourceSelectedItems){
-    //    targetSelectedItems[key].index = this.$lodash.findIndex(targetItems, function(o) { return o.title == key});
-    delete sourceSelectedItems[key];
-    //  index++;
-  }
+  this.giveSelected(sourceType);
+
 },
 giveSelected: function(sourceType){
   var sourceSelectedItems;
@@ -531,8 +465,10 @@ giveSelected: function(sourceType){
   var targetItems;
   var modIndex = 0;
   var i;
-
   var indexRemovedArr = [];
+
+  this.itemsSelected[sourceType] = 0;
+
   if(sourceType == 'available'){
     sourceSelectedItems = this.selectedAvailable;
     targetSelectedItems = this.selectedAssigned;
@@ -558,17 +494,8 @@ giveSelected: function(sourceType){
         i--;
       continue;
       }
-    /*sourceItemIndex = this.$lodash.findIndex(sourceItems, function(o){
-      return o.LoginName == sourceSelectedItems[o.LoginName].LoginName;
-    });*/
     o.selected = false;
     targetItems.push(o);
-  //  sourceSelectedItems[sourceItemIndex].Selected = false;
-    //sourceItems[sourceSelectedItems[key].index].selected = false;
-    //push item to target
-    //targetItems.push(JSON.parse(JSON.stringify()));
-  //  targetItems.push(  sourceSelectedItems[sourceItemIndex])
-    //delete targetItems[targetItems.length -1].index;
     itemIndex = that.$lodash.findIndex(that.originalAssignedItems, function(originallyAssignedItem){
       return originallyAssignedItem.LoginName == o.LoginName
     });
@@ -586,28 +513,14 @@ giveSelected: function(sourceType){
     }
 
     sourceItems.splice(i, 1);
-/*  for(key in sourceSelectedItems){
-    //remove item from source
-    //modIndex = this.$lodash.filter(indexRemovedArr, function(indexNum){ return indexNum < sourceSelectedItems[key].index }).length;
-    sourceItemIndex = this.$lodash.findIndex(sourceItems, function(o){
-      return o.LoginName == sourceSelectedItems[o.LoginName].LoginName;
-    });
-    sourceItems.splice(sourceItemIndex);
-    //indexRemovedArr.push(sourceSelectedItems[key].index);
-  }*/
   i--;
 }
 })(this);
 
   this.$set(this, sourceType == 'available' ? 'availableItems' : 'assignedItems', sourceItems);
 
-  //merge the selected items into the target selected items (maintains previously selected items)
-  //    targetSelectedItems = Object.assign(targetSelectedItems, sourceSelectedItems);
-  //  index = targetItems.length - Object.keys(sourceSelectedItems).length;
   for(key in sourceSelectedItems){
-    //    targetSelectedItems[key].index = index;
     delete sourceSelectedItems[key];
-    index++;
   }
 },
 save: function(){
@@ -708,9 +621,6 @@ save: function(){
           //update originating Items
           that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
           that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
-        /*  for(i = 0; i < that.assignedItems.length; i++){
-            that.originalAssignedItems.push(JSON.parse(JSON.stringify(that.assignedItems[i])));
-          }*/
         }
       }, 100);
     }

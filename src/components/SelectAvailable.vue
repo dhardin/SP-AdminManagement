@@ -49,9 +49,9 @@
       </v-data-iterator>
     </v-card-text>
     <v-card-actions>
-      <v-btn block color="green darken-4" outline :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected</v-btn>
-      <v-btn block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="green darken-3"  @click="giveSelected">Give Selected</v-btn>
-      <v-btn block :disabled="disabled" color="green darken-3" :dark="!disabled"  @click="giveAll">Give All</v-btn>
+      <v-btn block color="green darken-4" outline :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected ({{numSelected}})</v-btn>
+      <v-btn block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="green darken-3"  @click="giveSelected">Give Selected ({{numSelected}})</v-btn>
+      <v-btn block :disabled="disabled || items.length == 0" color="green darken-3" :dark="!disabled && items.length > 0"  @click="giveAll">Give All</v-btn>
     </v-card-actions>
   </v-card>
 </template>

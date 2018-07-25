@@ -9,9 +9,9 @@
         type: Boolean,
         default: false
       },
-      isAnySelected: {
-        type: Boolean,
-        default: false
+      numSelected: {
+        type: Number,
+        default: 0
       },
       isSaving: {
         type: Boolean,
@@ -50,6 +50,9 @@
     }
   },
   computed: {
+    isAnySelected: function(){
+      return this.numSelected > 0;
+    },
     disabled: function(){
       return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasItem;
     },
