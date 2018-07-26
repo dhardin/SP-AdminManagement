@@ -8,7 +8,6 @@
             <v-layout >
                 <v-flex xs12 align-end flexbox>
                     <div class="console blue-grey darken-4" ref="consoleMessages">
-                        <span class="message"> To start, please select a site collection. <span v-if="messages.length == 0" class="blinking-cursor">|</span></span>
                         <v-list dark class="blue-grey darken-4">
                             <template v-for="(item, index) in messages">
                                 <v-list-tile-content>
@@ -25,8 +24,11 @@
                                     <div v-if="item.hasError" class="red--text text--accent-1">Error: {{item.message}}</div>
                                 </v-list-tile-content>
                             </template>
-                            <span class="blinking-cursor" v-if="!isLoading && !isSaving && messages.length > 0">|</span>
+                            <span class="blinking-cursor" v-if="!isLoading && !isSaving && messages.length > 0 && isSiteCollectionSelected && isItemSelected">|</span>
                         </v-list>
+                        <span class="message" v-if="!isSiteCollectionSelected && !isLoading && !isSaving"> To start, please select a site collection. <span class="blinking-cursor">|</span></span>
+                          <span class="message" v-if="!isItemSelected && isSiteCollectionSelected && !isLoading && !isSaving"> Please select a {{type.user ? 'group' : 'user'}}. <span class="blinking-cursor">|</span></span>
+
                     </div>
                 </v-flex>
             </v-layout>
@@ -58,6 +60,10 @@ export default {
             type: Boolean,
             default: false
         },
+        isItemSelected: {
+          type: Boolean,
+          default: false
+        },
         isSiteCollectionSelected: {
             type: Boolean,
             default: false
@@ -69,6 +75,12 @@ export default {
         messages: {
             type: Array,
             default: []
+        },
+        type: {
+          type: Object,
+          default: function(){
+            return {users: true, groups: false}
+          }
         }
     },
     data: function() {

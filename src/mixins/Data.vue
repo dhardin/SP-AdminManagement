@@ -109,8 +109,11 @@ import axios from 'axios'
       });
     },
     addUserToGroup: function(siteCollection, digest, groupId, user, callback, errorCallback){
+      setTimeout(function(){
+
+
         return axios({
-          url: siteCollection.url + '/_api/web/sitegroups('+groupId+')/users',
+          url:  siteCollection.url + '/_api/web/sitegroups('+groupId+')/users',
         method: 'post',
         data: {
               __metadata: {
@@ -135,6 +138,7 @@ import axios from 'axios'
           errorCallback(error);
         }
       });
+      }, this.isTesting ? 1000 : 0)
     },
       getDigest: function(siteCollection, callback, errorCallback){
         return axios({

@@ -5,7 +5,7 @@
         <Info :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged"></Info>
       </v-flex>
       <v-flex xs6>
-        <Console :is-saving="isSaving" :is-loading="isLoading" :save-progress="saveProgress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole"></Console>
+        <Console :is-item-selected="isItemSelected" :type="type" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="saveProgress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole"></Console>
       </v-flex>
       <v-flex xs6>
         <SelectAvailable :num-selected="itemsSelected.available" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
@@ -537,7 +537,7 @@ export default {
       (function(that){
         var promiseArr = [];
         var i;
-        if(!that.isTesting){
+
           new Promise(function(resolve, reject){
             that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
             that.getDigest(that.siteCollection, function(digest){
@@ -549,8 +549,7 @@ export default {
               resolve();
             });
           }).then(function(result){
-            that.saveItems(that.newItems);
-            }).then(function(result){
+            that.saveItems(that.newItems).then(function(result){
               that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
               that.isSaving = false;
               //set new items to failed items as these are still "new" and need to be processed.
@@ -558,6 +557,7 @@ export default {
               that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
               that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
             });
+                });
             /*Promise.all(promiseArr.then(function(){
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
             that.isSaving = false;
@@ -567,50 +567,27 @@ export default {
             that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
           });
         });*/
-      } else {
-        that.updateProgressInterval = setInterval(function(){
-          var operationText = that.newItems[that.saveIndex].operation.charAt(0).toUpperCase() +  that.newItems[that.saveIndex].operation.slice(1);
-          var preposition = that.newItems[that.saveIndex].operation == 'add' ? 'to' : 'from';
-          that.saveProgress += 100/that.newItems.length;
 
-          if(Math.round(Math.random()) == 0){
-            that.newItems[that.saveIndex].hasError = true;
-            that.failedItems.push(that.newItems[that.saveIndex]);
-            that.messages.push({date: new Date(), verb: that.actions.Error, text:operationText + ' ' + that.newItems[that.saveIndex].Title, hasError: true, message: 'darn.', preposition: preposition, target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'error'});
-          } else {
-            that.messages.push({date: new Date(), verb: that.actions.Success, text:operationText + ' ' + that.newItems[that.saveIndex].Title, preposition: preposition, target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'success'});
-            that.newItems[that.saveIndex].isNew = false;
-            that.newItems[that.saveIndex].hasError = false;
-          }
-          that.saveIndex++;
-
-          if(that.saveIndex == that.newItems.length){
-            that.isSaving = false;
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'info'});
-            that.newItems = that.failedItems;
-            clearInterval(that.updateProgressInterval);
-            //update originating Items
-            that.$lodash.partition(that.assignedItems, function(o){
-              return that.$lodash.find(that.assignedItems, o) === undefined;
-            })[0];
-            that.originalAssignedItems = JSON.parse(JSON.stringify(that.$lodash.find(that.assignedItems, function(o){ return !o.isNew && !o.hasError})));
-            that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
-          }
-        }, 100);
-      }
     })(this);
   },
   saveItems: function(items){
-    (function(that){
+    return (function(that){
       return items.reduce(function(promise, item){
-        return promise.then(function(result){
+        return promise.then(function (result) {
+        /*  return new Promise(function(resolve, reject){
+              setTimeout(function(){
+              console.log(that.saveProgress);
+              that.saveProgress++;
+              return resolve();
+              }, Math.random() * 1000);
+            });*/
           return that.saveItem(item);
-        });
+        }).catch(console.error);
       }, Promise.resolve());
-    })(this);
+    })(this)
   },
   saveItem: function(item){
-    (function(that){
+  return  (function(that){
       return new Promise(function(resolve, reject){
         var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
         var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');;
@@ -639,7 +616,7 @@ export default {
           item.isNew = false;
           item.hasError = false;
           that.saveProgress += 100/that.newItems.length;
-          resolve();
+          return resolve();
         }, function(error){
           var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
           var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
@@ -647,7 +624,7 @@ export default {
           that.failedItems.push(item);
           that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + item.Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
           that.saveProgress += 100/that.newItems.length;
-          resolve();
+          return resolve();
         })
       })
     })(this);
