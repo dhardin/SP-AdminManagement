@@ -605,7 +605,7 @@ export default {
       return items.reduce(function(promise, item){
         return promise.then(function(result){
           return that.saveItem(item);
-        }).catch(consoe.log(error));
+        }).catch(console.log(error));
       }, Promise.resolve());
     })(this);
   },
@@ -613,7 +613,7 @@ export default {
     (function(that){
       return new Promise(function(resolve, reject){
         var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-        var preposition = item.operation == 'add' ? 'to' : 'from';
+        var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');;
         that.messages.push({
           date: new Date(),
           verb: that.actions.Starting,
@@ -626,7 +626,7 @@ export default {
 
         that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? item.Id : that.selectedItem.Id, that.type.groups ? item : that.selectedItem,function(results){
           var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-          var preposition = item.operation == 'add' ? 'to' : 'from';
+          var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
           that.messages.push({
             date: new Date(),
             verb: that.actions.Success,
@@ -642,7 +642,7 @@ export default {
           resolve();
         }, function(error){
           var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-          var preposition = item.operation == 'add' ? 'to' : 'from';
+          var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
           item.hasError = true;
           that.failedItems.push(item);
           that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + item.Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
