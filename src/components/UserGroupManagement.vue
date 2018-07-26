@@ -605,7 +605,7 @@ export default {
       return items.reduce(function(promise, item){
         return promise.then(function(result){
           return that.saveItem(item);
-        }).catch(console.log(error));
+        });
       }, Promise.resolve());
     })(this);
   },
