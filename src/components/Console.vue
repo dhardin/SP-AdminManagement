@@ -11,8 +11,8 @@
                         <v-list dark class="blue-grey darken-4">
                             <template v-for="(item, index) in messages">
                                 <v-list-tile-content>
-                                    <div class="message">
-                                      [{{item.date.getHours()}}:{{item.date.getMinutes()}}:{{item.date.getSeconds()}}]
+                                    <div class="message" v-if="item.type != 'notification'">
+                                      [{{item.hasOwnProperty('date') ? item.date.getHours() : ''}}:{{item.date.getMinutes()}}:{{item.date.getSeconds()}}]
                                       <span :class="getClassObject(item)">{{item.verb}}</span>
                                       <span class="purple--text text--accent-1">{{item.text}}</span>
                                       <span>{{item.preposition ? item.preposition : "from"}}</span>
@@ -21,6 +21,7 @@
                                       <span v-if="item.url" class="pink--text text--lighten-4">{{item.url}}</span>
                                       <span class="blinking-cursor" v-if="(isLoading || isSaving) && index == messages.length - 1">|</span>
                                     </div>
+                                    <span class="message" v-if="item.type == 'notification'"> {{item.text}} </span>
                                     <div v-if="item.hasError" class="red--text text--accent-1">Error: {{item.message}}</div>
                                 </v-list-tile-content>
                             </template>

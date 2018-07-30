@@ -160,6 +160,10 @@ export default {
         available: 0,
         assigned: 0
       },
+      metrics: {
+        start: null,
+        end: null
+      },
       savingIndex: 0,
       updateProgressInterval: false,
       selectedItem: null,
@@ -271,7 +275,7 @@ export default {
               if(that.type.users){
                 that.availableItems = data;
                 that.originalAvailableItems = data;
-                that.assignedItems = []
+                that.assignedItems = [];
               } else {
                 that.items = data;
               }
@@ -528,6 +532,7 @@ export default {
       this.isSaving = true;
       this.saveProgress = 0;
       this.failedItems = [];
+      this.metrics.start = new Date();
       this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.Title,  url: this.siteCollection.url,  type: 'warning'});
       this.saveIndex = 0;
       //reset errored out items
@@ -538,100 +543,110 @@ export default {
         var promiseArr = [];
         var i;
 
-          new Promise(function(resolve, reject){
-            that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
-            that.getDigest(that.siteCollection, function(digest){
-              that.digest = digest;
-              that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
-              resolve();
-            }, function(error){
-              that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: that.siteCollection.url,  type: 'error'});
-              resolve();
-            });
-          }).then(function(result){
-            that.saveItems(that.newItems).then(function(result){
-              that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
-              that.isSaving = false;
-              //set new items to failed items as these are still "new" and need to be processed.
-              that.newItems = that.failedItems;
-              that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
-              that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
-            });
-                });
-            /*Promise.all(promiseArr.then(function(){
+        new Promise(function(resolve, reject){
+          that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
+          that.getDigest(that.siteCollection, function(digest){
+            that.digest = digest;
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
+            resolve();
+          }, function(error){
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: that.siteCollection.url,  type: 'error'});
+            resolve();
+          });
+        }).then(function(result){
+          that.saveItems(that.newItems).then(function(result){
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
             that.isSaving = false;
+            that.metrics.end = new Date();
+            that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
             //set new items to failed items as these are still "new" and need to be processed.
             that.newItems = that.failedItems;
-            that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
-            that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
+            that.originalAssignedItems = JSON.parse(JSON.stringify(that.$lodash.partition(that.assignedItems, function(assignedItem){
+              return that.$lodash.find(that.newItems, function(newItem){
+                return newItem.LoginName == assignedItem.LoginName;
+              }) === undefined;
+            })));
+            that.originalAvailableItems = JSON.parse(JSON.stringify(that.$lodash.partition(that.availableItems, function(availableItem){
+              return that.$lodash.find(that.newItems, function(newItem){
+                return newItem.LoginName == availableItem.LoginName;
+              }) != undefined;
+            })));
           });
-        });*/
+        });
+        /*Promise.all(promiseArr.then(function(){
+        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+        that.isSaving = false;
+        //set new items to failed items as these are still "new" and need to be processed.
+        that.newItems = that.failedItems;
+        that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
+        that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
+      });
+    });*/
 
-    })(this);
-  },
-  saveItems: function(items){
-    return (function(that){
-      return items.reduce(function(promise, item){
-        return promise.then(function (result) {
+  })(this);
+},
+saveItems: function(items){
+  return (function(that){
+    return items.reduce(function(promise, item){
+      return promise.then(function (result) {
         /*  return new Promise(function(resolve, reject){
-              setTimeout(function(){
-              console.log(that.saveProgress);
-              that.saveProgress++;
-              return resolve();
-              }, Math.random() * 1000);
-            });*/
-          return that.saveItem(item);
-        }).catch(console.error);
-      }, Promise.resolve());
-    })(this)
-  },
-  saveItem: function(item){
+        setTimeout(function(){
+        console.log(that.saveProgress);
+        that.saveProgress++;
+        return resolve();
+      }, Math.random() * 1000);
+    });*/
+    return that.saveItem(item);
+  }).catch(console.error);
+}, Promise.resolve());
+})(this)
+},
+saveItem: function(item){
   return  (function(that){
-      return new Promise(function(resolve, reject){
+    return new Promise(function(resolve, reject){
+      var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
+      var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');;
+      that.messages.push({
+        date: new Date(),
+        verb: that.actions.Starting,
+        text:operationText + ' ' + item.Title,
+        preposition: preposition,
+        target: that.selectedItem.Title,
+        url: that.siteCollection.url,
+        type: 'info'
+      });
+
+      that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? item.Id : that.selectedItem.Id, that.type.groups ? item : that.selectedItem,function(results){
         var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-        var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');;
+        var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
         that.messages.push({
           date: new Date(),
-          verb: that.actions.Starting,
+          verb: that.actions.Success,
           text:operationText + ' ' + item.Title,
           preposition: preposition,
           target: that.selectedItem.Title,
           url: that.siteCollection.url,
-          type: 'info'
+          type: 'success'
         });
-
-        that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? item.Id : that.selectedItem.Id, that.type.groups ? item : that.selectedItem,function(results){
-          var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-          var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
-          that.messages.push({
-            date: new Date(),
-            verb: that.actions.Success,
-            text:operationText + ' ' + item.Title,
-            preposition: preposition,
-            target: that.selectedItem.Title,
-            url: that.siteCollection.url,
-            type: 'success'
-          });
-          item.isNew = false;
-          item.hasError = false;
-          that.saveProgress += 100/that.newItems.length;
-          return resolve();
-        }, function(error){
-          var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-          var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
-          item.hasError = true;
-          that.failedItems.push(item);
-          that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + item.Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
-          that.saveProgress += 100/that.newItems.length;
-          return resolve();
-        })
+        item.isNew = false;
+        item.hasError = false;
+        that.saveProgress += 100/that.newItems.length;
+        return resolve();
+      }, function(error){
+        var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
+        var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
+        item.hasError = true;
+        that.failedItems.push(item);
+        that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + item.Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+        that.saveProgress += 100/that.newItems.length;
+        return resolve();
       })
-    })(this);
-  },
-  clearConsole: function(){
-    this.messages = [];
-  },
+    })
+  })(this);
+},
+clearConsole: function(){
+  this.messages = [];
+},
 },
 created: function(){
   this.toggle_select = this.type.users ? 0 : 1;

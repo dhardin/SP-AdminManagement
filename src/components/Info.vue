@@ -11,7 +11,7 @@
               <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
             </div>
             <div v-else>
-              <v-text-field label="Owner" readonly disabled :value="selectedItem !== null ? selectedItem.Owner: ''"></v-text-field>
+              <v-text-field label="Owner" readonly disabled :value="selectedItem !== null ? selectedItem.OwnerTitle: ''"></v-text-field>
               <v-textarea label="Description" readonly auto-grow rows="1" disabled :value="selectedItem !== null ? selectedItem.Description: ''"></v-textarea>
             </div>
             </v-form>
