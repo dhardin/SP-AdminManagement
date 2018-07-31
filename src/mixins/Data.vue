@@ -108,6 +108,27 @@ import axios from 'axios'
         }
       });
     },
+    removeUserFromSiteCollection: function(siteCollection, digest, user, callback, errorCallback){
+        return axios({
+          url: siteCollection.url + '/_api/web/removebyloginname('+user.LoginName+')',
+          method: 'post',
+          headers: {
+           "X-HTTP-Method": "DELETE",
+           "X-RequestDigest": digest
+          }
+       }).then(function (response) {
+          // handle success
+          var results = response.data.d;
+          if (callback) {
+            callback(results);
+          }
+      }).catch(function(error) {
+        error = error != undefined ? error : {message: 'unspecified error'};
+        if (errorCallback) {
+          errorCallback(error);
+        }
+      });
+    },
     addUserToGroup: function(siteCollection, digest, groupId, user, callback, errorCallback){
       setTimeout(function(){
 

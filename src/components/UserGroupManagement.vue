@@ -231,7 +231,7 @@ export default {
     getIsLoadingSiteCollections: function(val){
       var siteCollectionSelected;
       if(this.isLoadingSiteCollections.status){
-        this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
+        this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
       } else {
         this.messages.push({date: new Date(), verb: this.actions.Finished, preposition: ' ', hasError: this.isLoadingSiteCollections.hasError, message: this.isLoadingSiteCollections.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
         if(this.url != ''){
@@ -676,25 +676,44 @@ removeUser: function(user, siteCollection){
         resolve();
       });
     }).then(function(result){
-      that.messages.push({
-        date: new Date(),
-        verb: that.actions.Starting,
-        text: 'Remove From Site Collection',
-        preposition: 'for',
-        target: user.Title,
-        url: siteCollection.url,
-        type: 'warning'
-      });
-      that.saveProgress += 100/that.siteCollections.length;
-      that.messages.push({
-        date: new Date(),
-        verb: that.actions.Finished,
-        text: 'Remove From Site Collection',
-        preposition: 'for',
-        target: user.Title,
-        url: siteCollection.url,
-        type: 'info'
-      });
+        return new Promise(function(resolve, reject){
+          that.messages.push({
+            date: new Date(),
+            verb: that.actions.Starting,
+            text: 'Remove From Site Collection',
+            preposition: 'for',
+            target: user.Title,
+            url: siteCollection.url,
+            type: 'warning'
+          });
+          that.removeUserFromSiteCollection(siteCollection, that.digest, user, function(result){
+            that.saveProgress += 100/that.siteCollections.length;
+            that.messages.push({
+              date: new Date(),
+              verb: that.actions.Finished,
+              text: 'Remove From Site Collection',
+              preposition: 'for',
+              target: user.Title,
+              url: siteCollection.url,
+              type: 'info'
+            });
+            resolve();
+          }, function(error){
+            that.saveProgress += 100/that.siteCollections.length;
+            that.messages.push({
+              date: new Date(),
+              verb: that.actions.Failed,
+              text: 'Remove From Site Collection',
+              preposition: 'for',
+              target: user.Title,
+              hasError: true,
+              message: error.message,
+              url: siteCollection.url,
+              type: 'error'
+            });
+            resolve();
+          });
+    })
     });
   })(this);
 },
