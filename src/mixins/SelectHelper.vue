@@ -13,6 +13,12 @@
         type: Number,
         default: 0
       },
+      type: {
+        type: Object,
+        default: function(){
+          return {users: true, groups: false}
+        }
+      },
       isSaving: {
         type: Boolean,
         default: false

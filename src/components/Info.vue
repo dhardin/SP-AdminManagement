@@ -23,7 +23,7 @@
     <v-card-actions>
       <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
       <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Copy</v-btn>
-      <v-dialog id="purge-warning" v-model="dialog"  width="500">
+      <v-dialog id="purge-warning" v-model="dialog"  width="500" v-if="type.users">
         <v-btn flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
         <v-card>
                 <v-card-title

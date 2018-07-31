@@ -1,7 +1,7 @@
 <template>
   <v-card class="flexcard" >
     <v-card-title primary-title>
-      <h4 class="grey--text text--darken-2">Available {{type}}</h4>
+      <h4 class="grey--text text--darken-2">Available {{type.users ? 'Groups' : 'Users'}}</h4>
       <v-text-field
       v-model="searchAvailable"
       append-icon="search"
@@ -63,7 +63,6 @@ export default {
   data: function(){
     return {
       searchAvailable: '',
-      type: 'available',
       selected: {},
       pagination: {
       }

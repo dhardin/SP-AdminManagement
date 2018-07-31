@@ -1,7 +1,7 @@
 <template>
   <v-card class="flexcard" >
     <v-card-title primary-title>
-      <h4 class="grey--text text--darken-2">Current {{type}}</h4>
+      <h4 class="grey--text text--darken-2">Current {{type.users  ? 'Groups' : 'Users'}}</h4>
       <v-text-field
       v-model="searchAssigned"
       append-icon="search"
@@ -66,7 +66,6 @@ export default {
   data: function(){
     return {
       searchAssigned: '',
-      type: 'assigned',
       pagination: {
       }
     };
