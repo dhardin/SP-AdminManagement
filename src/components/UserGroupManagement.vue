@@ -685,6 +685,7 @@ removeUser: function(user, siteCollection){
         url: siteCollection.url,
         type: 'warning'
       });
+      that.saveProgress += 100/that.siteCollections.length;
       that.messages.push({
         date: new Date(),
         verb: that.actions.Finished,
@@ -709,6 +710,8 @@ removeUserFromSiteCollections: function(user, siteCollections){
 purgeUser: function(){
   (function(that){
     that.metrics.start = new Date();
+    that.saveProgress = 0;
+    that.isSaving = true;
     that.messages.push({
       date: new Date(),
       verb: that.actions.Starting,
@@ -729,6 +732,7 @@ purgeUser: function(){
         type: 'info'
       });
       that.metrics.end = new Date();
+      that.isSaving = false;
       that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
     });
   })(this);
