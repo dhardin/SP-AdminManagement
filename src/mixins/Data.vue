@@ -110,7 +110,7 @@ import axios from 'axios'
     },
     removeUserFromSiteCollection: function(siteCollection, digest, user, callback, errorCallback){
         return axios({
-          url: siteCollection.url + '/_api/web/siteusers/removebyloginname(' + user.LoginName + ')',
+          url: siteCollection.url + '/_api/web/siteusers/removebyloginname(' + encodeURIComponent(user.LoginName) + ')',
           method: 'post',
           headers: {
            "X-HTTP-Method": "DELETE",
