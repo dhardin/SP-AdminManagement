@@ -43,16 +43,16 @@
     },
   methods: {
     selectItem: function(item, index){
-      this.$emit('select-item', this.type, item, index);
+      this.$emit('select-item', this.sourceType, item, index);
     },
     clearSelected: function(e){
-       this.$emit('clear-selected', this.type);
+       this.$emit('clear-selected', this.sourceType);
     },
     giveSelected: function(e){
-           this.$emit('give-selected', this.type);
+           this.$emit('give-selected', this.sourceType);
     },
     giveAll: function(e){
-        this.$emit('give-all', this.type);
+        this.$emit('give-all', this.sourceType);
     }
   },
   computed: {
