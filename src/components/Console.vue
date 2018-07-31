@@ -12,7 +12,7 @@
                             <template v-for="(item, index) in messages">
                                 <v-list-tile-content>
                                     <div class="message" v-if="item.type != 'notification'">
-                                      [{{item.hasOwnProperty('date') ? item.date.getHours() : ''}}:{{item.date.getMinutes()}}:{{item.date.getSeconds()}}]
+                                      [{{item.hasOwnProperty('date') ? item.date.getHours().toString().padStart(2, '0') : ''}}:{{item.date.getMinutes().toString().padStart(2, '0') }}:{{item.date.getSeconds().toString().padStart(2, '0')}}]
                                       <span :class="getClassObject(item)">{{item.verb}}</span>
                                       <span class="purple--text text--accent-1">{{item.text}}</span>
                                       <span>{{item.preposition ? item.preposition : "from"}}</span>

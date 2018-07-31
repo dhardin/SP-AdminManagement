@@ -500,10 +500,12 @@ export default {
           }
           o.selected = false;
           o.hasError = false;
-          targetItems.push(o);
+          console.log(that.originalAssignedItems);
           itemIndex = that.$lodash.findIndex(that.originalAssignedItems, function(originallyAssignedItem){
             return originallyAssignedItem.LoginName == o.LoginName
           });
+          targetItems.push(o);
+          console.log('item index: ' + itemIndex);
           isOriginalItem = itemIndex > -1;
           if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
             that.newItems.push(o);
