@@ -55,7 +55,6 @@
     </v-card-actions>
   </v-card>
 </template>
-
 <script>
 import SelectHelper from '../mixins/SelectHelper.vue'
 

@@ -23,7 +23,43 @@
     <v-card-actions>
       <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
       <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Copy</v-btn>
-      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
+      <v-dialog id="purge-warning" v-model="dialog"  width="500">
+        <v-btn flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
+        <v-card>
+                <v-card-title
+                  class="headline grey lighten-2"
+                  primary-title
+                >
+                <svg role="img" class="icon-error">
+                  <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_report_problem_24px" />
+                </svg>  Warning
+                </v-card-title>
+
+                <v-card-text>
+                  Purge will remove the user's account from all affiliated site collections.  Are you sure you want to do this?
+                </v-card-text>
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary"
+                    flat
+                    @click="purgeUser"
+                  >
+                   Yes
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    flat
+                    @click="dialog = false"
+                  >
+                   No
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+      </v-dialog>
       <v-btn flat color="pink":disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" @click="exportData" >Export</v-btn>
     </v-card-actions>
   </v-card>
@@ -76,7 +112,8 @@ export default {
   },
   data: function(){
     return {
-      selectedItem: null
+      selectedItem: null,
+      dialog: false
     };
   },
   watch : {
@@ -109,6 +146,10 @@ export default {
     }
   },
   methods: {
+    purgeUser: function(){
+      this.dialog = false;
+      this.$emit('purge-user');
+    },
     itemChanged: function(item){
       this.$emit('item-changed', this.selectedItem);
     },
@@ -197,4 +238,11 @@ export default {
 .input-group input:disabled {
   color: rgba(0,0,0,.9) !important;
 }
+.icon-error {
+  width: 24px;
+  height: 24px;
+  fill: #E53935;
+  margin-top: -5px;
+}
+
 </style>
