@@ -67,7 +67,8 @@ export default {
     return {
       searchAssigned: '',
       pagination: {
-      }
+      },
+      sourceType: 'assigned'
     };
   }
 }
