@@ -419,7 +419,7 @@ export default {
               that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
               that.isLoading = false;
               that.assignedItems = users;
-              that.originalAssignedItems = users;
+              that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
               that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
                 return that.$lodash.find(that.assignedItems, o) === undefined;
               })[0];
@@ -500,12 +500,10 @@ export default {
           }
           o.selected = false;
           o.hasError = false;
-          console.log(that.originalAssignedItems);
           itemIndex = that.$lodash.findIndex(that.originalAssignedItems, function(originallyAssignedItem){
             return originallyAssignedItem.LoginName == o.LoginName
           });
           targetItems.push(o);
-          console.log('item index: ' + itemIndex);
           isOriginalItem = itemIndex > -1;
           if(isOriginalItem && sourceType =='assigned' || !isOriginalItem && sourceType == 'available'){
             that.newItems.push(o);
