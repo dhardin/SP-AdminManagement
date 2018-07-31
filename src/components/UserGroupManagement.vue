@@ -651,7 +651,7 @@ removeUser: function(user, siteCollection){
         url: siteCollection.url,
         type: 'warning'
       });
-      that.getDigest(that.siteCollection, function(digest){
+      that.getDigest(siteCollection, function(digest){
         that.digest = digest;
         that.messages.push({
           date: new Date(),
