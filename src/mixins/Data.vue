@@ -115,12 +115,12 @@ import axios from 'axios'
       console.log(user.LoginName);
         return axios({
           url: siteCollection.url + '/_vti_bin/UserGroup.asmx',
-          beforeSend: function(xhr) {
-                xhr.setRequestHeader('SOAPAction', "http://schemas.microsoft.com/sharepoint/soap/directory/RemoveUserFromSite");
+            headers: {
+              'SOAPAction': 'http://schemas.microsoft.com/sharepoint/soap/directory/RemoveUserFromSite',
+              'content-type': "text/xml; charset=\"utf-8\"",
+              'data-type': 'xml'
             },
-            type: "POST",
-            dataType: "xml",
-            contentType: "text/xml; charset=\"utf-8\"",
+            method: 'post',
           data:  '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">\
                     <soap:Body>\
                         <RemoveUserFromSite xmlns="http://schemas.microsoft.com/sharepoint/soap/directory/">\
