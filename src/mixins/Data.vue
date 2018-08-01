@@ -108,20 +108,24 @@ import axios from 'axios'
         }
       });
     },
+    //ensure user
+    //https://msdn.microsoft.com/en-us/library/office/jj245233.aspx
+    //
     removeUserFromSiteCollection: function(siteCollection, digest, user, callback, errorCallback){
       console.log(user.LoginName);
         return axios({
-          url: siteCollection.url + '/_api/web/siteusers/removebyloginname',
+          url: siteCollection.url + '/_api/web/siteusers/removebyloginname(@v)?v="'+encodeURIComponent(user.LoginName)+'"',
           method: 'post',
           data: {
                 __metadata: {
                   type: 'SP.User'
                 },
-                  loginName: user.LoginName
+                  LoginName: user.LoginName
           },
           headers: {
-           "X-HTTP-Method": "DELETE",
-           "X-RequestDigest": digest
+          "accept": "application/json; odata=verbose",
+          "X-HTTP-Method": "DELETE",
+          "X-RequestDigest": digest
           }
        }).then(function (response) {
           // handle success
