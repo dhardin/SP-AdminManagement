@@ -643,7 +643,7 @@ clearConsole: function(){
 removeUser: function(user, siteCollection){
   return  (function(that){
     return new Promise(function(resolve, reject){
-      that.messages.push({
+    /*  that.messages.push({
         date: new Date(),
         verb: that.actions.Starting,
         text: 'Fetching Digest',
@@ -675,8 +675,8 @@ removeUser: function(user, siteCollection){
         });
         resolve();
       });
-    }).then(function(result){
-        return new Promise(function(resolve, reject){
+    }).then(function(result){*/
+        //return new Promise(function(resolve, reject){
           that.messages.push({
             date: new Date(),
             verb: that.actions.Starting,
@@ -686,7 +686,7 @@ removeUser: function(user, siteCollection){
             url: siteCollection.url,
             type: 'warning'
           });
-          that.removeUserFromSiteCollection(siteCollection, that.digest, user, function(result){
+          that.removeUserFromSiteCollection(siteCollection, '', user, function(result){
             that.saveProgress += 100/that.siteCollections.length;
             that.messages.push({
               date: new Date(),
@@ -714,7 +714,6 @@ removeUser: function(user, siteCollection){
             resolve();
           });
     })
-    });
   })(this);
 },
 removeUserFromSiteCollections: function(user, siteCollections){

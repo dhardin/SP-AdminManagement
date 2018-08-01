@@ -115,18 +115,19 @@ import axios from 'axios'
       console.log(user.LoginName);
         return axios({
           url: siteCollection.url + '/_api/web/siteusers/removebyloginname(@v)?@v="'+encodeURIComponent(user.LoginName) + '"',
-          method: 'post',
-          data: {
-                __metadata: {
-                  type: 'SP.User'
-                },
-                  LoginName: user.LoginName
-          },
-          headers: {
-          "accept": "application/json; odata=verbose",
-          "X-HTTP-Method": "DELETE",
-          "X-RequestDigest": digest
-          }
+          beforeSend: function(xhr) {
+                xhr.setRequestHeader('SOAPAction', "http://schemas.microsoft.com/sharepoint/soap/directory/RemoveUserFromSite");
+            },
+            type: "POST",
+            dataType: "xml",
+            contentType: "text/xml; charset=\"utf-8\"",
+          data:  '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">\
+                    <soap:Body>\
+                        <RemoveUserFromSite xmlns="http://schemas.microsoft.com/sharepoint/soap/directory/">\
+                            <userLoginName>' + user.LoginName + '</userLoginName>\
+                        </RemoveUserFromSite>\
+                    </soap:Body>\
+                </soap:Envelope>'
        }).then(function (response) {
           // handle success
           var results = response.data.d;
