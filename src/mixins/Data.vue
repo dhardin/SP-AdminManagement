@@ -114,7 +114,7 @@ import axios from 'axios'
     removeUserFromSiteCollection: function(siteCollection, digest, user, callback, errorCallback){
       console.log(user.LoginName);
         return axios({
-          url: siteCollection.url + '/_api/web/siteusers/removebyloginname(@v)?@v="'+encodeURIComponent(user.LoginName) + '"',
+          url: siteCollection.url + '/_vti_bin/UserGroup.asmx',
           beforeSend: function(xhr) {
                 xhr.setRequestHeader('SOAPAction', "http://schemas.microsoft.com/sharepoint/soap/directory/RemoveUserFromSite");
             },
