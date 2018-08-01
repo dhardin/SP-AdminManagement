@@ -109,7 +109,7 @@ import axios from 'axios'
       });
     },
     removeUserFromSiteCollection: function(siteCollection, digest, user, callback, errorCallback){
-      console.log(user.loginName);
+      console.log(user.LoginName);
         return axios({
           url: siteCollection.url + '/_api/web/siteusers/removebyloginname',
           method: 'post',
@@ -117,7 +117,7 @@ import axios from 'axios'
                 __metadata: {
                   type: 'SP.User'
                 },
-                  LoginName: user.LoginName
+                  loginName: user.LoginName
           },
           headers: {
            "X-HTTP-Method": "DELETE",
