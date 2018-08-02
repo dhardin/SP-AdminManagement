@@ -92,16 +92,18 @@ import axios from 'axios'
         url: siteCollection.url + "/_api/web/siteusers(@v)?@v='" + encodeURIComponent(loginName) + "'",
         method: 'get',
         headers: {
-          'acccept': 'application/json; odata=verbose'
+          'accept': 'application/json; odata=verbose'
         }
       }).then(function(response){
         // handle success
+        console.log(response);
         var results = response.d;
         if (callback) {
           callback(results);
         }
       }).catch(function(error){
         error = error != undefined ? error : {message: 'unspecified error'};
+        console.log(error);
         if (errorCallback) {
           errorCallback(error);
         }
