@@ -1,5 +1,5 @@
 <template>
-  <v-card class="flexcard" height="480px">
+  <v-card class="flexcard" min-height="480px">
     <v-card-text class="grow">
       <v-container fill-height fluid>
         <v-layout fill-height>
@@ -48,7 +48,7 @@
                      </div>
                   </div>
               </v-card-text>
-                <v-divider></v-divider>
+              <v-divider></v-divider>
                 <v-card-actions :class="{'slide-leave-active': isPurging, 'slide-leave-to': isPurging}">
                   <v-spacer></v-spacer>
                   <v-btn

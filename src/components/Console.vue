@@ -1,7 +1,15 @@
 <template>
-<v-card class="flexcard" height="480px">
+<v-card class="flexcard" min-height="480px">
     <v-card-title primary-title>
         <h3 class="grey--text text--darken-2">Console</h3>
+        <v-btn flat class="resize-btn" small right @click="resize"><div v-if="!maximize" class="maximize"><svg role="img" class="text-xs-right icon-size">
+          <use xlink:href="src/assets/svg-sprite-av-symbol.svg#ic_web_asset_24px" />
+        </svg></div>
+        <div v-if="maximize" class="restore"><svg style="width:20px;height:20px" viewBox="0 0 24 24">
+    <path fill="#000000" d="M4,8H8V4H20V16H16V20H4V8M16,8V14H18V6H10V8H16M6,12V18H14V12H6Z" />
+</svg>
+      </div>
+      </v-btn>
     </v-card-title>
     <v-card-text class="grow">
         <v-container fluid>
@@ -29,7 +37,6 @@
                         </v-list>
                         <span class="message" v-if="!isSiteCollectionSelected && !isLoading && !isSaving"> To start, please select a site collection. <span class="blinking-cursor">|</span></span>
                           <span class="message" v-if="!isItemSelected && isSiteCollectionSelected && !isLoading && !isSaving"> Please select a {{type.user ? 'group' : 'user'}}. <span class="blinking-cursor">|</span></span>
-
                     </div>
                 </v-flex>
             </v-layout>
@@ -56,6 +63,10 @@ export default {
         isSaving: {
             type: Boolean,
             default: false
+        },
+        maximize: {
+          type: Boolean,
+          default: false
         },
         isLoading: {
             type: Boolean,
@@ -85,7 +96,8 @@ export default {
         }
     },
     data: function() {
-        return {};
+        return {
+        };
     },
     watch: {
         messages: function(newMessages, oldMessages) {
@@ -98,6 +110,9 @@ export default {
         }
     },
     methods: {
+        resize: function(){
+          this.$emit('resize');
+        },
         clear: function() {
             this.$emit('clear-console');
         },
@@ -113,12 +128,13 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .console {
   height: 200px;
   box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
   padding: 1em;
   color: #CFD8DC;
+  resize: vertical;
   overflow-y: auto;
   font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
 }
@@ -139,6 +155,37 @@ export default {
   -o-animation: .8s blinker linear infinite;
   animation: .8 sblinker linear infinite;
 
+}
+
+.restore span {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: white;
+}
+.restore span:first-child {
+  top: 0px;
+  left: 0px;
+  background: white;
+}
+.restore span:last-child {
+  top:5px;
+  left: 5px;
+}
+
+
+svg.icon-size{
+  width: 16px;
+  height: 16px;
+}
+
+.resize-btn {
+  width: 16px !important;
+  height: 16px;
+  padding: 0 !important;
+  margin: 0;
+  min-width: 16px;
+  position: absolute;
 }
 
 @keyframes blinker{
