@@ -96,14 +96,12 @@ import axios from 'axios'
         }
       }).then(function(response){
         // handle success
-        console.log(response);
         var results = response.d;
         if (callback) {
           callback(results);
         }
       }).catch(function(error){
-        error = error != undefined ? error : {message: 'unspecified error'};
-        console.log(error);
+       error = error.response.data.error;
         if (errorCallback) {
           errorCallback(error);
         }
