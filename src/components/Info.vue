@@ -35,9 +35,17 @@
                 </svg>Warning
                 </v-card-title>
                 <v-card-text>
-                  <div :class="{'slide-leave-active': isPurging, 'slide-leave-to': isPurging}" >Purge will remove the user's account from all affiliated site collections.  Are you sure you want to do this?</div>
+                  <div :class="{'slide-leave-active': isPurging, 'slide-leave-to': isPurging}" >
+                    Purge will remove the user's account from all affiliated site collections.  Are you sure you want to do this?
+                    <div class="text-xs-right" style="color: #e91e63; font-size: small">
+                  1/2
+                   </div>
+                  </div>
                   <div :class="{'slide-enter-active': isPurging, 'slide-enter': !isPurging}" >
                     What site collection(s) would you like to remove the user from?
+                    <div class="text-xs-right" style="color: #e91e63; font-size: small">
+                      2/2
+                     </div>
                   </div>
               </v-card-text>
                 <v-divider></v-divider>

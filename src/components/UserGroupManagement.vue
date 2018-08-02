@@ -785,11 +785,8 @@ purgeUser: function(purgeAll){
       url: '',
       type: 'warning'
     });
-    that.getSiteCollectionsForUser(that.selectedItem, that.siteCollections).then(function(result){
-      targetSiteCollections = result;
+    that.getSiteCollectionsForUser(that.selectedItem, that.siteCollections, targetSiteCollections).then(function(result){
       console.log(targetSiteCollections);
-    }).then(function(result){
-      console.log('done');
       /*that.removeUserFromSiteCollections(that.selectedItem, targetSiteCollections).then(function(result){
         that.messages.push({
           date: new Date(),
