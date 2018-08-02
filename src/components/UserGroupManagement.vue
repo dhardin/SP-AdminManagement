@@ -577,15 +577,6 @@ export default {
             })));
           });
         });
-        /*Promise.all(promiseArr.then(function(){
-        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
-        that.isSaving = false;
-        //set new items to failed items as these are still "new" and need to be processed.
-        that.newItems = that.failedItems;
-        that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
-        that.originalAvailableItems = JSON.parse(JSON.stringify(that.availableItems));
-      });
-    });*/
 
   })(this);
 },
@@ -698,7 +689,7 @@ getItemFromSiteCollection: function(item, siteCollection, numSiteCollections){
       that.messages.push({
         date: new Date(),
         verb: that.actions.Starting,
-        text: 'Check Existence',
+      text: 'Check Profile Exists',
         preposition: 'for',
         target: item.Title,
         url: siteCollection.url,
@@ -709,7 +700,7 @@ getItemFromSiteCollection: function(item, siteCollection, numSiteCollections){
         that.messages.push({
           date: new Date(),
           verb: that.actions.Finished,
-          text: 'Check Existence',
+          text: 'Check Profile Exists',
           preposition: 'for',
           target: item.Title,
           url: siteCollection.url,
@@ -722,7 +713,7 @@ getItemFromSiteCollection: function(item, siteCollection, numSiteCollections){
         that.messages.push({
           date: new Date(),
           verb: that.actions.Failed,
-          text: 'Check Existence',
+        text: 'Check Profile Exists',
           preposition: 'for',
           target: item.Title,
           hasError: true,
@@ -786,8 +777,7 @@ purgeUser: function(purgeAll){
       type: 'warning'
     });
     that.getSiteCollectionsForUser(that.selectedItem, that.siteCollections, targetSiteCollections).then(function(result){
-      console.log(targetSiteCollections);
-      /*that.removeUserFromSiteCollections(that.selectedItem, targetSiteCollections).then(function(result){
+      that.removeUserFromSiteCollections(that.selectedItem, targetSiteCollections).then(function(result){
         that.messages.push({
           date: new Date(),
           verb: that.actions.Finished,
@@ -802,7 +792,7 @@ purgeUser: function(purgeAll){
         that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
         that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
         that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
-      }); */
+      });
     });
   })(this);
 }
