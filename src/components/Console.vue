@@ -5,9 +5,10 @@
         <v-btn flat class="resize-btn" small right @click="resize"><div v-if="!maximize" class="maximize"><svg role="img" class="text-xs-right icon-size">
           <use xlink:href="src/assets/svg-sprite-av-symbol.svg#ic_web_asset_24px" />
         </svg></div>
-        <div v-if="maximize" class="restore"><svg style="width:20px;height:20px" viewBox="0 0 24 24">
-    <path fill="#000000" d="M4,8H8V4H20V16H16V20H4V8M16,8V14H18V6H10V8H16M6,12V18H14V12H6Z" />
-</svg>
+        <div v-if="maximize" class="restore">
+          <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+              <path fill="#000000" d="M4,8H8V4H20V16H16V20H4V8M16,8V14H18V6H10V8H16M6,12V18H14V12H6Z" />
+          </svg>
       </div>
       </v-btn>
     </v-card-title>

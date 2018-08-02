@@ -8,6 +8,7 @@ import 'babel-polyfill'
 import './assets/svg-sprite-navigation-symbol.svg'
 import './assets/svg-sprite-action-symbol.svg'
 import './assets/svg-sprite-social-symbol.svg'
+import './assets/svg-sprite-av-symbol.svg'
 
 // index.js or main.js
 
