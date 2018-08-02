@@ -87,6 +87,26 @@ import axios from 'axios'
       }
     });
     },
+    getByLoginName: function(siteCollection, loginName, callback, errorCallback){
+      return axios({
+        url: siteCollection.url + '/_api/web/siteusers(@v)?@v="' + encodeURIComponent(loginName) + '"',
+        method: 'get',
+        headers: {
+          'acccept': 'application/json; odata=verbose'
+        }
+      }).then(function(response){
+        // handle success
+        var results = response.d;
+        if (callback) {
+          callback(results);
+        }
+      }).catch(function(error){
+        error = error != undefined ? error : {message: 'unspecified error'};
+        if (errorCallback) {
+          errorCallback(error);
+        }
+      });
+    },
     removeUserFromGroup: function(siteCollection, digest, groupId, user, callback, errorCallback){
         return axios({
           url: siteCollection.url + '/_api/web/sitegroups('+groupId+')/users/removebyid('+user.Id+')',

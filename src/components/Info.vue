@@ -23,30 +23,30 @@
     <v-card-actions>
       <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
       <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Copy</v-btn>
-      <v-dialog id="purge-warning" v-model="dialog"  width="500" v-if="type.users">
+      <v-dialog id="purge-warning" v-model="dialog"  width="500" v-if="type.users" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
         <v-btn flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
-        <v-card>
+        <v-card :style="{ overflow: 'hidden'}">
                 <v-card-title
                   class="headline grey lighten-2"
                   primary-title
                 >
                 <svg role="img" class="icon-error">
                   <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_report_problem_24px" />
-                </svg>  Warning
+                </svg>Warning
                 </v-card-title>
-
                 <v-card-text>
-                  Purge will remove the user's account from all affiliated site collections.  Are you sure you want to do this?
-                </v-card-text>
-
+                  <div :class="{'slide-leave-active': isPurging, 'slide-leave-to': isPurging}" >Purge will remove the user's account from all affiliated site collections.  Are you sure you want to do this?</div>
+                  <div :class="{'slide-enter-active': isPurging, 'slide-enter': !isPurging}" >
+                    What site collection(s) would you like to remove the user from?
+                  </div>
+              </v-card-text>
                 <v-divider></v-divider>
-
-                <v-card-actions>
+                <v-card-actions :class="{'slide-leave-active': isPurging, 'slide-leave-to': isPurging}">
                   <v-spacer></v-spacer>
                   <v-btn
                     color="primary"
                     flat
-                    @click="purgeUser"
+                    @click="isPurging = true"
                   >
                    Yes
                   </v-btn>
@@ -58,9 +58,33 @@
                    No
                   </v-btn>
                 </v-card-actions>
+                <v-card-actions :class="{'slide-enter-active': isPurging, 'slide-enter': !isPurging}">
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="primary"
+                    flat
+                    @click="purgeUser(true)"
+                  >
+                   All
+                  </v-btn>
+                  <v-btn
+                    color="primary"
+                    flat
+                    @click="purgeUser(false)"
+                  >
+                   Currently Selected
+                     </v-btn>
+                  <v-btn
+                    color="primary"
+                    flat
+                    @click="isPurging = false; dialog = false"
+                  >
+                   Cancel
+                  </v-btn>
+                </v-card-actions>
               </v-card>
       </v-dialog>
-      <v-btn flat color="pink":disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" @click="exportData" >Export</v-btn>
+      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" @click="exportData">Export</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -113,7 +137,8 @@ export default {
   data: function(){
     return {
       selectedItem: null,
-      dialog: false
+      dialog: false,
+      isPurging: false
     };
   },
   watch : {
@@ -146,9 +171,11 @@ export default {
     }
   },
   methods: {
-    purgeUser: function(){
+    purgeUser: function(purgeAll){
+      purgeAll = purgeAll !== 'undefined' ? purgeAll : false;
       this.dialog = false;
-      this.$emit('purge-user');
+      this.isPurging = false;
+      this.$emit('purge-user', purgeAll);
     },
     itemChanged: function(item){
       this.$emit('item-changed', this.selectedItem);
@@ -241,6 +268,7 @@ export default {
 .icon-error {
   width: 24px;
   height: 24px;
+  margin-right: 10px;
   fill: #E53935;
   margin-top: -5px;
 }
