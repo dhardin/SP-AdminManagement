@@ -89,7 +89,7 @@ import axios from 'axios'
     },
     getByLoginName: function(siteCollection, loginName, callback, errorCallback){
       return axios({
-        url: siteCollection.url + '/_api/web/siteusers(@v)?@v="' + encodeURIComponent(loginName) + '"',
+        url: siteCollection.url + "/_api/web/siteusers(@v)?@v='" + encodeURIComponent(loginName) + "'",
         method: 'get',
         headers: {
           'acccept': 'application/json; odata=verbose'
