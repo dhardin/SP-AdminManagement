@@ -781,6 +781,15 @@ purgeUser: function(purgeAll){
       type: 'warning'
     });
     that.getSiteCollectionsForUser(that.selectedItem, purgeAll ? that.siteCollections :  [that.siteCollection], targetSiteCollections).then(function(result){
+      that.messages.push({
+        date: new Date(),
+        verb: that.actions.Finished,
+        text: 'Fetching all site collections',
+        preposition: 'for',
+        target: that.selectedItem.Title,
+        url: '',
+        type: 'info'
+      });
       that.removeUserFromSiteCollections(that.selectedItem, targetSiteCollections).then(function(result){
         that.messages.push({
           date: new Date(),

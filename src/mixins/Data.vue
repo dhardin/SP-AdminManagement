@@ -23,10 +23,15 @@ import axios from 'axios'
           callback(siteCollections);
         }
     }).catch(function(error) {
-      error = error != undefined ? error : {message: 'unspecified error'};
-
+      var responseError;
+      try{
+       responseError = {message: error.response.data.error.message.value};
+     } catch(err){
+       responseError = error;
+       console.log(err);
+     }
       if (errorCallback) {
-        errorCallback(error);
+        errorCallback(responseError);
       }
     });
     },
@@ -43,9 +48,15 @@ import axios from 'axios'
             callback(users);
           }
       }).catch(function(error) {
-        error = error != undefined ? error : {message: 'unspecified error'};
+        var responseError;
+        try{
+         responseError = {message: error.response.data.error.message.value};
+       } catch(err){
+         responseError = error;
+         console.log(err);
+       }
         if (errorCallback) {
-          errorCallback(error);
+          errorCallback(responseError);
         }
       });
     },
@@ -62,9 +73,15 @@ import axios from 'axios'
             callback(groups);
           }
       }).catch(function(error) {
-        error = error != undefined ? error : {message: 'unspecified error'};
+        var responseError;
+        try{
+         responseError = {message: error.response.data.error.message.value};
+       } catch(err){
+         responseError = error;
+         console.log(err);
+       }
         if (errorCallback) {
-          errorCallback(error);
+          errorCallback(responseError);
         }
       });
     },
@@ -81,9 +98,15 @@ import axios from 'axios'
           callback(groups);
         }
     }).catch(function(error) {
-      error = error != undefined ? error : {message: 'unspecified error'};
+      var responseError;
+      try{
+       responseError = {message: error.response.data.error.message.value};
+     } catch(err){
+       responseError = error;
+       console.log(err);
+     }
       if (errorCallback) {
-        errorCallback(error);
+        errorCallback(responseError);
       }
     });
     },
@@ -101,9 +124,15 @@ import axios from 'axios'
           callback(results);
         }
       }).catch(function(error){
-         error = {message: error.response.data.error.message.value};
+        var responseError;
+        try{
+         responseError = {message: error.response.data.error.message.value};
+       } catch(err){
+         responseError = error;
+         console.log(err);
+       }
         if (errorCallback) {
-          errorCallback(error);
+          errorCallback(responseError);
         }
       });
     },
@@ -122,9 +151,15 @@ import axios from 'axios'
             callback(results);
           }
       }).catch(function(error) {
-        error = error != undefined ? error : {message: 'unspecified error'};
+        var responseError;
+        try{
+         responseError = {message: error.response.data.error.message.value};
+       } catch(err){
+         responseError = error;
+         console.log(err);
+       }
         if (errorCallback) {
-          errorCallback(error);
+          errorCallback(responseError);
         }
       });
     },
@@ -155,9 +190,15 @@ import axios from 'axios'
             callback(results);
           }
       }).catch(function(error) {
-        error = error != undefined ? error : {message: 'unspecified error'};
+        var responseError;
+        try{
+         responseError = {message: error.response.data.error.message.value};
+       } catch(err){
+         responseError = error;
+         console.log(err);
+       }
         if (errorCallback) {
-          errorCallback(error);
+          errorCallback(responseError);
         }
       });
     },
@@ -186,9 +227,15 @@ import axios from 'axios'
           callback(results);
           }
       }).catch(function(error) {
-        error = error != undefined ? error : {message: 'unspecified error'};
+        var responseError;
+        try{
+         responseError = {message: error.response.data.error.message.value};
+       } catch(err){
+         responseError = error;
+         console.log(err);
+       }
         if (errorCallback) {
-          errorCallback(error);
+          errorCallback(responseError);
         }
       });
       }, this.isTesting ? 1000 : 0)
@@ -212,8 +259,15 @@ import axios from 'axios'
             console.log(error);
           }
         }).catch(function(error) {
+          var responseError;
+          try{
+           responseError = {message: error.response.data.error.message.value};
+         } catch(err){
+           responseError = error;
+           console.log(err);
+         }
           if (errorCallback) {
-            errorCallback(error);
+            errorCallback(responseError);
           }
         });
       },  // Get List Item Type metadata
