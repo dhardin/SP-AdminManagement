@@ -101,7 +101,7 @@ import axios from 'axios'
           callback(results);
         }
       }).catch(function(error){
-       error = error.response.data.error.value;
+        console.log(error)
         if (errorCallback) {
           errorCallback(error);
         }
