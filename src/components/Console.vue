@@ -32,7 +32,7 @@
                                       <span class="blinking-cursor" v-if="(isLoading || isSaving) && index == messages.length - 1">|</span>
                                     </div>
                                     <span class="message" v-if="item.type == 'notification'"> {{item.text}} </span>
-                                    <div v-if="item.hasError" class="red--text text--accent-1">Error: {{item.message}}</div>
+                                    <div v-if="item.hasError" class="error red--text text--accent-1">Error: {{item.message}}</div>
                                 </v-list-tile-content>
                             </template>
                             <span class="blinking-cursor" v-if="!isLoading && !isSaving && messages.length > 0 && isSiteCollectionSelected && isItemSelected">|</span>
@@ -140,7 +140,7 @@ export default {
   font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;
 }
 
-.console .message {
+.console .message, .console. .error{
   display: block;
   word-wrap: break-word;
   width: 100%;
