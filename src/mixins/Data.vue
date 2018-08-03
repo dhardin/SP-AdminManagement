@@ -191,6 +191,7 @@ import axios from 'axios'
           }
       }).catch(function(error) {
         var responseError;
+        console.log(error);
         try{
          responseError = {message: error.response.data.error.message.value};
        } catch(err){
