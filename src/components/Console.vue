@@ -1,5 +1,5 @@
 <template>
-<v-card class="flexcard" min-height="480px">
+<v-card class="flexcard" :min-height="maximize ? '800px' : '480px'">
     <v-card-title primary-title>
         <h3 class="grey--text text--darken-2">Console</h3>
         <v-btn flat class="resize-btn" small right @click="resize"><div v-if="!maximize" class="maximize"><svg role="img" class="text-xs-right icon-size">
@@ -16,7 +16,7 @@
         <v-container fluid>
             <v-layout >
                 <v-flex xs12 align-end flexbox>
-                    <div class="console blue-grey darken-4" ref="consoleMessages">
+                    <div class="console blue-grey darken-4" ref="consoleMessages" :style="{height: maximize ? '400px' : '200px'}">
                         <v-list dark class="blue-grey darken-4">
                             <template v-for="(item, index) in messages">
                                 <v-list-tile-content>
@@ -131,7 +131,6 @@ export default {
 </script>
 <style scoped>
 .console {
-  height: 200px;
   box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
   padding: 1em;
   color: #CFD8DC;
