@@ -174,7 +174,7 @@ import axios from 'axios'
             headers: {
               'SOAPAction': 'http://schemas.microsoft.com/sharepoint/soap/directory/RemoveUserFromSite',
               'content-type': "text/xml; charset=\"utf-8\"",
-              'data-type': 'xml',
+              'data-type': 'json',
               'accept': 'application/json; odata=verbose'
             },
             method: 'post',
