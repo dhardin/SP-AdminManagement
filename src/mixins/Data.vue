@@ -193,9 +193,11 @@ import axios from 'axios'
           }
       }).catch(function(error) {
         var responseError;
-        console.log(error);
         try{
-         responseError = {message: error.response.data.error.message.value};
+          var xml = error.response.data;
+          var parser = new DOMParser();
+          var xmlDoc = parser.parseFromString(xml, 'text/xml');
+         responseError = {message: xmlDoc.getElementsByTagName('faultstring')[0].childNodes[0].nodeValue};
        } catch(err){
          responseError = error;
          console.log(err);
