@@ -757,7 +757,7 @@ removeUserFromSiteCollections: function(user, siteCollections){
 },
 purgeUser: function(purgeAll){
   (function(that){
-    var targetSiteCollections = purgeAll ? [] : [that.siteCollection];
+    var targetSiteCollections = [];
     that.metrics.start = new Date();
     that.progress = 0;
     that.isSaving = true;
@@ -780,7 +780,7 @@ purgeUser: function(purgeAll){
       url: '',
       type: 'warning'
     });
-    that.getSiteCollectionsForUser(that.selectedItem, that.siteCollections, targetSiteCollections).then(function(result){
+    that.getSiteCollectionsForUser(that.selectedItem, purgeAll ? that.siteCollections :  [that.siteCollection], targetSiteCollections).then(function(result){
       that.removeUserFromSiteCollections(that.selectedItem, targetSiteCollections).then(function(result){
         that.messages.push({
           date: new Date(),
