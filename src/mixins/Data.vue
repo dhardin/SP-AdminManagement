@@ -142,7 +142,8 @@ import axios from 'axios'
           method: 'post',
           headers: {
            "X-HTTP-Method": "DELETE",
-           "X-RequestDigest": digest
+           "X-RequestDigest": digest,
+           'accept': 'application/json; odata=verbose'
           }
        }).then(function (response) {
           // handle success
@@ -173,7 +174,8 @@ import axios from 'axios'
             headers: {
               'SOAPAction': 'http://schemas.microsoft.com/sharepoint/soap/directory/RemoveUserFromSite',
               'content-type': "text/xml; charset=\"utf-8\"",
-              'data-type': 'xml'
+              'data-type': 'xml',
+              'accept': 'application/json; odata=verbose'
             },
             method: 'post',
           data:  '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">\
