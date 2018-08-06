@@ -3,30 +3,46 @@
     <v-card-title primary-title>
       <h4 class="grey--text text--darken-2">Current {{type.users  ? 'Groups' : 'Users'}}</h4>
     </v-card-title>
-    <div><v-checkbox v-if="type.users"
-     :label="`Show Description`"
-     v-model="showDescription"
-   ></v-checkbox>
+    <div>
+    <div class="checkbox" v-if="type.users">
+      <v-btn flat  v-if="!showDescription" @click="showDescription = true" :disabled="disabled">
+        <svg role="img" :style="{ opacity: disabled == true ? .38 : .87}">
+          <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px"/>
+        </svg>
+        <span class="font-weight-thin subheading">
+            Show Description
+          </span>
+        </v-btn>
+        <v-btn flat  v-if="showDescription" @click="showDescription = false" :disabled="disabled">
+      <svg role="img" :style="{ opacity: disabled == true ? .38 : .87, fill: '#1976d2'}">
+        <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
+      </svg>
+      <span class="font-weight-thin subheading">
+          Show Description
+        </span>
+      </v-btn>
+    </div>
       <v-text-field
       v-model="searchAssigned"
       append-icon="search"
       label="Search"
+      class="search"
       @focus="hasFocus=true"
       @blur="hasFocus=false"
       full-width
       hide-details
-      ></v-text-field>
-    </div>
+       :disabled="disabled"></v-text-field>
+     </div>
     <v-card-text class="grow">
       <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAssigned" class="items" must-sort  :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
-          <v-flex  slot="header" :style="{top: type.users ? '132px' : '64px', right: '16px', position: 'absolute'}" >
+          <v-flex  slot="header" :style="{top: type.users ? '112px' : '64px', right: '16px', position: 'absolute'}" >
         <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87, fill: hasFocus ? '#1976d2' : 'black'}">
           <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
         </svg>
         </v-flex>
 
-        <v-flex slot="item"slot-scope="props" xs12>
-              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index )" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light class="selectItem">
+        <v-flex slot="item"slot-scope="props" xs12 class="item">
+              <v-btn block :ripple="false" :class="{'left-right': props.item.leftRight}" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index )" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light class="selectItem listItem">
                 <v-container>
                <v-layout row wrap>
                  <v-flex xs1>
@@ -80,6 +96,32 @@ export default {
       },
       sourceType: 'assigned'
     };
+  },
+  watch: {
+    /*sortedItems: function(newVal, oldVal){
+      (function(that){
+      that.$lodash.each(newVal, function(o){
+       (function(obj){
+        setTimeout(function(){
+          that.$set(obj, 'leftRight', true);
+        },100);
+      })(o);
+      })
+    })(this)
+  }*/
   }
 }
 </script>
+<style>
+/*.items {
+  overflow-x: hidden;
+}
+.listItem{
+  left: -800px;
+}
+.left-right {
+ transform: translateX(800px);
+ transition: all .2s ease-in;
+}*/
+
+</style>

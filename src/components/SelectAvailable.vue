@@ -4,23 +4,39 @@
       <h4 class="grey--text text--darken-2">Available {{type.users ? 'Groups' : 'Users'}}</h4>
     </v-card-title>
     <div>
-    <v-checkbox
-     :label="`Show Description`"
-     v-model="showDescription" v-if="type.users"
-    ></v-checkbox>
+    <div class="checkbox" v-if="type.users">
+      <v-btn flat  v-if="!showDescription" @click="showDescription = true" :disabled="disabled">
+        <svg role="img" :style="{ opacity: disabled == true ? .38 : .87}">
+          <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px"/>
+        </svg>
+        <span class="font-weight-thin subheading">
+            Show Description
+          </span>
+        </v-btn>
+        <v-btn flat  v-if="showDescription" @click="showDescription = false" :disabled="disabled">
+        <svg role="img" :style="{ opacity: disabled == true ? .38 : .87, fill: '#1976d2'}">
+        <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
+      </svg>
+      <span class="font-weight-thin subheading">
+          Show Description
+        </span>
+      </v-btn>
+    </div>
     <v-text-field
     v-model="searchAvailable"
     append-icon="search"
     label="Search"
     @focus="hasFocus=true"
     @blur="hasFocus=false"
+    class="search"
     full-width
     hide-details
+    :disabled="disabled"
     ></v-text-field>
   </div>
     <v-card-text class="grow">
       <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAvailable" class="items" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
-        <v-flex  slot="header" :style="{top: type.users ? '132px' : '64px', right: '16px', position: 'absolute'}" >
+        <v-flex  slot="header" :style="{top: type.users ? '112px' : '64px', right: '16px', position: 'absolute'}" >
       <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87, fill: hasFocus ? '#1976d2' : 'black'}">
         <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
       </svg>

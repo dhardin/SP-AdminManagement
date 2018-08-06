@@ -84,11 +84,25 @@
   };
 </script>
 <style>
+.checkbox svg {
+
+}
+.checkbox .subheading {
+  text-transform: none;
+  padding: 5px;
+}
 .description {
   white-space: normal;
   text-align: left;
   padding: 5px;
   display: block;
+}
+.search input {
+  border-bottom: 1px solid rgba(0,0,0,.37);
+}
+.search input:focus {
+  border-bottom: 2px solid #1976d2;
+  transition: all .5s ease-out;
 }
 .selectItem {
   height: auto;

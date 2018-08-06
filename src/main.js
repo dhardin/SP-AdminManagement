@@ -9,6 +9,7 @@ import './assets/svg-sprite-navigation-symbol.svg'
 import './assets/svg-sprite-action-symbol.svg'
 import './assets/svg-sprite-social-symbol.svg'
 import './assets/svg-sprite-av-symbol.svg'
+import './assets/svg-sprite-toggle-symbol.svg'
 
 // index.js or main.js
 

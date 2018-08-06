@@ -26,7 +26,7 @@
       <v-toolbar-title >SharePoint Admin</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs" v-if="$route.name == 'Home'">
-        <SearchSelect item-value="title" item-text="title" item-subtitle="url" :style="{marginTop: '10px', marginRight: '10px', minWidth: '225px'}" dark v-model="siteCollection" :items="siteCollections" :disabled="isSaving || isLoading" :has-slot="true" :has-custom-filter="true" :filterProperties="['title', 'url']">
+        <SearchSelect item-value="title" item-text="title" item-subtitle="url" :style="{marginTop: '10px', marginRight: '10px', minWidth: '350px', right: '0px'}" dark v-model="siteCollection" :items="siteCollections" :disabled="isSaving || isLoading" :has-slot="true" :has-custom-filter="true" :filterProperties="['title', 'url']">
                   <v-list-tile-content slot="foo" slot-scope="item">
                   <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
                     <v-list-tile-sub-title>{{item.item.url.replace(item.item.origin, '')}}</v-list-tile-sub-title>
