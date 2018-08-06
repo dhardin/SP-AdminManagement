@@ -83,7 +83,7 @@
   }
   };
 </script>
-<style scoped>
+<style>
 .description {
   white-space: normal;
   text-align: left;

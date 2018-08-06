@@ -6,7 +6,7 @@
     <div>
     <v-checkbox
      :label="`Show Description`"
-     v-model="showDescription"
+     v-model="showDescription" v-if="type.users"
     ></v-checkbox>
     <v-text-field
     v-model="searchAvailable"
@@ -20,7 +20,7 @@
   </div>
     <v-card-text class="grow">
       <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAvailable" class="items" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
-        <v-flex  slot="header" :style="{top: '132px', right: '16px', position: 'absolute'}" >
+        <v-flex  slot="header" :style="{top: type.users ? '132px' : '64px', right: '16px', position: 'absolute'}" >
       <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87, fill: hasFocus ? '#1976d2' : 'black'}">
         <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
       </svg>
@@ -82,33 +82,3 @@ export default {
   }
 };
 </script>
-<style>
-
-.footer {
-  text-align: right;
-}
-.v-input__icon.v-input__icon--append {
-  display: none;
-}
-.v-btn.pagination {
-
-  display: inline-block;
-}
-.v-btn.pagination, .v-btn.pagination .v-btn__content {
-  width: 36px !important;
-  height: 36px;
-  padding: 0 !important;
-  margin: 0;
-  min-width: 36px;
-}
-.v-btn .container {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-.icon-error {
-  margin-bottom: -5px;
-  width: 24px;
-  height: 24px;
-  fill: #E53935;
-}
-</style>
