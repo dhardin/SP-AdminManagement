@@ -2,24 +2,31 @@
   <v-card class="flexcard" >
     <v-card-title primary-title>
       <h4 class="grey--text text--darken-2">Current {{type.users  ? 'Groups' : 'Users'}}</h4>
+    </v-card-title>
+    <div><v-checkbox
+     :label="`Show Description`"
+     v-model="showDescription"
+   ></v-checkbox>
       <v-text-field
       v-model="searchAssigned"
       append-icon="search"
       label="Search"
+      @focus="hasFocus=true"
+      @blur="hasFocus=false"
       full-width
       hide-details
       ></v-text-field>
-    </v-card-title>
+    </div>
     <v-card-text class="grow">
       <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAssigned" class="items" must-sort  :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
-          <v-flex  slot="header" :style="{top: '24px', right: '16px', position: 'absolute'}" >
-        <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87}">
+          <v-flex  slot="header" :style="{top: '132px', right: '16px', position: 'absolute'}" >
+        <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87, fill: hasFocus ? '#1976d2' : 'black'}">
           <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
         </svg>
         </v-flex>
 
         <v-flex slot="item"slot-scope="props" xs12>
-              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index )" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light>
+              <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index )" :color="props.item.selected ? 'red lighten-1' : 'red lighten-4'"  depressed light class="selectItem">
                 <v-container>
                <v-layout row wrap>
                  <v-flex xs1>
@@ -31,6 +38,9 @@
               <v-flex xs11>
                  {{  props.item.Title }}
                </v-flex>
+               <v-flex xs12 class="caption fot-weight-thin" v-if="showDescription">
+<small class="description">{{ props.item.Description}}</small>
+</v-flex>
              </v-layout>
            </v-container>
              </v-btn>

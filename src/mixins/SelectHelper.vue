@@ -41,6 +41,12 @@
 
       }
     },
+    data: function(){
+      return {
+        hasFocus: false,
+        showDescription: false
+      };
+    },
   methods: {
     selectItem: function(item, index){
       this.$emit('select-item', this.sourceType, item, index);
@@ -77,3 +83,44 @@
   }
   };
 </script>
+<style scoped>
+.description {
+  white-space: normal;
+  text-align: left;
+  padding: 5px;
+  display: block;
+}
+.selectItem {
+  height: auto;
+  min-height: 36px;
+  padding: 5px;
+}
+
+.footer {
+  text-align: right;
+}
+.v-input__icon.v-input__icon--append {
+  display: none;
+}
+.v-btn.pagination {
+
+  display: inline-block;
+}
+.v-btn.pagination, .v-btn.pagination .v-btn__content {
+  width: 36px !important;
+  height: 36px;
+  padding: 0 !important;
+  margin: 0;
+  min-width: 36px;
+}
+.v-btn .container {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.icon-error {
+  margin-bottom: -5px;
+  width: 24px;
+  height: 24px;
+  fill: #E53935;
+}
+</style>

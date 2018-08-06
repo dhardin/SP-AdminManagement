@@ -17,7 +17,7 @@ import axios from 'axios'
         var row;
         for(i = 0; i < numRows; i++){
             row = data.PrimaryQueryResult.RelevantResults.Table.Rows.results[i];
-            siteCollections.push({title: row.Cells.results[2].Value, url: row.Cells.results[3].Value});
+            siteCollections.push({title: row.Cells.results[2].Value, url: row.Cells.results[3].Value, origin: window.location.origin});
         }
         if (callback) {
           callback(siteCollections);

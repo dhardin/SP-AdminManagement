@@ -29,7 +29,7 @@
         <SearchSelect item-value="title" item-text="title" item-subtitle="url" :style="{marginTop: '10px', marginRight: '10px', minWidth: '225px'}" dark v-model="siteCollection" :items="siteCollections" :disabled="isSaving || isLoading" :has-slot="true" :has-custom-filter="true" :filterProperties="['title', 'url']">
                   <v-list-tile-content slot="foo" slot-scope="item">
                   <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
-                    <v-list-tile-sub-title>{{item.item.url}}</v-list-tile-sub-title>
+                    <v-list-tile-sub-title>{{item.item.url.replace(item.item.origin, '')}}</v-list-tile-sub-title>
                   </v-list-tile-content>
         </SearchSelect>
       <!--  <v-autocomplete v-model="siteCollection" @select="isSiteCollectionDropdownActive=true" @focus="isSiteCollectionDropdownActive=true" @blur="isSiteCollectionDropdownActive=false" :items="siteCollections" label="Select"  item-value="title" item-text="title" single-line autocomplete return-object clearable attach  :disabled="isSaving || isLoading"></v-autocomplete>
@@ -134,7 +134,7 @@ export default {
           //populate items for current type and populate availabe items for the opposing type
           //re-select previously selected item if its available
           //trigger select change for selected item if it exists, else clear selected item
-          that.siteCollections = [{title:'Home', url: '/'},{title:  'Engineering', url: '/sites/eng'}, {title: 'Quality Assurance', url: '/sites/qa'}];
+          that.siteCollections = [{title:'Home', url: 'https://localhost:8080/#/', origin: 'https://localhost:8080'},{title:  'Engineering', url: 'https://localhost:8080/#/sites/eng', origin: 'https://localhost:8080'}, {title: 'Quality Assurance', url: 'https://localhost:8080/#/sites/qa', origin: 'https://localhost:8080'}];
           that.isLoading = false;
           that.isLoadingSiteCollections.status = false;
         },1000);
@@ -144,7 +144,6 @@ export default {
           that.siteCollections = siteCollections;
           that.isLoading = false;
           that.isLoadingSiteCollections.status = false;
-
         }, function(error){
           that.isLoading = false;
           that.isLoadingSiteCollections.status = false;
