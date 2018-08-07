@@ -4,24 +4,24 @@
       <h4 class="grey--text text--darken-2">Available {{type.users ? 'Groups' : 'Users'}}</h4>
     </v-card-title>
     <div>
-    <div class="checkbox" v-if="type.users">
-      <v-btn flat  v-if="!showDescription" @click="showDescription = true" :disabled="disabled">
-        <svg role="img" :style="{ opacity: disabled == true ? .38 : .87}">
-          <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px"/>
+      <div class="checkbox" v-if="type.users">
+        <v-btn flat  v-if="showDescription == false" @click="showDescription = true" :disabled="disabled">
+          <svg role="img" :style="{ opacity: disabled == true ? .38 : .87}">
+            <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px"/>
+          </svg>
+          <span class="font-weight-thin subheading">
+              Show Description
+            </span>
+          </v-btn>
+          <v-btn flat  v-if="showDescription == true" @click="showDescription = false" :disabled="disabled">
+        <svg role="img" class="blue" :style="{ opacity: disabled == true ? .38 : .87}">
+          <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
         </svg>
         <span class="font-weight-thin subheading">
             Show Description
           </span>
         </v-btn>
-        <v-btn flat  v-if="showDescription" @click="showDescription = false" :disabled="disabled">
-        <svg role="img" :style="{ opacity: disabled == true ? .38 : .87, fill: '#1976d2'}">
-        <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
-      </svg>
-      <span class="font-weight-thin subheading">
-          Show Description
-        </span>
-      </v-btn>
-    </div>
+      </div>
     <v-text-field
     v-model="searchAvailable"
     append-icon="search"
