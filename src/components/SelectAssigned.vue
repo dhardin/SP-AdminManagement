@@ -4,19 +4,27 @@
       <h4 class="grey--text text--darken-2">Current {{type.users  ? 'Groups' : 'Users'}}</h4>
     </v-card-title>
     <div>
-      <div class="checkbox" v-if="type.users" >
+      <div class="checkbox" v-if="type.users && !showDescription">
           <v-btn flat @click="showDescription = !showDescription" :disabled="disabled">
-        <svg role="img" :style="{ opacity: disabled == true ? .38 : .87, fill: '#1976d2'}" v-if="showDescription">
-          <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
-        </svg>
         <svg role="img" :style="{ opacity: disabled == true ? .38 : .87}">
-          <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px" v-if="!showDescription"/>
+          <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px" />
         </svg>
+
         <span class="font-weight-thin subheading">
             Show Description
           </span>
         </v-btn>
       </div>
+      <div v-if="type.users && showDescription">
+          <v-btn flat @click="showDescription = !showDescription" :disabled="disabled">
+      <svg role="img" :style="{ opacity: disabled == true ? .38 : .87, fill: '#1976d2'}">
+        <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
+      </svg>
+      <span class="font-weight-thin subheading">
+          Show Description
+        </span>
+      </v-btn>
+    </div>
       <v-text-field
       v-model="searchAssigned"
       append-icon="search"

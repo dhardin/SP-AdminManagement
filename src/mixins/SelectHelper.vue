@@ -85,10 +85,8 @@
 </script>
 <style>
 
-.checkbox svg {
 
-}
-.checkbox .subheading {
+ .subheading {
   text-transform: none;
   padding: 5px;
 }
