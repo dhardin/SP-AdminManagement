@@ -84,9 +84,7 @@
   };
 </script>
 <style>
-.blue {
-  fill: #1976d2;
-}
+
 .checkbox svg {
 
 }

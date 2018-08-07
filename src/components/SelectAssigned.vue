@@ -14,7 +14,7 @@
           </span>
         </v-btn>
         <v-btn flat  v-if="showDescription == true" @click="showDescription = false" :disabled="disabled">
-      <svg role="img" class="blue" :style="{ opacity: disabled == true ? .38 : .87}">
+      <svg role="img" :style="{ opacity: disabled == true ? .38 : .87, fill: '#1976d2'}">
         <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
       </svg>
       <span class="font-weight-thin subheading">
