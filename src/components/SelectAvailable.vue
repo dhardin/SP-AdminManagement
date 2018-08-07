@@ -4,7 +4,7 @@
       <h4 class="grey--text text--darken-2">Available {{type.users ? 'Groups' : 'Users'}}</h4>
     </v-card-title>
     <div>
-      <div class="checkbox" v-if="type.users">
+      <div class="checkbox" v-if="type.users" v-if="!showDescription">
         <v-btn flat @click="showDescription = true" :disabled="disabled">
           <svg role="img" :style="{ opacity: disabled == true ? .38 : .87}">
             <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px"/>
@@ -13,6 +13,8 @@
               Show Description
             </span>
           </v-btn>
+            </div>
+                <div class="checkbox" v-if="type.users" v-if="showDescription">
           <v-btn flat @click="showDescription = false" :disabled="disabled">
         <svg role="img" :style="{ opacity: disabled == true ? .38 : .87, fill: '#1976d2'}">
           <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
