@@ -26,7 +26,8 @@
       </v-btn>
     </div>
     <v-text-field
-    v-model="searchAvailable"
+    @keyup="searchText"
+    v-model="search"
     append-icon="search"
     label="Search"
     @focus="hasFocus=true"
@@ -38,7 +39,7 @@
     ></v-text-field>
   </div>
     <v-card-text class="grow">
-      <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :search="searchAvailable" class="items" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
+      <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :loading="isSearching" class="items" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
         <v-flex  slot="header" :style="{top: type.users ? '112px' : '64px', right: '16px', position: 'absolute'}" >
       <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87, fill: hasFocus ? '#1976d2' : 'black'}">
         <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
@@ -81,7 +82,7 @@
     <v-card-actions>
       <v-btn block color="green darken-4" outline :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected ({{numSelected}})</v-btn>
       <v-btn block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="green darken-3"  @click="giveSelected">Give Selected ({{numSelected}})</v-btn>
-      <v-btn block :disabled="disabled || items.length == 0" color="green darken-3" :dark="!disabled && items.length > 0"  @click="giveAll">Give All</v-btn>
+      <v-btn block :disabled="disabled || sortedItems.length == 0" color="green darken-3" :dark="!disabled && items.length > 0"  @click="giveAll">Give All</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -98,6 +99,20 @@ export default {
       },
       sourceType: 'available'
     };
+  },
+  watch: {
+    sortedItems: function(newVal, oldVal){
+      (function(that){
+      that.$lodash.each(newVal, function(o){
+       (function(obj){
+        setTimeout(function(){
+          that.$set(obj, 'leftRight', false);
+          that.$set(obj, 'rightLeft', true);
+        },5000);
+      })(o);
+      })
+    })(this)
+  }
   }
 };
 </script>

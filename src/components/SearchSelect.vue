@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-autocomplete ref="autocomplete" v-model="selectedItem" :item-text="itemText" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true" @blur="active=false" clear-icon="" append-icon="" :items="items" label="Select"  :item-value="itemValue"  autocomplete return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-if="hasSlot" :filter="customFilter">
+    <v-autocomplete ref="autocomplete" :loading="isSearching" v-model="selectedItem" no-filter :no-data-text="isSearching ? 'Searching' : 'No Data'" :item-text="itemText" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items; " @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" label="Select"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-if="hasSlot">
       <template slot="item" slot-scope="{ item, tile, parent }">
-            <slot name="foo" :item="item"></slot>
+        <slot name="foo" :item="item"></slot>
       </template>
     </v-autocomplete>
-    <v-autocomplete ref="autocomplete" v-model="selectedItem" :item-text="itemText" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true" @blur="active=false" clear-icon="" append-icon="" :items="items" label="Select"  :item-value="itemValue"  autocomplete return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-else>
+    <v-autocomplete ref="autocomplete" :loading="isSearching" no-filter v-model="selectedItem" :item-text="itemText" :no-data-text="isSearching ? 'Searching' : 'No Data'" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items;" @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" label="Select"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-else>
     </v-autocomplete>
     <svg role="img" title="drop down" class="close" @click="clear" v-if="value != null && !active" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}">
       <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" />
@@ -79,7 +79,18 @@ export default {
   },
   computed: {
     filterMethod: function(){
-        return this.hasFilters ? this.customFilter : null;
+      return this.hasFilters ? this.customFilter : null;
+    },
+    sortedItems: function(){
+      if(this.search == null || this.search.length == 0){
+        this.filteredItems = this.items;
+      }
+
+      return (function(that){
+        return that.$lodash.sortBy(that.filteredItems, [function(o){
+          return o[that.itemText].toLowerCase();
+        }]);
+      })(this);
     }
   },
   watch: {
@@ -89,6 +100,22 @@ export default {
         this.$emit('input', newVal);
       },
       deep: true
+    },
+    search: function(newVal, oldVal){
+      this.isSearching = true;
+      this.filteredItems = [];
+      (function(that){
+        if(that.items > 100){
+        clearTimeout(that.searchTimeout);
+          that.searchTimeout = setTimeout(function(){
+            that.customFilter(that.items, newVal);
+            that.isSearching = false;
+          },  350);
+        } else {
+          that.customFilter(that.items, newVal);
+          that.isSearching = false;
+        }
+      })(this);
     }
   },
   data: function() {
@@ -97,59 +124,73 @@ export default {
         type: Boolean,
         default: false
       },
-      selectedItem: null
+      isSearching: false,
+      selectedItem: null,
+      filteredItems: this.items,
+      search: "",
+      hasFocus: false,
+      searchTimeout: null
     }
   },
+
   methods: {
+    searchStuff: function(e){
+      this.search = e.currentTarget.value;
+    },
     onChange: function(selectedItem){
       this.active = false;
       this.$emit('input', selectedItem);
     },
-    customFilter: function(item, queryText, itemText){
-        var i;
-        var property;
-        var searchText = queryText.toLowerCase();
-        if(!this.hasCustomFilter){
-          return itemText.toLowerCase().indexOf(searchText);
-        }
-        for(i = 0; i < this.filterProperties.length; i++){
-          property = this.filterProperties[i];
-          if(item.hasOwnProperty(property) && item[property].toLowerCase().indexOf(searchText) > -1){
-            return true;
+    customFilter: function(items, search){
+      if(search == null || search.length == 0){
+        this.filteredItems = items;
+        return;
+      }
+      (function(that){
+        that.filteredItems  = that.$lodash.filter(items, function(o){
+          var i;
+          var property;
+          var searchText = search.toLowerCase();
+          if(!that.hasCustomFilter){
+            return o[that.itemText].toLowerCase().indexOf(searchText) > -1;
+          } else {
+            for(i = 0; i < that.filterProperties.length; i++){
+              property = that.filterProperties[i];
+              return o.hasOwnProperty(property) && o[property].toLowerCase().indexOf(searchText) > -1;
+            }
           }
-        }
-        return false;
-
-    },
-    clear: function(){
-         this.selectedItem = null;
-      this.$emit('input', null);
-    }
-  }
+        });
+      })(this);
+},
+clear: function(){
+  this.selectedItem = null;
+  this.$emit('input', null);
+}
+}
 }
 </script>
 
 <style lang="css" scoped>
-  div {
-    position: relative;
-  }
-  svg.dropdown {
-    position: absolute;
-    right: 0;
-    top: 5px;
-  }
+div {
+  position: relative;
+}
+svg.dropdown {
+  position: absolute;
+  right: 0;
+  top: 5px;
+}
 
-  svg.close {
-    position: absolute;
-    right: 30px;
-    top: 5px;
-    cursor: pointer;
-  }
-  svg.dropdown.inactive {
-    transition: all .2s;
-  }
-  svg.dropdown.active {
-    /* Firefox */
+svg.close {
+  position: absolute;
+  right: 30px;
+  top: 5px;
+  cursor: pointer;
+}
+svg.dropdown.inactive {
+  transition: all .2s;
+}
+svg.dropdown.active {
+  /* Firefox */
 
   -moz-transform:  rotate(180deg);
   /* WebKit */
@@ -159,5 +200,5 @@ export default {
   /* Standard */
   transform:  rotate(180deg);
   transition: all .2s;
-  }
+}
 </style>
