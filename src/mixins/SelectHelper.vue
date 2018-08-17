@@ -55,11 +55,16 @@
     searchText: function(){
       this.isSearching = true;
       (function(that){
+        if(that.items > 100){
         clearTimeout(that.searchTimeout);
         that.searchTimeout = setTimeout(function(){
           that.customFilter(that.items, that.search);
           that.isSearching = false;
         },200);
+      } else {
+        that.customFilter(that.items, that.search);
+        that.isSearching = false;
+      }
       })(this);
     },
     customFilter: function(items, search){
