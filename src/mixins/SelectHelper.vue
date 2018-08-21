@@ -55,12 +55,12 @@
     searchText: function(){
       this.isSearching = true;
       (function(that){
-        if(that.items > 100){
+        if(that.items.length > 100){
         clearTimeout(that.searchTimeout);
         that.searchTimeout = setTimeout(function(){
           that.customFilter(that.items, that.search);
           that.isSearching = false;
-        },200);
+        },350);
       } else {
         that.customFilter(that.items, that.search);
         that.isSearching = false;
@@ -85,6 +85,11 @@
     },
     giveAll: function(e){
         this.$emit('give-all', this.sourceType);
+    }
+  },
+  watch: {
+    items: function(newVal, oldVal){
+      this.customFilter(this.items, this.search);
     }
   },
   computed: {

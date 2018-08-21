@@ -105,7 +105,7 @@ export default {
       this.isSearching = true;
       this.filteredItems = [];
       (function(that){
-        if(that.items > 100){
+        if(that.items.length > 100){
         clearTimeout(that.searchTimeout);
           that.searchTimeout = setTimeout(function(){
             that.customFilter(that.items, newVal);
@@ -116,6 +116,9 @@ export default {
           that.isSearching = false;
         }
       })(this);
+    },
+    items: function(newVal, oldVal){
+      this.customFilter(this.items, this.search);
     }
   },
   data: function() {
