@@ -32,6 +32,7 @@
       class="search"
       @focus="hasFocus=true"
       @blur="hasFocus=false"
+      @keydown="items.length > 100 ? isSearching=true : false"
       full-width
       hide-details
       :disabled="disabled"></v-text-field>
@@ -42,6 +43,25 @@
           <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87, fill: hasFocus ? '#1976d2' : 'black'}">
             <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
           </svg>
+        </v-flex>
+        <v-flex slot="no-data" :style="{'text-align': 'left'}">
+          <div v-if="!isSearching" :style="{'text-align': 'center'}">No Data</div>
+          <div v-else>
+            <v-container fill-height>
+    <v-layout row wrap align-center>
+      <v-flex>
+        <v-progress-circular
+    indeterminate
+    color="primary"
+    size="24"
+    ></v-progress-circular>
+      </v-flex>
+      <v-flex class="pl-2">
+        Searching
+      </v-flex>
+    </v-layout>
+  </v-container>
+  </div>
         </v-flex>
 
 

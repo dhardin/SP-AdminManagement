@@ -1,11 +1,49 @@
 <template>
   <div>
-    <v-autocomplete ref="autocomplete" :loading="isSearching" v-model="selectedItem" no-filter :no-data-text="isSearching ? 'Searching' : 'No Data'" :item-text="itemText" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items; " @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" label="Select"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-if="hasSlot">
+    <v-autocomplete ref="autocomplete" :loading="isSearching" v-model="selectedItem" no-filter :item-text="itemText" @keydown="isSearching=true" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items; " @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" label="Select"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-if="hasSlot">
       <template slot="item" slot-scope="{ item, tile, parent }">
         <slot name="foo" :item="item"></slot>
       </template>
+      <v-flex slot="no-data">
+        <span v-if="!isSearching">No Data</span>
+        <div v-else>
+          <v-container fill-height>
+  <v-layout row wrap align-center>
+    <v-flex>
+      <v-progress-circular
+  indeterminate
+  color="primary"
+  size="24"
+  ></v-progress-circular>
+    </v-flex>
+    <v-flex>
+      Searching
+    </v-flex>
+  </v-layout>
+</v-container>
+</div>
+      </v-flex>
     </v-autocomplete>
-    <v-autocomplete ref="autocomplete" :loading="isSearching" no-filter v-model="selectedItem" :item-text="itemText" :no-data-text="isSearching ? 'Searching' : 'No Data'" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items;" @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" label="Select"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-else>
+    <v-autocomplete ref="autocomplete" :loading="isSearching" no-filter v-model="selectedItem" :item-text="itemText" @keydown="isSearching=true" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items;" @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" label="Select"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-else>
+      <v-flex slot="no-data">
+        <span v-if="!isSearching">No Data</span>
+        <div v-else>
+          <v-container fill-height>
+  <v-layout row wrap align-center>
+    <v-flex>
+      <v-progress-circular
+  indeterminate
+  color="primary"
+  size="24"
+  ></v-progress-circular>
+    </v-flex>
+    <v-flex>
+      Searching
+    </v-flex>
+  </v-layout>
+</v-container>
+</div>
+      </v-flex>
     </v-autocomplete>
     <svg role="img" title="drop down" class="close" @click="clear" v-if="value != null && !active" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}">
       <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" />
@@ -102,10 +140,11 @@ export default {
       deep: true
     },
     search: function(newVal, oldVal){
-      this.isSearching = true;
+
       this.filteredItems = [];
       (function(that){
         if(that.items.length > 100){
+            that.isSearching = true;
         clearTimeout(that.searchTimeout);
           that.searchTimeout = setTimeout(function(){
             that.customFilter(that.items, newVal);
@@ -203,5 +242,8 @@ svg.dropdown.active {
   /* Standard */
   transform:  rotate(180deg);
   transition: all .2s;
+}
+.v-progress-circular {
+  float: right;
 }
 </style>

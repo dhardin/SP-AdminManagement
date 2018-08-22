@@ -53,15 +53,17 @@
     },
   methods: {
     searchText: function(){
-      this.isSearching = true;
+
+      console.log(this.items.length);
       (function(that){
-        if(that.items.length > 100){
+       if(that.items.length > 100){
+           that.isSearching = true;
         clearTimeout(that.searchTimeout);
         that.searchTimeout = setTimeout(function(){
           that.customFilter(that.items, that.search);
           that.isSearching = false;
         },350);
-      } else {
+    } else {
         that.customFilter(that.items, that.search);
         that.isSearching = false;
       }
@@ -126,8 +128,6 @@
   };
 </script>
 <style>
-
-
  .subheading {
   text-transform: none;
   padding: 5px;
@@ -177,5 +177,12 @@
   width: 24px;
   height: 24px;
   fill: #E53935;
+}
+.loading {
+  background-color: white;
+  opacity: 0.25;
+}
+.v-progress-circular {
+  float: right;
 }
 </style>

@@ -20,10 +20,6 @@
   flex-direction: column;
 }
 
-.items .flex {
-  padding: 0 !important;
-
-}
 .items .btn {
   margin: 0;
   border: none;

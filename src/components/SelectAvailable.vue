@@ -32,6 +32,7 @@
     label="Search"
     @focus="hasFocus=true"
     @blur="hasFocus=false"
+    @keydown="items.length > 100 ? isSearching=true : false"
     class="search"
     full-width
     hide-details
@@ -39,13 +40,32 @@
     ></v-text-field>
   </div>
     <v-card-text class="grow">
-      <v-data-iterator :pagination.sync="pagination" :items="sortedItems" :loading="isSearching" class="items" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
+      <v-data-iterator :pagination.sync="pagination" :items="isSearching ? [] : sortedItems" :loading="isSearching ? 'primary' : false" must-sort :rows-per-page-items="[10, 20, 50, {'text':'All', 'value': -1}]" next-icon="" prev-icon="">
         <v-flex  slot="header" :style="{top: type.users ? '112px' : '64px', right: '16px', position: 'absolute'}" >
       <svg role="img" title="drop down" class="close" :style="{ opacity: disabled == true ? .38 : .87, fill: hasFocus ? '#1976d2' : 'black'}">
         <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_search_24px" />
       </svg>
       </v-flex>
-        <v-flex slot="item"slot-scope="props" xs12>
+      <v-flex slot="no-data" :style="{'text-align': 'left'}">
+        <div v-if="!isSearching" :style="{'text-align': 'center'}">No Data</div>
+        <div v-else>
+          <v-container fill-height>
+  <v-layout row wrap align-center>
+    <v-flex>
+      <v-progress-circular
+  indeterminate
+  color="primary"
+  size="24"
+  ></v-progress-circular>
+    </v-flex>
+    <v-flex class="pl-2">
+      Searching
+    </v-flex>
+  </v-layout>
+</v-container>
+</div>
+      </v-flex>
+        <v-flex slot="item"slot-scope="props" xs12 class="pa-0">
           <v-btn block :ripple="false" :disabled="disabled" @click="selectItem(props.item, (pagination.page - 1) * pagination.rowsPerPage + props.index)" :color="props.item.selected ? 'green lighten-1' : 'green lighten-4'"  depressed light class="selectItem">
             <v-container>
            <v-layout row wrap>
