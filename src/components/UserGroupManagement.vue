@@ -189,7 +189,7 @@ export default {
       originalAssignedItems:[],
       newItems: [],
       failedItems: [],
-      messages: [],
+      messages: [],//[{type: 'table', headers: ['url', 'target', 'status'], rows: [{status: 'pending', url: '/home', target: ''}, {status: 'error', error: {expanded: false, message: 'some error', title: 'Unable to reach domain'}, url: '/blah', target: ''}]}],
       selectedAvailable: {},
       selectedAssigned: {},
       actions: {
@@ -545,7 +545,8 @@ export default {
       this.$lodash.forEach(this.failedItems, function(o){
         o.hasError = false;
       });
-      (function(that){
+
+    (function(that){
         var promiseArr = [];
         var i;
 
@@ -560,7 +561,7 @@ export default {
             resolve();
           });
         }).then(function(result){
-          that.saveItems(that.newItems).then(function(result){
+          that.saveItemsAsync(that.newItems).then(function(result){
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
             that.isSaving = false;
             that.metrics.end = new Date();
@@ -581,25 +582,75 @@ export default {
             })));
           });
         });
-
   })(this);
 },
-saveItems: function(items){
+saveItemsAsync: function(items){
   this.metrics.numFailed = 0;
   this.metrics.numSuccesses = 0;
+  var message =  {type: 'table', pagination: {
+    sortBy: 'operation',
+    descending: false
+  },
+  search: '',headers: [{text: 'Operation', value: 'operation'}, {text: 'URL', value: 'url'}, {text: 'Target', value: 'target'}, {text: 'Status', value: 'status'}], rows: []};
+  var messageList = message.rows;
+  this.messages.push(message);
+  var promiseArr;
+  (function(that){
+   promiseArr = items.map(function(item){
+        return that.saveItemAsync(item, messageList);
+    });
+  })(this);
+  return Promise.all(promiseArr);
+},
+saveItemAsync: function(item, messageList){
+  var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
+  var preposition = item.operation == 'add' ? (this.type.user ? 'for' : 'to') : (this.type.user ? 'for' :'from');
+  messageList.push({status: 'pending', url: this.siteCollection.url, target: this.selectedItem.Title, operation: operationText + ' ' + item.Title, error: {expanded: false, message: '', title: ''}});
+  var message = messageList[messageList.length - 1];
+  var promise;
+  (function(that){
+   promise = new Promise(function(resolve, reject){
+      that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? item.Id : that.selectedItem.Id, that.type.groups ? item : that.selectedItem,function(results){
+        var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
+        var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
+        that.metrics.numSuccesses++;
+        item.isNew = false;
+        item.hasError = false;
+        that.progress += 100/that.newItems.length;
+        message.status = 'done';
+        return resolve();
+      }, function(error){
+        var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
+        var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
+        item.hasError = true;
+        that.failedItems.push(item);
+        message.status = 'error';
+        message.error = {expanded: false, message: error.stack, title: error.message};
+        that.progress += 100/that.newItems.length;
+        that.metrics.numFailed++;
+        return resolve();
+      })
+    });
+  })(this);
+  return promise;
+},
+saveItemsSync: function(items){
+  this.metrics.numFailed = 0;
+  this.metrics.numSuccesses = 0;
+
   return (function(that){
     return items.reduce(function(promise, item){
       return promise.then(function (result) {
-        return that.saveItem(item);
+        return that.saveItemSync(item);
       }).catch(console.error);
     }, Promise.resolve());
   })(this);
 },
-saveItem: function(item){
+saveItemSync: function(item){
   return  (function(that){
     return new Promise(function(resolve, reject){
       var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-      var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');;
+      var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
       that.messages.push({
         date: new Date(),
         verb: that.actions.Starting,
@@ -622,6 +673,7 @@ saveItem: function(item){
           url: that.siteCollection.url,
           type: 'success'
         });
+
         that.metrics.numSuccesses++;
         item.isNew = false;
         item.hasError = false;
@@ -643,51 +695,8 @@ saveItem: function(item){
 clearConsole: function(){
   this.messages = [];
 },
-removeUser: function(user, siteCollection, numSiteCollections){
-  return  (function(that){
-    return new Promise(function(resolve, reject){
-      that.messages.push({
-        date: new Date(),
-        verb: that.actions.Starting,
-        text: 'Remove From Site Collection',
-        preposition: 'for',
-        target: user.Title,
-        url: siteCollection.url,
-        type: 'warning'
-      });
-      that.removeUserFromSiteCollection(siteCollection, '', user, function(result){
-        that.progress += 100/numSiteCollections;
-        that.messages.push({
-          date: new Date(),
-          verb: that.actions.Finished,
-          text: 'Remove From Site Collection',
-          preposition: 'for',
-          target: user.Title,
-          url: siteCollection.url,
-          type: 'info'
-        });
-        that.metrics.numSuccesses++;
-        resolve();
-      }, function(error){
-        that.progress += 100/numSiteCollections;
-        that.messages.push({
-          date: new Date(),
-          verb: that.actions.Failed,
-          text: 'Remove From Site Collection',
-          preposition: 'for',
-          target: user.Title,
-          hasError: true,
-          message: error.message,
-          url: siteCollection.url,
-          type: 'error'
-        });
-        that.metrics.numFailed++;
-        resolve();
-      });
-    });
-  })(this);
-},
-getItemFromSiteCollection: function(item, siteCollection, numSiteCollections){
+
+getItemFromSiteCollectionSync: function(item, siteCollection, numSiteCollections){
   return  (function(that){
     return new Promise(function(resolve, reject){
       that.messages.push({
@@ -731,28 +740,158 @@ getItemFromSiteCollection: function(item, siteCollection, numSiteCollections){
     });
   })(this);
 },
-getSiteCollectionsForUser: function(user, siteCollections, targetSiteCollections){
+getSiteCollectionsForUserAsync: function(user, siteCollections, targetSiteCollections){
   this.metrics.numFailed = 0;
   this.metrics.numSuccesses = 0;
+  this.progress = 0;
+  var message =  {type: 'table', pagination: {
+    sortBy: 'operation',
+    descending: false
+  },
+  search: '', headers: [{text: 'Operation', value: 'operation'}, {text: 'URL', value: 'url'}, {text: 'Target', value: 'target'}, {text: 'Status', value: 'status'}], rows: []};
+  var messageList = message.rows;
+  this.messages.push(message);
+  var promiseArr;
+  (function(that){
+       promiseArr = siteCollections.map(function(siteCollection){
+        return that.getItemFromSiteCollectionAsync(user, siteCollection, siteCollections.length, messageList).then(function(result){
+          return result ? targetSiteCollections.push(siteCollection) : targetSiteCollections;
+        });
+      });
+  })(this);
+  return Promise.all(promiseArr);
+},
+getItemFromSiteCollectionAsync: function(item, siteCollection, numSiteCollections, messageList){
+  var promise;
+  messageList.push({status: 'pending', url: siteCollection.url, target: item.Title, operation:  'Check Profile Exists', error: {expanded: false, message: '', title: ''}});
+  var message = messageList[messageList.length - 1];
+  (function(that){
+    promise = new Promise(function(resolve, reject){
+      that.getByLoginName(siteCollection, item.LoginName, function(result){
+        that.progress += 100/numSiteCollections;
+        message.status = 'done';
+        that.metrics.numSuccesses++;
+        resolve(siteCollection);
+      }, function(error){
+        that.progress += 100/numSiteCollections;
+        message.status = 'error';
+        message.error = {expanded: false, message: error.stack, title: error.message};
+        that.metrics.numFailed++;
+        resolve(false);
+      });
+    });
+  })(this);
+  return promise;
+},
+getSiteCollectionsForUserSync: function(user, siteCollections, targetSiteCollections){
+  this.metrics.numFailed = 0;
+  this.metrics.numSuccesses = 0;
+  this.progress = 0;
   return (function(that){
     return siteCollections.reduce(function(promise, siteCollection){
       return promise.then(function (result) {
-        return that.getItemFromSiteCollection(user, siteCollection, siteCollections.length).then(function(result){
+        return that.getItemFromSiteCollectionSync(user, siteCollection, siteCollections.length).then(function(result){
           return result ? targetSiteCollections.push(siteCollection) : targetSiteCollections;
         });
       }).catch(console.error);
     }, Promise.resolve());
   })(this);
 },
-removeUserFromSiteCollections: function(user, siteCollections){
+removeUserFromSiteCollectionsAsync: function(user, siteCollections){
   this.metrics.numFailed = 0;
   this.metrics.numSuccesses = 0;
+  this.progress = 0;
+  var message =  {type: 'table', pagination: {
+    sortBy: 'operation',
+    descending: false
+  },
+  search: '', headers: [{text: 'Operation', value: 'operation'}, {text: 'URL', value: 'url'}, {text: 'Target', value: 'target'}, {text: 'Status', value: 'status'}], rows: []};
+  var messageList = message.rows;
+  this.messages.push(message);
+  var promiseArr;
+  (function(that){
+   promiseArr = siteCollections.map(function(item){
+        return that.removeUserAsync(user, siteCollection, siteCollections.length, messageList);
+    });
+  })(this);
+  return Promise.all(promiseArr);
+},
+removeUserAsync: function(user, siteCollection, numSiteCollections){
+  var promise;
+  messageList.push({status: 'pending', url: siteCollection.url, target: user.Title, operation:  'Remove From Site Collection', error: {expanded: false, message: '', title: ''}});
+  var message = messageList[messageList.length - 1];
+  (function(that){
+    promise = new Promise(function(resolve, reject){
+      message.status = 'done';
+      that.removeUserFromSiteCollection(siteCollection, '', user, function(result){
+        that.progress += 100/numSiteCollections;
+        that.metrics.numSuccesses++;
+        resolve();
+      }, function(error){
+        that.progress += 100/numSiteCollections;
+        message.status = 'error';
+        message.error = {expanded: false, message: error.stack, title: error.message};
+        that.metrics.numFailed++;
+        resolve();
+      });
+    });
+  })(this);
+  return promise;
+},
+removeUserFromSiteCollectionsSync: function(user, siteCollections){
+  this.metrics.numFailed = 0;
+  this.metrics.numSuccesses = 0;
+  this.progress = 0;
   return (function(that){
     return siteCollections.reduce(function(promise, siteCollection){
       return promise.then(function (result) {
-        return that.removeUser(user, siteCollection, siteCollections.length);
+        return that.removeUserSync(user, siteCollection, siteCollections.length);
       }).catch(console.error);
     }, Promise.resolve());
+  })(this);
+},
+removeUserSync: function(user, siteCollection, numSiteCollections){
+  return  (function(that){
+    return new Promise(function(resolve, reject){
+      that.messages.push({
+        date: new Date(),
+        verb: that.actions.Starting,
+        text: 'Remove From Site Collection',
+        preposition: 'for',
+        target: user.Title,
+        url: siteCollection.url,
+        type: 'warning'
+      });
+      that.removeUserFromSiteCollection(siteCollection, '', user, function(result){
+        that.progress += 100/numSiteCollections;
+        that.messages.push({
+          date: new Date(),
+          verb: that.actions.Finished,
+          text: 'Remove From Site Collection',
+          preposition: 'for',
+          target: user.Title,
+          url: siteCollection.url,
+          type: 'info'
+        });
+        that.metrics.numSuccesses++;
+        resolve();
+      }, function(error){
+        that.progress += 100/numSiteCollections;
+        that.messages.push({
+          date: new Date(),
+          verb: that.actions.Failed,
+          text: 'Remove From Site Collection',
+          preposition: 'for',
+          target: user.Title,
+          hasError: true,
+          message: error.message,
+          url: siteCollection.url,
+          type: 'error'
+        });
+        that.metrics.numFailed++;
+        resolve();
+      });
+    });
   })(this);
 },
 purgeUser: function(purgeAll){
@@ -780,7 +919,7 @@ purgeUser: function(purgeAll){
       url: '',
       type: 'warning'
     });
-    that.getSiteCollectionsForUser(that.selectedItem, purgeAll ? that.siteCollections :  [that.siteCollection], targetSiteCollections).then(function(result){
+    that.getSiteCollectionsForUserAsync(that.selectedItem, purgeAll ? that.siteCollections :  [that.siteCollection], targetSiteCollections).then(function(result){
       that.messages.push({
         date: new Date(),
         verb: that.actions.Finished,
@@ -790,7 +929,7 @@ purgeUser: function(purgeAll){
         url: '',
         type: 'info'
       });
-      that.removeUserFromSiteCollections(that.selectedItem, targetSiteCollections).then(function(result){
+      that.removeUserFromSiteCollectionsAsync(that.selectedItem, targetSiteCollections).then(function(result){
         that.messages.push({
           date: new Date(),
           verb: that.actions.Finished,
