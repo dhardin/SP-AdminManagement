@@ -42,26 +42,27 @@
                           label="Search"
                           single-line
                           hide-details
+                          @keyup="filter(item.search, item)"
+                          @input="filter(item.search, item)"
                           ></v-text-field>
                         </v-flex>
                       </v-layout>
                     <v-layout>
                       <v-flex xs12>
-                    <v-data-table dark hide-actions :search="item.search" :headers="item.headers" :items="item.rows" :pagination.sync="item.pagination">
+                    <v-data-table dark hide-actions :total-items="item.rows.length" :search="item.search" :headers="item.headers" :items="item.search.length == 0 ? item.rows : item.filteredItems" :pagination.sync="item.pagination">
                       <template slot="headers" slot-scope="props">
                         <tr class="blue-grey darken-4">
                           <th
                           v-for="header in props.headers"
                           :key="header.text"
                           :class="['column sortable', item.pagination.descending ? 'desc' : 'asc', header.value === item.pagination.sortBy ? 'active' : '']"
-                          @click="changeSort(header.value, item.pagination)"
+                          @click="changeSort(header.value, item.pagination, item)"
                           >
                           <svg role="img" :style="{visibility: item.pagination.sortBy == header.value ? 'visible' : 'hidden', fill: 'rgba(255,255,255,0.7)'}" :class="['sortIcon',  item.pagination.descending ? 'desc' : 'asc']" >
                             <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_upward_24px" />
                           </svg>
                           {{ header.text }}
                         </th>
-
                       </tr>
                     </template>
                     <template slot="items" slot-scope="props">
@@ -70,7 +71,7 @@
                         <td>{{props.item.url}}</td>
                         <td>{{props.item.target}}</td>
                         <td>
-                          <img class="loading-icon" src="src/assets/svg-loading-icon.svg" v-if="props.item.status == 'pending'"/>
+                        <v-progress-linear :indeterminate="true" v-if="props.item.status == 'pending'"></v-progress-linear>
                           <span v-if="props.item.status != 'pending' && props.item.status !='error'">{{props.item.status}}</span>
                           <span v-if="props.item.status == 'error'">
                             <v-btn small flat outline color="error" class="errorBtn" @click="props.item.error.expanded = !props.item.error.expanded">{{props.item.error.expanded ? '-' : '+'}} Error: {{props.item.error.title}}</v-btn>
@@ -79,7 +80,6 @@
                         </td>
                       </tr>
                     </template>
-
                   </v-data-table>
               </v-flex>
                 </v-layout>
@@ -179,13 +179,57 @@ export default {
         'blue--text text--lighten-4': item.type == 'info'
       }
     },
-    changeSort (column, pagination) {
+    filter: function(search, item){
+      item.filteredItems = this.$lodash.filter(item.rows, function(o){
+        var match = false;
+        var i;
+        var key;
+        for(i = 0; i < item.headers.length; i++){
+          match = o[item.headers[i].value].toLowerCase().indexOf(search.toLowerCase()) > -1;
+          if(match){
+            break;
+          }
+        }
+        //search error object if no match (could be looking for error specific messages)
+        if(!match && o.status == 'error') {
+          for(key in o.error){
+            if(typeof o.error[key] == 'string'){
+              match = o.error[key].toLowerCase().indexOf(search.toLowerCase()) > -1;
+              if(match){
+                break;
+              }
+          }
+        }
+      }
+        return match;
+      });
+    },
+    changeSort: function (column, pagination, item) {
       if (pagination.sortBy === column) {
         pagination.descending = !pagination.descending
       } else {
         pagination.sortBy = column
         pagination.descending = false
       }
+      item.rows = item.rows.sort(function(a,b){
+          if(pagination.descending){
+            if(b[column].toLowerCase() < a[column].toLowerCase()){
+              return 1;
+            } else if (b[column].toLowerCase() > a[column].toLowerCase()) {
+              return -1;
+            } else {
+               return 0;
+            }
+          } else {
+              if(a[column].toLowerCase() < b[column].toLowerCase()){
+                return 1;
+              } else if (a[column].toLowerCase() > b[column].toLowerCase()) {
+                return -1;
+              } else {
+                 return 0;
+              }
+          }
+      });
     }
   }
 }

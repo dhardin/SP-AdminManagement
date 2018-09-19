@@ -148,7 +148,9 @@
 .selectItem {
   height: auto;
   min-height: 36px;
-  padding: 5px;
+  padding: 10px 5px 10px 5px;
+  margin: 0;
+  transition: none;
 }
 
 .footer {
@@ -184,5 +186,10 @@
 }
 .v-progress-circular {
   float: right;
+}
+
+ul, li {
+  list-style-type: none;
+  padding: 0;
 }
 </style>
