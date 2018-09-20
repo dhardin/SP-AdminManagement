@@ -20,7 +20,7 @@
             <div class="console blue-grey darken-4" ref="consoleMessages" :style="{height: maximize ? '400px' : '200px'}">
               <v-list dark class="blue-grey darken-4">
                 <template v-for="(item, index) in messages">
-                  <v-list-tile-content>
+                  <v-list-tile-content :class="{'block-flex': isIE && item.type == 'table'}">
                     <div class="message" v-if="item.type != 'notification' && item.type != 'table'">
                       [{{item.hasOwnProperty('date') ? item.date.getHours().toString().padStart(2, '0') : ''}}:{{item.date.getMinutes().toString().padStart(2, '0') }}:{{item.date.getSeconds().toString().padStart(2, '0')}}]
                       <span :class="getClassObject(item)">{{item.verb}}</span>
@@ -32,7 +32,7 @@
                       <span class="blinking-cursor" v-if="(isLoading || isSaving) && index == messages.length - 1">|</span>
                     </div>
                     <span class="message" v-if="item.type == 'notification'"> {{item.text}} </span>
-                    <v-container fluid :style="{padding: '0px'}"v-if="item.type == 'table'">
+                    <v-container fluid :style="{padding: '0px'}"v-if="item.type == 'table'" >
                       <v-layout>
                         <v-flex xs8></v-flex>
                         <v-flex xs4>
@@ -48,8 +48,8 @@
                         </v-flex>
                       </v-layout>
                     <v-layout>
-                      <v-flex xs12>
-                    <v-data-table dark hide-actions :total-items="item.rows.length" :search="item.search" :headers="item.headers" :items="item.search.length == 0 ? item.rows : item.filteredItems" :pagination.sync="item.pagination">
+                      <v-flex xs12 >
+                    <v-data-table  dark hide-actions :total-items="item.rows.length" :search="item.search" :headers="item.headers" :items="item.search.length == 0 ? item.rows : item.filteredItems" :pagination.sync="item.pagination">
                       <template slot="headers" slot-scope="props">
                         <tr class="blue-grey darken-4">
                           <th
@@ -154,6 +154,11 @@ export default {
 
     };
   },
+  computed: {
+    isIE: function(){
+      return (navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true ); //IF IE > 10
+    }
+  },
   watch: {
     messages: function(newMessages, oldMessages) {
       (function(that) {
@@ -179,7 +184,7 @@ export default {
         'blue--text text--lighten-4': item.type == 'info'
       }
     },
-    filter: function(search, item){
+    filter: function(search, item) {
       item.filteredItems = this.$lodash.filter(item.rows, function(o){
         var match = false;
         var i;
@@ -344,4 +349,7 @@ svg.icon-size {
   50% { opacity: 1.0; }
 }
 
+.block-flex {
+  display: block;
+}
 </style>
