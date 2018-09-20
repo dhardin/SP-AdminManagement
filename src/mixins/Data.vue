@@ -61,7 +61,7 @@ import axios from 'axios'
       });
     },
     getGroups: function(siteCollection, userId, callback, errorCallback){
-        return axios.get(siteCollection.url + "/_api/web/" + (userId !== false ? 'getuserbyid('+userId+')/Groups' : 'sitegroups'),
+        return axios.get(siteCollection.url + "/_api/web/" + (userId !== false ? 'getuserbyid('+userId+')/Groups' : 'sitegroups?$select=*'),
         {
         headers: {
           "accept": "application/json;odata=verbose"

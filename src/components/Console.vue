@@ -20,7 +20,7 @@
             <div class="console blue-grey darken-4" ref="consoleMessages" :style="{height: maximize ? '400px' : '200px'}">
               <v-list dark class="blue-grey darken-4">
                 <template v-for="(item, index) in messages">
-                  <v-list-tile-content :class="{'block-flex': isIE && item.type == 'table'}">
+                  <v-list-tile-content :class="{'block-flex': isIE}">
                     <div class="message" v-if="item.type != 'notification' && item.type != 'table'">
                       [{{item.hasOwnProperty('date') ? item.date.getHours().toString().padStart(2, '0') : ''}}:{{item.date.getMinutes().toString().padStart(2, '0') }}:{{item.date.getSeconds().toString().padStart(2, '0')}}]
                       <span :class="getClassObject(item)">{{item.verb}}</span>
@@ -262,7 +262,6 @@ export default {
 
 .console td, .console th {
   padding: 10px;
-
   border-bottom: 1px solid rgba(255, 255, 255, .2);
 }
 
@@ -271,8 +270,14 @@ export default {
   vertical-align: top;
 }
 
+.console th {
+  text-align: left;
+}
+
 .errorBtn {
   margin: 0 0 8px 0;
+  display: block;
+  word-wrap: break-word;
 }
 .console .message{
   display: block;
