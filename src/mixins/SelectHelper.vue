@@ -145,13 +145,20 @@
   border-bottom: 2px solid #1976d2;
   transition: all .5s ease-out;
 }
-.selectItem {
+.v-btn.selectItem {
   height: auto;
   min-height: 36px;
   padding: 10px 5px 10px 5px;
   margin: 0;
-  transition: none;
-}
+ }
+
+ .v-btn, .v-btn::before, .v-btn::after {
+   -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+    transition-timing-function: step-end !important;
+ }
 
 .footer {
   text-align: right;
