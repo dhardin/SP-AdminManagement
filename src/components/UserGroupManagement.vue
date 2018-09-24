@@ -561,7 +561,7 @@ export default {
             resolve();
           });
         }).then(function(result){
-          that.saveItemsAsync(that.newItems).then(function(result){
+          that.saveItemsSync(that.newItems).then(function(result){
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
             that.isSaving = false;
             that.metrics.end = new Date();
@@ -637,21 +637,37 @@ saveItemAsync: function(item, messageList){
 saveItemsSync: function(items){
   this.metrics.numFailed = 0;
   this.metrics.numSuccesses = 0;
-
+  var i;
+  var message =  {type: 'table', pagination: {
+    sortBy: 'operation',
+    descending: false
+  },
+  search: '',headers: [{text: 'Operation', value: 'operation'}, {text: 'URL', value: 'url'}, {text: 'Target', value: 'target'}, {text: 'Status', value: 'status'}], rows: []};
+  var messageList = message.rows;
+    var operationText;
+    var item;
+    var preposition
+  this.messages.push(message);
+  for(i = 0; i < items.length; i++){
+    item = items[i];
+   operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
+   preposition = item.operation == 'add' ? (this.type.user ? 'for' : 'to') : (this.type.user ? 'for' :'from');
+  messageList.push({status: 'pending', url: this.siteCollection.url, target: this.selectedItem.Title, operation: operationText + ' ' + item.Title, error: {expanded: false, message: '', title: ''}});
+  }
   return (function(that){
-    return items.reduce(function(promise, item){
+    return items.reduce(function(promise, item, index){
       return promise.then(function (result) {
-        return that.saveItemSync(item);
+        return that.saveItemSync(item, messageList[index]);
       }).catch(console.error);
     }, Promise.resolve());
   })(this);
 },
-saveItemSync: function(item){
+saveItemSync: function(item, message){
   return  (function(that){
     return new Promise(function(resolve, reject){
       var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
       var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
-      that.messages.push({
+  /*    that.messages.push({
         date: new Date(),
         verb: that.actions.Starting,
         text:operationText + ' ' + item.Title,
@@ -659,10 +675,10 @@ saveItemSync: function(item){
         target: that.selectedItem.Title,
         url: that.siteCollection.url,
         type: 'info'
-      });
+      });*/
 
       that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? item.Id : that.selectedItem.Id, that.type.groups ? item : that.selectedItem,function(results){
-        var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
+      /*  var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
         var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
         that.messages.push({
           date: new Date(),
@@ -672,8 +688,8 @@ saveItemSync: function(item){
           target: that.selectedItem.Title,
           url: that.siteCollection.url,
           type: 'success'
-        });
-
+        });*/
+        message.status = 'done';
         that.metrics.numSuccesses++;
         item.isNew = false;
         item.hasError = false;
@@ -684,7 +700,9 @@ saveItemSync: function(item){
         var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
         item.hasError = true;
         that.failedItems.push(item);
-        that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + item.Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+        //that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + item.Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+        message.status = 'error';
+        message.error = {expanded: false, message: error.stack, title: error.message};
         that.progress += 100/that.newItems.length;
         that.metrics.numFailed++;
         return resolve();
