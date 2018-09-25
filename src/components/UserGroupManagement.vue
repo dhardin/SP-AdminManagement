@@ -625,7 +625,7 @@ saveItemAsync: function(item, messageList){
         var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
         item.hasError = true;
         that.failedItems.push(item);
-        message.status = 'error';
+        message.status = 'done';
         message.error = {expanded: false, message: error.stack, title: error.message};
         that.progress += 100/that.newItems.length;
         that.metrics.numFailed++;
@@ -702,7 +702,7 @@ saveItemSync: function(item, message){
         item.hasError = true;
         that.failedItems.push(item);
         //that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + item.Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
-        message.status = 'error';
+        message.status = 'done';
         message.error = {expanded: false, message: error.stack, title: error.message};
         that.progress += 100/that.newItems.length;
         that.metrics.numFailed++;

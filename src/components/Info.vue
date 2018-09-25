@@ -22,7 +22,10 @@
 
     <v-card-actions>
       <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
-      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Copy</v-btn>
+      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :style="{position: 'relative'}">Copy
+        <div class="text-xs-center" :style="{position: 'absolute', top: '-24px'}">
+          <v-chip small outline color="purple" :style="{'font-size': '8px'}" label>Coming Soon</v-chip>
+        </div></v-btn>
       <v-dialog id="purge-warning" v-model="dialog"  width="500" v-if="type.users" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
         <v-btn flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
         <v-card :style="{ overflow: 'hidden'}">
@@ -92,7 +95,7 @@
                 </v-card-actions>
               </v-card>
       </v-dialog>
-      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" @click="exportData">Export</v-btn>
+      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :href="csv" @click="downloadCSV" download="download.csv">Export</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -178,6 +181,11 @@ export default {
       }
     }
   },
+  computed: {
+    csv: function(){
+        return !navigator.msSaveBlob ? 'data:text/csv;charset=utf-8,' + escape(this.getCSV(this.assignedItems, 'Permissions', true, {Title: {displayText: "Title"}})) : '';
+    }
+  },
   methods: {
     purgeUser: function(purgeAll){
       purgeAll = purgeAll !== 'undefined' ? purgeAll : false;
@@ -194,7 +202,21 @@ export default {
     exportData: function(e){
       this.JSONToCSVConvertor(this.assignedItems, 'Permissions', true, {title: {displayText: "Title"}});
     },
-    JSONToCSVConvertor: function(JSONData, ReportTitle, ShowLabel, columnMap) {
+    downloadCSV: function(){
+      var csv;
+      var filename = 'download.csv';
+      var blob;
+      if(navigator.msSaveBlob){
+        csv  = this.getCSV(this.assignedItems, 'Permissions', true, {Title: {displayText: "Title"}});
+        blob = new Blob([csv], {
+            type: 'text/csv;charset=utf8;'
+        });
+        navigator.msSaveBlob(blob, filename);
+      } else {
+        return;
+      }
+    },
+    getCSV: function(JSONData, ReportTitle, ShowLabel, columnMap) {
       //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
       var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
 
@@ -246,7 +268,7 @@ export default {
       fileName += ReportTitle.replace(/ /g,"_");
 
       //Initialize file format you want csv or xls
-      var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+      return CSV;
 
       // Now the little tricky part.
       // you can use either>> window.open(uri);
@@ -254,7 +276,7 @@ export default {
       // or you will not get the correct file extension
 
       //this trick will generate a temp <a /> tag
-      var link = document.createElement("a");
+      /*var link = document.createElement("a");
       link.href = uri;
 
       //set the visibility hidden so it will not effect on your web-layout
@@ -264,7 +286,7 @@ export default {
       //this part will append the anchor tag and remove it after automatic click
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      document.body.removeChild(link);*/
     }
   }
 }

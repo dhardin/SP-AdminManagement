@@ -72,7 +72,7 @@
                         <td>{{props.item.target}}</td>
                         <td>
                         <v-progress-linear :indeterminate="true" v-if="props.item.status == 'pending'"></v-progress-linear>
-                          <span v-if="props.item.status != 'pending' && props.item.status !='error'">{{props.item.status}}</span>
+                          <span v-if="props.item.status != 'pending' && props.item.status !='error'" :class="{'green--text': props.item.status == 'done','text--darken-1': props.item.status == 'done', 'font-weight-black': props.item.status == 'done', 'text-uppercase': props.item.status == 'done'}">{{props.item.status}}</span>
                           <span v-if="props.item.status == 'error'">
                             <v-btn small flat outline color="error" class="errorBtn" @click="props.item.error.expanded = !props.item.error.expanded">{{props.item.error.expanded ? '-' : '+'}} Error: {{props.item.error.title}}</v-btn>
                             <div v-if="props.item.error.expanded" class="red--text text--accent-1">{{props.item.error.message}}</div>
