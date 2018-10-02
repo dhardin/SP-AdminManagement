@@ -1,6 +1,6 @@
 <template>
   <v-btn class="checkbox-button" flat @click="toggleChecked" :disabled="disabled">
-    <svg role="img" :class="{hidden: checked == true}" class="checkbox-icon"  width="24" height="24" viewBox="0 0 8 8">
+    <svg role="img" :class="{hidden: checked == true}" class="checkbox-icon"  width="24" height="24">
       <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px" />
     </svg>
     <svg role="img":class="{hidden: checked == false}" :style="{fill: '#1976d2' }" class="checkbox-icon"  >
