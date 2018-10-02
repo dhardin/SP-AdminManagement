@@ -43,6 +43,20 @@
   padding: 0;
 }
 
+.card-swap-enter-active {
+  transition: all .2s ease;
+  transition-delay: .2s;
+}
+.card-swap-leave-active {
+  transition: all .2s ease-out;
+}
+.card-swap-enter, .card-swap-leave-to
+/* .card-swap-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(-800px);
+  height: 0;
+  opacity: 0;
+}
+
 
 
 

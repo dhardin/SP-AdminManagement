@@ -53,8 +53,6 @@
     },
   methods: {
     searchText: function(){
-
-      console.log(this.items.length);
       (function(that){
        if(that.items.length > 100){
            that.isSearching = true;
@@ -87,6 +85,9 @@
     },
     giveAll: function(e){
         this.$emit('give-all', this.sourceType);
+    },
+    toggleDescription: function(isDisplayed){
+      this.showDescription = isDisplayed;
     }
   },
   watch: {

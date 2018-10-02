@@ -4,27 +4,7 @@
       <h4 class="grey--text text--darken-2">Available {{type.users ? 'Groups' : 'Users'}}</h4>
     </v-card-title>
     <div>
-      <div class="checkbox" v-if="type.users && !showDescription">
-        <v-btn flat @click="showDescription = !showDescription" :disabled="disabled">
-          <svg role="img" :style="{ opacity: disabled == true ? .38 : .87}">
-            <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_outline_blank_24px" />
-          </svg>
-
-          <span class="font-weight-thin subheading">
-            Show Description
-          </span>
-        </v-btn>
-      </div>
-      <div v-if="type.users && showDescription">
-        <v-btn flat @click="showDescription = !showDescription" :disabled="disabled">
-          <svg role="img" :style="{ opacity: disabled == true ? .38 : .87, fill: '#1976d2'}">
-            <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_check_box_24px" />
-          </svg>
-          <span class="font-weight-thin subheading">
-            Show Description
-          </span>
-        </v-btn>
-      </div>
+      <Checkbox label="Show Description" @toggle-checked="toggleDescription" v-if="type.users"></Checkbox>
       <div :style="{position: 'relative'}">
         <v-text-field
         @keyup="searchText"
@@ -81,11 +61,12 @@
 <script>
 import SelectHelper from '../mixins/SelectHelper.vue'
 import DataIterator from './DataIterator.vue'
-
+import Checkbox from './Checkbox.vue'
 export default {
   mixins: [SelectHelper],
   components: {
-    DataIterator: DataIterator
+    DataIterator: DataIterator,
+    Checkbox: Checkbox
   },
   data: function(){
     return {

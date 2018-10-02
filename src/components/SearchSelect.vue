@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-autocomplete ref="autocomplete" :loading="isSearching" v-model="selectedItem" no-filter :item-text="itemText" @keydown="isSearching=true" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items; " @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" label="Select"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-if="hasSlot">
+    <v-autocomplete ref="autocomplete" :loading="isSearching" v-model="selectedItem" no-filter :item-text="itemText" @keydown="isSearching=true" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items; " @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" :label="label"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-if="hasSlot">
       <template slot="item" slot-scope="{ item, tile, parent }">
         <slot name="foo" :item="item"></slot>
       </template>
@@ -24,7 +24,7 @@
 </div>
       </v-flex>
     </v-autocomplete>
-    <v-autocomplete ref="autocomplete" :loading="isSearching" no-filter v-model="selectedItem" :item-text="itemText" @keydown="isSearching=true" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items;" @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" label="Select"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-else>
+    <v-autocomplete ref="autocomplete" :loading="isSearching" no-filter v-model="selectedItem" :item-text="itemText" @keydown="isSearching=true" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items;" @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" :label="label"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-else>
       <v-flex slot="no-data">
         <span v-if="!isSearching">No Data</span>
         <div v-else>
@@ -78,6 +78,10 @@ export default {
     itemText: {
       type: String,
       default: ''
+    },
+    label: {
+      type: String,
+      default: 'Select'
     },
     itemSubtitle: {
       type: String,

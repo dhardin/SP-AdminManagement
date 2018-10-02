@@ -1,19 +1,22 @@
 <template>
-  <v-card class="flexcard" min-height="480px">
+<div class="flexcard" :style="{width: '100%', 'min-height': '480px'}">
+  <v-card class="grow flexcard" :style="{'overflow': 'hidden'}">
+    <transition name="card-swap">
+    <div v-if="copyDialog==false" class="grow flexcard">
     <v-card-text class="grow">
       <v-container fill-height fluid>
         <v-layout fill-height>
           <v-flex xs12 align-end flexbox>
             <v-form>
-              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" label="Select Item" light inactiveColor="#000"></SearchSelect>
+              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" :label="'Select ' + (type.users ? 'Group' : 'User')" light inactiveColor="#000"></SearchSelect>
               <div v-if="type.users == true">
-              <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
-              <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
-            </div>
-            <div v-else>
-              <v-text-field label="Owner" readonly disabled :value="selectedItem !== null ? selectedItem.OwnerTitle: ''"></v-text-field>
-              <v-textarea label="Description" readonly auto-grow rows="1" disabled :value="selectedItem !== null ? selectedItem.Description: ''"></v-textarea>
-            </div>
+                <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
+                <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
+              </div>
+              <div v-else>
+                <v-text-field label="Owner" readonly disabled :value="selectedItem !== null ? selectedItem.OwnerTitle: ''"></v-text-field>
+                <v-textarea label="Description" readonly auto-grow rows="1" disabled :value="selectedItem !== null ? selectedItem.Description: ''"></v-textarea>
+              </div>
             </v-form>
           </v-flex>
         </v-layout>
@@ -22,10 +25,7 @@
 
     <v-card-actions>
       <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
-      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :style="{position: 'relative'}">Copy
-        <div class="text-xs-center" :style="{position: 'absolute', top: '-24px'}">
-          <v-chip small outline color="purple" :style="{'font-size': '8px'}" label>Coming Soon</v-chip>
-        </div></v-btn>
+        <v-btn flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Copy</v-btn>
       <v-dialog id="purge-warning" v-model="dialog"  width="500" v-if="type.users" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
         <v-btn flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
         <v-card :style="{ overflow: 'hidden'}">
@@ -97,14 +97,23 @@
       </v-dialog>
       <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :href="csv" @click="downloadCSV" download="download.csv">Export</v-btn>
     </v-card-actions>
+  </div>
+    <Copy @get-site-collections-for-user="getSiteCollectionsForUser" :items="items" :type="type" @copy-items="copyItems" @close-copy="closeCopy" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :label="'Select ' + (type.users ? 'User' : 'Group') + ' To Copy To'" v-else></Copy>
+  </transition>
   </v-card>
+
+
+</div>
 </template>
 
 <script>
 import SearchSelect from './SearchSelect'
+import Copy from './Copy'
+
 export default {
   components: {
-    SearchSelect: SearchSelect
+    SearchSelect: SearchSelect,
+    Copy: Copy
   },
  props:{
     items: {
@@ -148,11 +157,16 @@ export default {
   data: function(){
     return {
       selectedItem: null,
+      selectedItemToCopyTo: null,
       dialog: false,
+      copyDialog: false,
       isPurging: false
     };
   },
   watch : {
+    copyDialog: function(newVal, oldVal){
+      this.$emit('copy-dialog-opened', newVal);
+    },
     selectedItem: {
       handler: function(newVal, oldVal){
         this.itemChanged(newVal);
@@ -183,15 +197,36 @@ export default {
   },
   computed: {
     csv: function(){
-        return !navigator.msSaveBlob ? 'data:text/csv;charset=utf-8,' + escape(this.getCSV(this.assignedItems, 'Permissions', true, {Title: {displayText: "Title"}})) : '';
+        return !navigator.msSaveBlob ? 'data:text/csv;charset=utf-8,' + escape(this.getCSV(this.assignedItems, 'Permissions', true, this.getExportOptions())) : '';
     }
   },
   methods: {
+    copyItems: function(selectedItem, items){
+
+    },
+    getSiteCollectionsForUser: function(){
+        this.$emit('get-site-collections-for-user', this.selectedItem);
+    },
+    closeCopy: function(){
+      this.copyDialog = false;
+    },
     purgeUser: function(purgeAll){
       purgeAll = purgeAll !== 'undefined' ? purgeAll : false;
       this.dialog = false;
       this.isPurging = false;
       this.$emit('purge-user', purgeAll);
+    },
+    getExportOptions: function(){
+      return this.type.groups
+      ? {
+          Title: {displayText: 'Title'},
+          loginName: {displayText: 'Login Name'},
+          email: {displayText: 'Email'}
+      }
+      : {
+        Title: {displayText: 'Title'},
+        Description: {displayText: 'Description'}
+      };
     },
     itemChanged: function(item){
       this.$emit('item-changed', this.selectedItem);
@@ -200,14 +235,14 @@ export default {
       this.$emit('save');
     },
     exportData: function(e){
-      this.JSONToCSVConvertor(this.assignedItems, 'Permissions', true, {title: {displayText: "Title"}});
+      this.JSONToCSVConvertor(this.assignedItems, 'Permissions', true, this.getExportOptions());
     },
     downloadCSV: function(){
       var csv;
       var filename = 'download.csv';
       var blob;
       if(navigator.msSaveBlob){
-        csv  = this.getCSV(this.assignedItems, 'Permissions', true, {Title: {displayText: "Title"}});
+        csv  = this.getCSV(this.assignedItems, 'Permissions', true, this.getExportOptions());
         blob = new Blob([csv], {
             type: 'text/csv;charset=utf8;'
         });

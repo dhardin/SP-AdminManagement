@@ -5,13 +5,13 @@
         <Console :maximize="maximize" :is-item-selected="isItemSelected" :type="type" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <Info :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>
+        <Info @get-site-collections-for-user="getSiteCollectionsGroupsForUser" @copy-dialog-opened="copyDialogOpened" :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>
       </v-flex>
-      <v-flex xs6 order-xs3>
-        <SelectAvailable :type="type" :num-selected="itemsSelected.available" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
+      <v-flex xs6 order-xs3 >
+        <SelectAvailable :type="type" :num-selected="itemsSelected.available" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving || copyDialogOpen" :is-loading="isLoading || copyDialogOpen" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
       </v-flex>
-      <v-flex xs6 order-xs4>
-        <SelectAssigned :type="type" :num-selected="itemsSelected.assigned" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving" :is-loading="isLoading" :is-site-collection-selected="isSiteCollectionSelected" :items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
+      <v-flex xs6 order-xs4 >
+        <SelectAssigned :type="type" :num-selected="itemsSelected.assigned" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAssignedSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving || copyDialogOpen" :is-loading="isLoading || copyDialogOpen" :is-site-collection-selected="isSiteCollectionSelected" :items="assignedItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAssigned>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -157,6 +157,7 @@ export default {
       progress: 0,
       isItemSelected: false,
       maximize: false,
+      copyDialogOpen: false,
       itemsSelected: {
         available: 0,
         assigned: 0
@@ -201,6 +202,9 @@ export default {
     };
   },
   methods: {
+    copyDialogOpened: function(isOpened){
+      this.copyDialogOpen = isOpened;
+    },
     resize: function(){
       this.maximize = !this.maximize;
     },
@@ -277,7 +281,7 @@ export default {
         }).then(function(result){
           return new Promise(function(resolve, reject){
             that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Groups', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
-            that.getGroupsForSiteCollection(function(data){
+            that.getGroupsForSiteCollection(that.siteCollection, function(data){
               if(that.type.users){
                 that.availableItems = data;
                 that.originalAvailableItems = data;
@@ -331,7 +335,7 @@ export default {
         }
       })(this);
     },
-    getGroupsForSiteCollection: function(callback, errorCallback){
+    getGroupsForSiteCollection: function(siteCollection, callback, errorCallback){
       (function(that){
         if(that.isTesting){
           setTimeout(function(){
@@ -344,8 +348,7 @@ export default {
 
           },1000);
         } else {
-          that.getGroups(that.siteCollection, false, function(groups){
-
+          that.getGroups(siteCollection, false, function(groups){
             callback(groups);
           }, function(error){
             errorCallback(error);
@@ -835,6 +838,37 @@ removeUserFromSiteCollectionsAsync: function(user, siteCollections){
   })(this);
   return Promise.all(promiseArr);
 },
+getGroupsForUserInSiteCollections: function(user, siteCollections){
+  this.metrics.numFailed = 0;
+  this.metrics.numSuccesses = 0;
+  this.progress = 0;
+  var message =  {type: 'table', pagination: {
+    sortBy: 'operation',
+    descending: false
+  },
+  search: '', headers: [{text: 'Operation', value: 'operation'}, {text: 'URL', value: 'url'}, {text: 'Target', value: 'target'}, {text: 'Status', value: 'status'}], rows: []};
+  var messageList = message.rows;
+  this.messages.push(message);
+  var promiseArr;
+  (function(that){
+   promiseArr = siteCollections.map(function(item){
+        var promise;
+        (function(that){
+          promise = new Promise(function(resolve, reject){
+            that.getGroups(item, user.Id, function(groups){
+              resolve({siteCollection: item, children: groups});
+          }, function(error){
+            console.log('error');
+            reject();
+          }
+        );
+        });
+        })(this);
+        return promise;
+    });
+  })(this);
+  return Promise.all(promiseArr);
+},
 removeUserAsync: function(user, siteCollection, numSiteCollections){
   var promise;
   messageList.push({status: 'pending', url: siteCollection.url, target: user.Title, operation:  'Remove From Site Collection', error: {expanded: false, message: '', title: ''}});
@@ -912,6 +946,75 @@ removeUserSync: function(user, siteCollection, numSiteCollections){
       });
     });
   })(this);
+},
+getSiteCollectionsGroupsForUser: function(){
+  (function(that){
+    var targetSiteCollections = [];
+    var siteCollections = [];
+    that.metrics.start = new Date();
+    that.progress = 0;
+    that.isSaving = true;
+
+    that.messages.push({
+      date: new Date(),
+      verb: that.actions.Starting,
+      text: 'Fetching all site collections',
+      preposition: 'for',
+      target: that.selectedItem.Title,
+      url: '',
+      type: 'warning'
+    });
+  new Promise(function(resolve, reject){
+  that.getSiteCollectionsForUserAsync(that.selectedItem, that.siteCollections, targetSiteCollections).then(function(result){
+    that.metrics.end = new Date();
+    that.messages.push({
+      date: new Date(),
+      verb: that.actions.Finished,
+      text: 'Fetching all site collections',
+      preposition: 'for',
+      target: that.selectedItem.Title,
+      url: '',
+      type: 'info'
+    });
+    that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
+    that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
+    that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
+    that.isSaving = false;
+    siteCollections = result;
+    resolve();
+  });
+  }).then(function(){
+    that.metrics.start = new Date();
+    that.progress = 0;
+    that.isSaving = true;
+    that.messages.push({
+      date: new Date(),
+      verb: that.actions.Starting,
+      text: 'Fetching Groups for user in Site Collections',
+      preposition: 'for',
+      target: that.selectedItem.Title,
+      url: '',
+      type: 'warning'
+    });
+    that.getGroupsForUserInSiteCollections(that.selectedItem, targetSiteCollections).then(function(result){
+      that.metrics.end = new Date();
+      that.messages.push({
+        date: new Date(),
+        verb: that.actions.Finished,
+        text: 'Fetching Groups for user in Site Collections',
+        preposition: 'for',
+        target: that.selectedItem.Title,
+        url: '',
+        type: 'info'
+      });
+      that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
+      that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
+      that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
+      that.isSaving = false;
+      console.log(result);
+    });
+  })
+})(this);
 },
 purgeUser: function(purgeAll){
   (function(that){
