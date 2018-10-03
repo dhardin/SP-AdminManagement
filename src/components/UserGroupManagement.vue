@@ -867,7 +867,7 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
   })(this);
   return Promise.all(promiseArr);
 },
-removeUserAsync: function(user, siteCollection, numSiteCollections){
+removeUserAsync: function(user, siteCollection, numSiteCollections, messageList){
   var promise;
   messageList.push({status: 'pending', url: siteCollection.url, target: user.Title, operation:  'Remove From Site Collection', error: {expanded: false, message: '', title: ''}});
   var message = messageList[messageList.length - 1];
