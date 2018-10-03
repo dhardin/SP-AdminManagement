@@ -197,7 +197,7 @@ import axios from 'axios'
           var xml = error.response.data;
           var parser = new DOMParser();
           var xmlDoc = parser.parseFromString(xml, 'text/xml');
-         responseError = {message: xmlDoc.getElementsByTagName('faultstring')[0].childNodes[0].nodeValue};
+         responseError = {message: xmlDoc.getElementsByTagName('faultstring')[0].childNodes[0].nodeValue, stack: xmlDoc.getElementsByTagName('errorstring')[0].childNodes[0].nodeValue};
        } catch(err){
          responseError = error;
          console.log(err);

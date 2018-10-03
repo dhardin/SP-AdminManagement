@@ -133,11 +133,15 @@ export default {
     selectedItem: {
       handler: function(newVal, oldVal){
         this.$router.push({ query: { url: this.siteCollection.url,loginname: this.selectedItem !== null ? this.selectedItem.LoginName : ''}});
+        this.clearSelected('available');
+        this.clearSelected('assigned');
       },
       deep: true
     },
     type: {
       handler: function(newVal, oldVal){
+        this.clearSelected('available');
+        this.clearSelected('assigned');
         if(this.isSiteCollectionSelected){
           this.getData();
         }
