@@ -98,7 +98,7 @@
     <v-container fluid>
       <v-layout >
         <v-flex xs12 align-end flexbox>
-          <v-progress-linear v-model="saveProgress" :color="saveProgress >= 100 ? 'success' : 'info'"></v-progress-linear>
+          <v-progress-linear :indeterminate="(isLoading || isSaving) && (saveProgress == 100 || saveProgress == 0)" v-model="saveProgress" :color="saveProgress >= 100 ? 'success' : 'info'"></v-progress-linear>
         </v-flex>
       </v-layout>
     </v-container>

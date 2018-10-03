@@ -1049,6 +1049,19 @@ purgeUser: function(purgeAll){
         url: '',
         type: 'info'
       });
+      that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
+      that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
+      that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
+      that.messages.push({
+        date: new Date(),
+        verb: that.actions.Starting,
+        text: 'Purging',
+        preposition: 'for',
+        target: that.selectedItem.Title,
+        url: '',
+        type: 'warning'
+      });
+      that.metrics.start = new Date();
       that.removeUserFromSiteCollectionsAsync(that.selectedItem, targetSiteCollections).then(function(result){
         that.messages.push({
           date: new Date(),
