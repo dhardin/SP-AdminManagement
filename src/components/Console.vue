@@ -17,7 +17,7 @@
       <v-container fluid>
         <v-layout >
           <v-flex xs12 align-end flexbox>
-            <div class="console blue-grey darken-4" ref="consoleMessages" :style="{height: maximize ? '400px' : '200px'}">
+            <div class="console blue-grey darken-4" @scroll="onScroll" ref="consoleMessages" :style="{height: maximize ? '400px' : '200px', position: 'relative'}">
               <v-list dark class="blue-grey darken-4">
                 <template v-for="(item, index) in messages">
                   <v-list-tile-content :class="{'block-flex': isIE}">
@@ -91,6 +91,20 @@
             </v-list>
             <span class="message" v-if="!isSiteCollectionSelected && !isLoading && !isSaving"> To start, please select a site collection. <span class="blinking-cursor">|</span></span>
             <span class="message" v-if="!isItemSelected && isSiteCollectionSelected && !isLoading && !isSaving"> Please select a {{type.user ? 'group' : 'user'}}. <span class="blinking-cursor">|</span></span>
+            <transition name="fade">
+            <div
+            :style="{position: 'sticky', bottom: '20px'}" v-if="!isBottomScroll">
+            <v-btn
+             color="pink"
+             dark
+             small
+             absolute
+             right
+             @click="goToEnd"
+             class="goToEndBtn"
+            >Go to End</v-btn>
+          </div>
+        </transition>
           </div>
         </v-flex>
       </v-layout>
@@ -151,7 +165,7 @@ export default {
   },
   data: function() {
     return {
-
+      isBottomScroll: true
     };
   },
   computed: {
@@ -170,6 +184,13 @@ export default {
     }
   },
   methods: {
+    onScroll: function(){
+      var elem = this.$refs.consoleMessages;
+      this.isBottomScroll = elem.scrollHeight - elem.scrollTop - elem.clientHeight < 40;
+    },
+    goToEnd: function(){
+      this.$refs.consoleMessages.scrollTop = this.$refs.consoleMessages.scrollHeight;
+    },
     resize: function(){
       this.$emit('resize');
     },
@@ -356,5 +377,31 @@ svg.icon-size {
 
 .block-flex {
   display: block;
+}
+.fade-leave-to {
+  opacity: 0;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+
+.fade-enter {
+  opacity: 1;
+}
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.fade-enter-active {
+  transition: all .5s;
+}
+.fade-leave-active {
+  transition: all .5s;
+}
+
+.goToEndBtn {
+  opacity: 0.2;
+}
+
+.goToEndBtn:hover {
+  opacity: 1;
 }
 </style>
