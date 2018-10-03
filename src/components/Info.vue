@@ -8,7 +8,7 @@
         <v-layout fill-height>
           <v-flex xs12 align-end flexbox>
             <v-form>
-              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" :label="'Select ' + (type.users ? 'Group' : 'User')" light inactiveColor="#000"></SearchSelect>
+              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" :label="'Select ' + (type.users ? 'User' : 'Group')" light inactiveColor="#000"></SearchSelect>
               <div v-if="type.users == true">
                 <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
                 <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
@@ -25,8 +25,8 @@
 
     <v-card-actions>
       <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
-        <v-btn flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Copy</v-btn>
-      <v-dialog id="purge-warning" v-model="dialog"  width="500" v-if="type.users" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
+        <v-btn flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" v-if="type.users">Copy</v-btn>
+      <v-dialog :persistent="true" id="purge-warning" v-model="dialog"  width="500" v-if="type.users" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
         <v-btn flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
         <v-card :style="{ overflow: 'hidden'}">
                 <v-card-title

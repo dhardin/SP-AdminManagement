@@ -833,7 +833,7 @@ removeUserFromSiteCollectionsAsync: function(user, siteCollections){
   var promiseArr;
   (function(that){
    promiseArr = siteCollections.map(function(item){
-        return that.removeUserAsync(user, siteCollection, siteCollections.length, messageList);
+        return that.removeUserAsync(user, item, siteCollections.length, messageList);
     });
   })(this);
   return Promise.all(promiseArr);
@@ -853,7 +853,6 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
   (function(that){
    promiseArr = siteCollections.map(function(item){
         var promise;
-        (function(that){
           promise = new Promise(function(resolve, reject){
             that.getGroups(item, user.Id, function(groups){
               resolve({siteCollection: item, children: groups});
@@ -863,7 +862,6 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
           }
         );
         });
-        })(this);
         return promise;
     });
   })(this);
