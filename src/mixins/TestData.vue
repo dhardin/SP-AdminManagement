@@ -8,7 +8,7 @@ export default {
     "firstName": "Sykes",
     "lastName": "Irwin",
     "Title": "Sykes Irwin",
-    "loginName": "Sykes.Irwin",
+    "LoginName": "Sykes.Irwin",
     "email": "sykesirwin@geoforma.com"
   },
   {
@@ -16,7 +16,7 @@ export default {
     "firstName": "Patrick",
     "lastName": "Herring",
     "Title": "Patrick Herring",
-    "loginName": "Patrick.Herring",
+    "LoginName": "Patrick.Herring",
     "email": "patrickherring@geoforma.com"
   },
   {
@@ -24,7 +24,7 @@ export default {
     "firstName": "Lorrie",
     "lastName": "Goff",
     "Title": "Lorrie Goff",
-    "loginName": "Lorrie.Goff",
+    "LoginName": "Lorrie.Goff",
     "email": "lorriegoff@geoforma.com"
   },
   {
@@ -32,7 +32,7 @@ export default {
     "firstName": "Pace",
     "lastName": "Winters",
     "Title": "Pace Winters",
-    "loginName": "Pace.Winters",
+    "LoginName": "Pace.Winters",
     "email": "pacewinters@geoforma.com"
   },
   {
@@ -40,7 +40,7 @@ export default {
     "firstName": "Cora",
     "lastName": "Hayes",
     "Title": "Cora Hayes",
-    "loginName": "Cora.Hayes",
+    "LoginName": "Cora.Hayes",
     "email": "corahayes@geoforma.com"
   },
   {
@@ -48,7 +48,7 @@ export default {
     "firstName": "Frankie",
     "lastName": "Reyes",
     "Title": "Frankie Reyes",
-    "loginName": "Frankie.Reyes",
+    "LoginName": "Frankie.Reyes",
     "email": "frankiereyes@geoforma.com"
   },
   {
@@ -56,7 +56,7 @@ export default {
     "firstName": "Gertrude",
     "lastName": "Sawyer",
     "Title": "Gertrude Sawyer",
-    "loginName": "Gertrude.Sawyer",
+    "LoginName": "Gertrude.Sawyer",
     "email": "gertrudesawyer@geoforma.com"
   },
   {
@@ -64,7 +64,7 @@ export default {
     "firstName": "Eve",
     "lastName": "Sosa",
     "Title": "Eve Sosa",
-    "loginName": "Eve.Sosa",
+    "LoginName": "Eve.Sosa",
     "email": "evesosa@geoforma.com"
   },
   {
@@ -72,7 +72,7 @@ export default {
     "firstName": "Mckee",
     "lastName": "Kerr",
     "Title": "Mckee Kerr",
-    "loginName": "Mckee.Kerr",
+    "LoginName": "Mckee.Kerr",
     "email": "mckeekerr@geoforma.com"
   },
   {
@@ -80,7 +80,7 @@ export default {
     "firstName": "Wilson",
     "lastName": "Copeland",
     "Title": "Wilson Copeland",
-    "loginName": "Wilson.Copeland",
+    "LoginName": "Wilson.Copeland",
     "email": "wilsoncopeland@geoforma.com"
   },
   {
@@ -88,7 +88,7 @@ export default {
     "firstName": "Eaton",
     "lastName": "Atkinson",
     "Title": "Eaton Atkinson",
-    "loginName": "Eaton.Atkinson",
+    "LoginName": "Eaton.Atkinson",
     "email": "eatonatkinson@geoforma.com"
   },
   {
@@ -96,7 +96,7 @@ export default {
     "firstName": "Sparks",
     "lastName": "Morris",
     "Title": "Sparks Morris",
-    "loginName": "Sparks.Morris",
+    "LoginName": "Sparks.Morris",
     "email": "sparksmorris@geoforma.com"
   },
   {
@@ -104,7 +104,7 @@ export default {
     "firstName": "Hope",
     "lastName": "Skinner",
     "Title": "Hope Skinner",
-    "loginName": "Hope.Skinner",
+    "LoginName": "Hope.Skinner",
     "email": "hopeskinner@geoforma.com"
   },
   {
@@ -112,7 +112,7 @@ export default {
     "firstName": "Randi",
     "lastName": "Chambers",
     "Title": "Randi Chambers",
-    "loginName": "Randi.Chambers",
+    "LoginName": "Randi.Chambers",
     "email": "randichambers@geoforma.com"
   },
   {
@@ -120,7 +120,7 @@ export default {
     "firstName": "Greene",
     "lastName": "Bennett",
     "Title": "Greene Bennett",
-    "loginName": "Greene.Bennett",
+    "LoginName": "Greene.Bennett",
     "email": "greenebennett@geoforma.com"
   },
   {
@@ -128,7 +128,7 @@ export default {
     "firstName": "Castaneda",
     "lastName": "Martinez",
     "Title": "Castaneda Martinez",
-    "loginName": "Castaneda.Martinez",
+    "LoginName": "Castaneda.Martinez",
     "email": "castanedamartinez@geoforma.com"
   },
   {
@@ -136,7 +136,7 @@ export default {
     "firstName": "Marshall",
     "lastName": "Powers",
     "Title": "Marshall Powers",
-    "loginName": "Marshall.Powers",
+    "LoginName": "Marshall.Powers",
     "email": "marshallpowers@geoforma.com"
   },
   {
@@ -144,7 +144,7 @@ export default {
     "firstName": "Palmer",
     "lastName": "Trevino",
     "Title": "Palmer Trevino",
-    "loginName": "Palmer.Trevino",
+    "LoginName": "Palmer.Trevino",
     "email": "palmertrevino@geoforma.com"
   },
   {
@@ -152,7 +152,7 @@ export default {
     "firstName": "Consuelo",
     "lastName": "Stanton",
     "Title": "Consuelo Stanton",
-    "loginName": "Consuelo.Stanton",
+    "LoginName": "Consuelo.Stanton",
     "email": "consuelostanton@geoforma.com"
   },
   {
@@ -160,7 +160,7 @@ export default {
     "firstName": "Colette",
     "lastName": "Downs",
     "Title": "Colette Downs",
-    "loginName": "Colette.Downs",
+    "LoginName": "Colette.Downs",
     "email": "colettedowns@geoforma.com"
   },
   {
@@ -168,7 +168,7 @@ export default {
     "firstName": "Judith",
     "lastName": "Pace",
     "Title": "Judith Pace",
-    "loginName": "Judith.Pace",
+    "LoginName": "Judith.Pace",
     "email": "judithpace@geoforma.com"
   },
   {
@@ -176,7 +176,7 @@ export default {
     "firstName": "Good",
     "lastName": "Goodman",
     "Title": "Good Goodman",
-    "loginName": "Good.Goodman",
+    "LoginName": "Good.Goodman",
     "email": "goodgoodman@geoforma.com"
   },
   {
@@ -184,7 +184,7 @@ export default {
     "firstName": "Cathryn",
     "lastName": "Hahn",
     "Title": "Cathryn Hahn",
-    "loginName": "Cathryn.Hahn",
+    "LoginName": "Cathryn.Hahn",
     "email": "cathrynhahn@geoforma.com"
   },
   {
@@ -192,7 +192,7 @@ export default {
     "firstName": "Beach",
     "lastName": "Snyder",
     "Title": "Beach Snyder",
-    "loginName": "Beach.Snyder",
+    "LoginName": "Beach.Snyder",
     "email": "beachsnyder@geoforma.com"
   },
   {
@@ -200,7 +200,7 @@ export default {
     "firstName": "Nanette",
     "lastName": "Suarez",
     "Title": "Nanette Suarez",
-    "loginName": "Nanette.Suarez",
+    "LoginName": "Nanette.Suarez",
     "email": "nanettesuarez@geoforma.com"
   },
   {
@@ -208,7 +208,7 @@ export default {
     "firstName": "Horn",
     "lastName": "Wallace",
     "Title": "Horn Wallace",
-    "loginName": "Horn.Wallace",
+    "LoginName": "Horn.Wallace",
     "email": "hornwallace@geoforma.com"
   },
   {
@@ -216,7 +216,7 @@ export default {
     "firstName": "Sonja",
     "lastName": "Richard",
     "Title": "Sonja Richard",
-    "loginName": "Sonja.Richard",
+    "LoginName": "Sonja.Richard",
     "email": "sonjarichard@geoforma.com"
   },
   {
@@ -224,7 +224,7 @@ export default {
     "firstName": "Lana",
     "lastName": "Cash",
     "Title": "Lana Cash",
-    "loginName": "Lana.Cash",
+    "LoginName": "Lana.Cash",
     "email": "lanacash@geoforma.com"
   },
   {
@@ -232,7 +232,7 @@ export default {
     "firstName": "Anita",
     "lastName": "Forbes",
     "Title": "Anita Forbes",
-    "loginName": "Anita.Forbes",
+    "LoginName": "Anita.Forbes",
     "email": "anitaforbes@geoforma.com"
   },
   {
@@ -240,7 +240,7 @@ export default {
     "firstName": "Savage",
     "lastName": "Thompson",
     "Title": "Savage Thompson",
-    "loginName": "Savage.Thompson",
+    "LoginName": "Savage.Thompson",
     "email": "savagethompson@geoforma.com"
   },
   {
@@ -248,7 +248,7 @@ export default {
     "firstName": "Deidre",
     "lastName": "Webb",
     "Title": "Deidre Webb",
-    "loginName": "Deidre.Webb",
+    "LoginName": "Deidre.Webb",
     "email": "deidrewebb@geoforma.com"
   },
   {
@@ -256,7 +256,7 @@ export default {
     "firstName": "Cook",
     "lastName": "House",
     "Title": "Cook House",
-    "loginName": "Cook.House",
+    "LoginName": "Cook.House",
     "email": "cookhouse@geoforma.com"
   },
   {
@@ -264,7 +264,7 @@ export default {
     "firstName": "Janna",
     "lastName": "Zimmerman",
     "Title": "Janna Zimmerman",
-    "loginName": "Janna.Zimmerman",
+    "LoginName": "Janna.Zimmerman",
     "email": "jannazimmerman@geoforma.com"
   },
   {
@@ -272,7 +272,7 @@ export default {
     "firstName": "Monroe",
     "lastName": "Shepherd",
     "Title": "Monroe Shepherd",
-    "loginName": "Monroe.Shepherd",
+    "LoginName": "Monroe.Shepherd",
     "email": "monroeshepherd@geoforma.com"
   },
   {
@@ -280,7 +280,7 @@ export default {
     "firstName": "Karla",
     "lastName": "Landry",
     "Title": "Karla Landry",
-    "loginName": "Karla.Landry",
+    "LoginName": "Karla.Landry",
     "email": "karlalandry@geoforma.com"
   },
   {
@@ -288,7 +288,7 @@ export default {
     "firstName": "Naomi",
     "lastName": "Roth",
     "Title": "Naomi Roth",
-    "loginName": "Naomi.Roth",
+    "LoginName": "Naomi.Roth",
     "email": "naomiroth@geoforma.com"
   },
   {
@@ -296,7 +296,7 @@ export default {
     "firstName": "Frank",
     "lastName": "Hopper",
     "Title": "Frank Hopper",
-    "loginName": "Frank.Hopper",
+    "LoginName": "Frank.Hopper",
     "email": "frankhopper@geoforma.com"
   },
   {
@@ -304,7 +304,7 @@ export default {
     "firstName": "Maldonado",
     "lastName": "Barrett",
     "Title": "Maldonado Barrett",
-    "loginName": "Maldonado.Barrett",
+    "LoginName": "Maldonado.Barrett",
     "email": "maldonadobarrett@geoforma.com"
   },
   {
@@ -312,7 +312,7 @@ export default {
     "firstName": "Madelyn",
     "lastName": "Patrick",
     "Title": "Madelyn Patrick",
-    "loginName": "Madelyn.Patrick",
+    "LoginName": "Madelyn.Patrick",
     "email": "madelynpatrick@geoforma.com"
   },
   {
@@ -320,7 +320,7 @@ export default {
     "firstName": "Little",
     "lastName": "Armstrong",
     "Title": "Little Armstrong",
-    "loginName": "Little.Armstrong",
+    "LoginName": "Little.Armstrong",
     "email": "littlearmstrong@geoforma.com"
   },
   {
@@ -328,7 +328,7 @@ export default {
     "firstName": "Doris",
     "lastName": "Jefferson",
     "Title": "Doris Jefferson",
-    "loginName": "Doris.Jefferson",
+    "LoginName": "Doris.Jefferson",
     "email": "dorisjefferson@geoforma.com"
   },
   {
@@ -336,7 +336,7 @@ export default {
     "firstName": "Baker",
     "lastName": "Garrett",
     "Title": "Baker Garrett",
-    "loginName": "Baker.Garrett",
+    "LoginName": "Baker.Garrett",
     "email": "bakergarrett@geoforma.com"
   },
   {
@@ -344,7 +344,7 @@ export default {
     "firstName": "Tara",
     "lastName": "Norris",
     "Title": "Tara Norris",
-    "loginName": "Tara.Norris",
+    "LoginName": "Tara.Norris",
     "email": "taranorris@geoforma.com"
   },
   {
@@ -352,7 +352,7 @@ export default {
     "firstName": "Odessa",
     "lastName": "Duran",
     "Title": "Odessa Duran",
-    "loginName": "Odessa.Duran",
+    "LoginName": "Odessa.Duran",
     "email": "odessaduran@geoforma.com"
   },
   {
@@ -360,7 +360,7 @@ export default {
     "firstName": "Jackson",
     "lastName": "Weaver",
     "Title": "Jackson Weaver",
-    "loginName": "Jackson.Weaver",
+    "LoginName": "Jackson.Weaver",
     "email": "jacksonweaver@geoforma.com"
   },
   {
@@ -368,7 +368,7 @@ export default {
     "firstName": "Lott",
     "lastName": "Gutierrez",
     "Title": "Lott Gutierrez",
-    "loginName": "Lott.Gutierrez",
+    "LoginName": "Lott.Gutierrez",
     "email": "lottgutierrez@geoforma.com"
   },
   {
@@ -376,7 +376,7 @@ export default {
     "firstName": "Neva",
     "lastName": "Leon",
     "Title": "Neva Leon",
-    "loginName": "Neva.Leon",
+    "LoginName": "Neva.Leon",
     "email": "nevaleon@geoforma.com"
   },
   {
@@ -384,7 +384,7 @@ export default {
     "firstName": "Schultz",
     "lastName": "Schroeder",
     "Title": "Schultz Schroeder",
-    "loginName": "Schultz.Schroeder",
+    "LoginName": "Schultz.Schroeder",
     "email": "schultzschroeder@geoforma.com"
   },
   {
@@ -392,7 +392,7 @@ export default {
     "firstName": "Lynn",
     "lastName": "Hughes",
     "Title": "Lynn Hughes",
-    "loginName": "Lynn.Hughes",
+    "LoginName": "Lynn.Hughes",
     "email": "lynnhughes@geoforma.com"
   },
   {
@@ -400,7 +400,7 @@ export default {
     "firstName": "Teri",
     "lastName": "Robbins",
     "Title": "Teri Robbins",
-    "loginName": "Teri.Robbins",
+    "LoginName": "Teri.Robbins",
     "email": "terirobbins@geoforma.com"
   },
   {
@@ -408,7 +408,7 @@ export default {
     "firstName": "Justine",
     "lastName": "Wiley",
     "Title": "Justine Wiley",
-    "loginName": "Justine.Wiley",
+    "LoginName": "Justine.Wiley",
     "email": "justinewiley@geoforma.com"
   },
   {
@@ -416,7 +416,7 @@ export default {
     "firstName": "Barnett",
     "lastName": "Fleming",
     "Title": "Barnett Fleming",
-    "loginName": "Barnett.Fleming",
+    "LoginName": "Barnett.Fleming",
     "email": "barnettfleming@geoforma.com"
   },
   {
@@ -424,7 +424,7 @@ export default {
     "firstName": "Kerri",
     "lastName": "Leach",
     "Title": "Kerri Leach",
-    "loginName": "Kerri.Leach",
+    "LoginName": "Kerri.Leach",
     "email": "kerrileach@geoforma.com"
   },
   {
@@ -432,7 +432,7 @@ export default {
     "firstName": "Acevedo",
     "lastName": "Knapp",
     "Title": "Acevedo Knapp",
-    "loginName": "Acevedo.Knapp",
+    "LoginName": "Acevedo.Knapp",
     "email": "acevedoknapp@geoforma.com"
   },
   {
@@ -440,7 +440,7 @@ export default {
     "firstName": "Woodard",
     "lastName": "Short",
     "Title": "Woodard Short",
-    "loginName": "Woodard.Short",
+    "LoginName": "Woodard.Short",
     "email": "woodardshort@geoforma.com"
   },
   {
@@ -448,7 +448,7 @@ export default {
     "firstName": "Valentine",
     "lastName": "Horton",
     "Title": "Valentine Horton",
-    "loginName": "Valentine.Horton",
+    "LoginName": "Valentine.Horton",
     "email": "valentinehorton@geoforma.com"
   },
   {
@@ -456,7 +456,7 @@ export default {
     "firstName": "Hill",
     "lastName": "Barton",
     "Title": "Hill Barton",
-    "loginName": "Hill.Barton",
+    "LoginName": "Hill.Barton",
     "email": "hillbarton@geoforma.com"
   },
   {
@@ -464,7 +464,7 @@ export default {
     "firstName": "Daniels",
     "lastName": "Blackburn",
     "Title": "Daniels Blackburn",
-    "loginName": "Daniels.Blackburn",
+    "LoginName": "Daniels.Blackburn",
     "email": "danielsblackburn@geoforma.com"
   },
   {
@@ -472,7 +472,7 @@ export default {
     "firstName": "Adams",
     "lastName": "Acevedo",
     "Title": "Adams Acevedo",
-    "loginName": "Adams.Acevedo",
+    "LoginName": "Adams.Acevedo",
     "email": "adamsacevedo@geoforma.com"
   },
   {
@@ -480,7 +480,7 @@ export default {
     "firstName": "Louella",
     "lastName": "Dodson",
     "Title": "Louella Dodson",
-    "loginName": "Louella.Dodson",
+    "LoginName": "Louella.Dodson",
     "email": "louelladodson@geoforma.com"
   },
   {
@@ -488,7 +488,7 @@ export default {
     "firstName": "Sondra",
     "lastName": "Ayers",
     "Title": "Sondra Ayers",
-    "loginName": "Sondra.Ayers",
+    "LoginName": "Sondra.Ayers",
     "email": "sondraayers@geoforma.com"
   },
   {
@@ -496,7 +496,7 @@ export default {
     "firstName": "Hogan",
     "lastName": "Rivas",
     "Title": "Hogan Rivas",
-    "loginName": "Hogan.Rivas",
+    "LoginName": "Hogan.Rivas",
     "email": "hoganrivas@geoforma.com"
   },
   {
@@ -504,7 +504,7 @@ export default {
     "firstName": "Britney",
     "lastName": "Graves",
     "Title": "Britney Graves",
-    "loginName": "Britney.Graves",
+    "LoginName": "Britney.Graves",
     "email": "britneygraves@geoforma.com"
   },
   {
@@ -512,7 +512,7 @@ export default {
     "firstName": "Whitney",
     "lastName": "Terry",
     "Title": "Whitney Terry",
-    "loginName": "Whitney.Terry",
+    "LoginName": "Whitney.Terry",
     "email": "whitneyterry@geoforma.com"
   },
   {
@@ -520,7 +520,7 @@ export default {
     "firstName": "Dalton",
     "lastName": "Kelly",
     "Title": "Dalton Kelly",
-    "loginName": "Dalton.Kelly",
+    "LoginName": "Dalton.Kelly",
     "email": "daltonkelly@geoforma.com"
   },
   {
@@ -528,7 +528,7 @@ export default {
     "firstName": "Chase",
     "lastName": "Stout",
     "Title": "Chase Stout",
-    "loginName": "Chase.Stout",
+    "LoginName": "Chase.Stout",
     "email": "chasestout@geoforma.com"
   },
   {
@@ -536,7 +536,7 @@ export default {
     "firstName": "Beck",
     "lastName": "Cook",
     "Title": "Beck Cook",
-    "loginName": "Beck.Cook",
+    "LoginName": "Beck.Cook",
     "email": "beckcook@geoforma.com"
   },
   {
@@ -544,7 +544,7 @@ export default {
     "firstName": "Mccormick",
     "lastName": "Ross",
     "Title": "Mccormick Ross",
-    "loginName": "Mccormick.Ross",
+    "LoginName": "Mccormick.Ross",
     "email": "mccormickross@geoforma.com"
   },
   {
@@ -552,7 +552,7 @@ export default {
     "firstName": "Figueroa",
     "lastName": "Snider",
     "Title": "Figueroa Snider",
-    "loginName": "Figueroa.Snider",
+    "LoginName": "Figueroa.Snider",
     "email": "figueroasnider@geoforma.com"
   },
   {
@@ -560,7 +560,7 @@ export default {
     "firstName": "Felecia",
     "lastName": "Carey",
     "Title": "Felecia Carey",
-    "loginName": "Felecia.Carey",
+    "LoginName": "Felecia.Carey",
     "email": "feleciacarey@geoforma.com"
   },
   {
@@ -568,7 +568,7 @@ export default {
     "firstName": "Hilda",
     "lastName": "Yates",
     "Title": "Hilda Yates",
-    "loginName": "Hilda.Yates",
+    "LoginName": "Hilda.Yates",
     "email": "hildayates@geoforma.com"
   },
   {
@@ -576,7 +576,7 @@ export default {
     "firstName": "Pena",
     "lastName": "Riddle",
     "Title": "Pena Riddle",
-    "loginName": "Pena.Riddle",
+    "LoginName": "Pena.Riddle",
     "email": "penariddle@geoforma.com"
   },
   {
@@ -584,7 +584,7 @@ export default {
     "firstName": "Jeannette",
     "lastName": "Brooks",
     "Title": "Jeannette Brooks",
-    "loginName": "Jeannette.Brooks",
+    "LoginName": "Jeannette.Brooks",
     "email": "jeannettebrooks@geoforma.com"
   },
   {
@@ -592,7 +592,7 @@ export default {
     "firstName": "Fernandez",
     "lastName": "Adams",
     "Title": "Fernandez Adams",
-    "loginName": "Fernandez.Adams",
+    "LoginName": "Fernandez.Adams",
     "email": "fernandezadams@geoforma.com"
   },
   {
@@ -600,7 +600,7 @@ export default {
     "firstName": "Burt",
     "lastName": "Sweet",
     "Title": "Burt Sweet",
-    "loginName": "Burt.Sweet",
+    "LoginName": "Burt.Sweet",
     "email": "burtsweet@geoforma.com"
   },
   {
@@ -608,7 +608,7 @@ export default {
     "firstName": "Levy",
     "lastName": "Cunningham",
     "Title": "Levy Cunningham",
-    "loginName": "Levy.Cunningham",
+    "LoginName": "Levy.Cunningham",
     "email": "levycunningham@geoforma.com"
   },
   {
@@ -616,7 +616,7 @@ export default {
     "firstName": "Dennis",
     "lastName": "Bond",
     "Title": "Dennis Bond",
-    "loginName": "Dennis.Bond",
+    "LoginName": "Dennis.Bond",
     "email": "dennisbond@geoforma.com"
   },
   {
@@ -624,7 +624,7 @@ export default {
     "firstName": "Luisa",
     "lastName": "Brewer",
     "Title": "Luisa Brewer",
-    "loginName": "Luisa.Brewer",
+    "LoginName": "Luisa.Brewer",
     "email": "luisabrewer@geoforma.com"
   },
   {
@@ -632,7 +632,7 @@ export default {
     "firstName": "Barbara",
     "lastName": "Aguirre",
     "Title": "Barbara Aguirre",
-    "loginName": "Barbara.Aguirre",
+    "LoginName": "Barbara.Aguirre",
     "email": "barbaraaguirre@geoforma.com"
   },
   {
@@ -640,7 +640,7 @@ export default {
     "firstName": "Sawyer",
     "lastName": "Roy",
     "Title": "Sawyer Roy",
-    "loginName": "Sawyer.Roy",
+    "LoginName": "Sawyer.Roy",
     "email": "sawyerroy@geoforma.com"
   },
   {
@@ -648,7 +648,7 @@ export default {
     "firstName": "Luna",
     "lastName": "Carson",
     "Title": "Luna Carson",
-    "loginName": "Luna.Carson",
+    "LoginName": "Luna.Carson",
     "email": "lunacarson@geoforma.com"
   },
   {
@@ -656,7 +656,7 @@ export default {
     "firstName": "Debbie",
     "lastName": "Franco",
     "Title": "Debbie Franco",
-    "loginName": "Debbie.Franco",
+    "LoginName": "Debbie.Franco",
     "email": "debbiefranco@geoforma.com"
   },
   {
@@ -664,7 +664,7 @@ export default {
     "firstName": "Joy",
     "lastName": "Monroe",
     "Title": "Joy Monroe",
-    "loginName": "Joy.Monroe",
+    "LoginName": "Joy.Monroe",
     "email": "joymonroe@geoforma.com"
   },
   {
@@ -672,7 +672,7 @@ export default {
     "firstName": "Carver",
     "lastName": "Norton",
     "Title": "Carver Norton",
-    "loginName": "Carver.Norton",
+    "LoginName": "Carver.Norton",
     "email": "carvernorton@geoforma.com"
   },
   {
@@ -680,7 +680,7 @@ export default {
     "firstName": "Stacy",
     "lastName": "Newton",
     "Title": "Stacy Newton",
-    "loginName": "Stacy.Newton",
+    "LoginName": "Stacy.Newton",
     "email": "stacynewton@geoforma.com"
   },
   {
@@ -688,7 +688,7 @@ export default {
     "firstName": "Reed",
     "lastName": "Peterson",
     "Title": "Reed Peterson",
-    "loginName": "Reed.Peterson",
+    "LoginName": "Reed.Peterson",
     "email": "reedpeterson@geoforma.com"
   },
   {
@@ -696,7 +696,7 @@ export default {
     "firstName": "Jenkins",
     "lastName": "Duffy",
     "Title": "Jenkins Duffy",
-    "loginName": "Jenkins.Duffy",
+    "LoginName": "Jenkins.Duffy",
     "email": "jenkinsduffy@geoforma.com"
   },
   {
@@ -704,7 +704,7 @@ export default {
     "firstName": "Hanson",
     "lastName": "Oneal",
     "Title": "Hanson Oneal",
-    "loginName": "Hanson.Oneal",
+    "LoginName": "Hanson.Oneal",
     "email": "hansononeal@geoforma.com"
   },
   {
@@ -712,7 +712,7 @@ export default {
     "firstName": "Miranda",
     "lastName": "Mccall",
     "Title": "Miranda Mccall",
-    "loginName": "Miranda.Mccall",
+    "LoginName": "Miranda.Mccall",
     "email": "mirandamccall@geoforma.com"
   },
   {
@@ -720,7 +720,7 @@ export default {
     "firstName": "Rhodes",
     "lastName": "Barker",
     "Title": "Rhodes Barker",
-    "loginName": "Rhodes.Barker",
+    "LoginName": "Rhodes.Barker",
     "email": "rhodesbarker@geoforma.com"
   },
   {
@@ -728,7 +728,7 @@ export default {
     "firstName": "Barrett",
     "lastName": "Jacobson",
     "Title": "Barrett Jacobson",
-    "loginName": "Barrett.Jacobson",
+    "LoginName": "Barrett.Jacobson",
     "email": "barrettjacobson@geoforma.com"
   },
   {
@@ -736,7 +736,7 @@ export default {
     "firstName": "Tran",
     "lastName": "Carr",
     "Title": "Tran Carr",
-    "loginName": "Tran.Carr",
+    "LoginName": "Tran.Carr",
     "email": "trancarr@geoforma.com"
   },
   {
@@ -744,7 +744,7 @@ export default {
     "firstName": "Bonita",
     "lastName": "Mccormick",
     "Title": "Bonita Mccormick",
-    "loginName": "Bonita.Mccormick",
+    "LoginName": "Bonita.Mccormick",
     "email": "bonitamccormick@geoforma.com"
   },
   {
@@ -752,7 +752,7 @@ export default {
     "firstName": "Gray",
     "lastName": "Wood",
     "Title": "Gray Wood",
-    "loginName": "Gray.Wood",
+    "LoginName": "Gray.Wood",
     "email": "graywood@geoforma.com"
   },
   {
@@ -760,7 +760,7 @@ export default {
     "firstName": "Shelia",
     "lastName": "Estrada",
     "Title": "Shelia Estrada",
-    "loginName": "Shelia.Estrada",
+    "LoginName": "Shelia.Estrada",
     "email": "sheliaestrada@geoforma.com"
   },
   {
@@ -768,7 +768,7 @@ export default {
     "firstName": "Christie",
     "lastName": "Whitaker",
     "Title": "Christie Whitaker",
-    "loginName": "Christie.Whitaker",
+    "LoginName": "Christie.Whitaker",
     "email": "christiewhitaker@geoforma.com"
   },
   {
@@ -776,7 +776,7 @@ export default {
     "firstName": "Alexander",
     "lastName": "Mcfadden",
     "Title": "Alexander Mcfadden",
-    "loginName": "Alexander.Mcfadden",
+    "LoginName": "Alexander.Mcfadden",
     "email": "alexandermcfadden@geoforma.com"
   },
   {
@@ -784,7 +784,7 @@ export default {
     "firstName": "Minerva",
     "lastName": "Petty",
     "Title": "Minerva Petty",
-    "loginName": "Minerva.Petty",
+    "LoginName": "Minerva.Petty",
     "email": "minervapetty@geoforma.com"
   },
   {
@@ -792,7 +792,7 @@ export default {
     "firstName": "Larsen",
     "lastName": "Koch",
     "Title": "Larsen Koch",
-    "loginName": "Larsen.Koch",
+    "LoginName": "Larsen.Koch",
     "email": "larsenkoch@geoforma.com"
   },
   {
@@ -800,7 +800,7 @@ export default {
     "firstName": "Albert",
     "lastName": "Frazier",
     "Title": "Albert Frazier",
-    "loginName": "Albert.Frazier",
+    "LoginName": "Albert.Frazier",
     "email": "albertfrazier@geoforma.com"
   },
   {
@@ -808,7 +808,7 @@ export default {
     "firstName": "Ronda",
     "lastName": "Cantu",
     "Title": "Ronda Cantu",
-    "loginName": "Ronda.Cantu",
+    "LoginName": "Ronda.Cantu",
     "email": "rondacantu@geoforma.com"
   },
   {
@@ -816,7 +816,7 @@ export default {
     "firstName": "Jordan",
     "lastName": "Poole",
     "Title": "Jordan Poole",
-    "loginName": "Jordan.Poole",
+    "LoginName": "Jordan.Poole",
     "email": "jordanpoole@geoforma.com"
   },
   {
@@ -824,7 +824,7 @@ export default {
     "firstName": "Peck",
     "lastName": "Sullivan",
     "Title": "Peck Sullivan",
-    "loginName": "Peck.Sullivan",
+    "LoginName": "Peck.Sullivan",
     "email": "pecksullivan@geoforma.com"
   },
   {
@@ -832,7 +832,7 @@ export default {
     "firstName": "Gabriela",
     "lastName": "Rush",
     "Title": "Gabriela Rush",
-    "loginName": "Gabriela.Rush",
+    "LoginName": "Gabriela.Rush",
     "email": "gabrielarush@geoforma.com"
   },
   {
@@ -840,7 +840,7 @@ export default {
     "firstName": "Lee",
     "lastName": "Baker",
     "Title": "Lee Baker",
-    "loginName": "Lee.Baker",
+    "LoginName": "Lee.Baker",
     "email": "leebaker@geoforma.com"
   },
   {
@@ -848,7 +848,7 @@ export default {
     "firstName": "Bishop",
     "lastName": "Wooten",
     "Title": "Bishop Wooten",
-    "loginName": "Bishop.Wooten",
+    "LoginName": "Bishop.Wooten",
     "email": "bishopwooten@geoforma.com"
   },
   {
@@ -856,7 +856,7 @@ export default {
     "firstName": "Rush",
     "lastName": "Owen",
     "Title": "Rush Owen",
-    "loginName": "Rush.Owen",
+    "LoginName": "Rush.Owen",
     "email": "rushowen@geoforma.com"
   },
   {
@@ -864,7 +864,7 @@ export default {
     "firstName": "Estelle",
     "lastName": "Best",
     "Title": "Estelle Best",
-    "loginName": "Estelle.Best",
+    "LoginName": "Estelle.Best",
     "email": "estellebest@geoforma.com"
   },
   {
@@ -872,7 +872,7 @@ export default {
     "firstName": "Turner",
     "lastName": "Rowe",
     "Title": "Turner Rowe",
-    "loginName": "Turner.Rowe",
+    "LoginName": "Turner.Rowe",
     "email": "turnerrowe@geoforma.com"
   },
   {
@@ -880,7 +880,7 @@ export default {
     "firstName": "Lilia",
     "lastName": "Tyson",
     "Title": "Lilia Tyson",
-    "loginName": "Lilia.Tyson",
+    "LoginName": "Lilia.Tyson",
     "email": "liliatyson@geoforma.com"
   },
   {
@@ -888,7 +888,7 @@ export default {
     "firstName": "Cardenas",
     "lastName": "Walsh",
     "Title": "Cardenas Walsh",
-    "loginName": "Cardenas.Walsh",
+    "LoginName": "Cardenas.Walsh",
     "email": "cardenaswalsh@geoforma.com"
   },
   {
@@ -896,7 +896,7 @@ export default {
     "firstName": "Matilda",
     "lastName": "Good",
     "Title": "Matilda Good",
-    "loginName": "Matilda.Good",
+    "LoginName": "Matilda.Good",
     "email": "matildagood@geoforma.com"
   },
   {
@@ -904,7 +904,7 @@ export default {
     "firstName": "Angelina",
     "lastName": "Foley",
     "Title": "Angelina Foley",
-    "loginName": "Angelina.Foley",
+    "LoginName": "Angelina.Foley",
     "email": "angelinafoley@geoforma.com"
   },
   {
@@ -912,7 +912,7 @@ export default {
     "firstName": "Montgomery",
     "lastName": "Singleton",
     "Title": "Montgomery Singleton",
-    "loginName": "Montgomery.Singleton",
+    "LoginName": "Montgomery.Singleton",
     "email": "montgomerysingleton@geoforma.com"
   },
   {
@@ -920,7 +920,7 @@ export default {
     "firstName": "Chang",
     "lastName": "Sargent",
     "Title": "Chang Sargent",
-    "loginName": "Chang.Sargent",
+    "LoginName": "Chang.Sargent",
     "email": "changsargent@geoforma.com"
   },
   {
@@ -928,7 +928,7 @@ export default {
     "firstName": "Annmarie",
     "lastName": "Lewis",
     "Title": "Annmarie Lewis",
-    "loginName": "Annmarie.Lewis",
+    "LoginName": "Annmarie.Lewis",
     "email": "annmarielewis@geoforma.com"
   },
   {
@@ -936,7 +936,7 @@ export default {
     "firstName": "Shawna",
     "lastName": "Crane",
     "Title": "Shawna Crane",
-    "loginName": "Shawna.Crane",
+    "LoginName": "Shawna.Crane",
     "email": "shawnacrane@geoforma.com"
   },
   {
@@ -944,7 +944,7 @@ export default {
     "firstName": "Velazquez",
     "lastName": "Bell",
     "Title": "Velazquez Bell",
-    "loginName": "Velazquez.Bell",
+    "LoginName": "Velazquez.Bell",
     "email": "velazquezbell@geoforma.com"
   },
   {
@@ -952,7 +952,7 @@ export default {
     "firstName": "Allison",
     "lastName": "Logan",
     "Title": "Allison Logan",
-    "loginName": "Allison.Logan",
+    "LoginName": "Allison.Logan",
     "email": "allisonlogan@geoforma.com"
   },
   {
@@ -960,7 +960,7 @@ export default {
     "firstName": "Mathis",
     "lastName": "Chase",
     "Title": "Mathis Chase",
-    "loginName": "Mathis.Chase",
+    "LoginName": "Mathis.Chase",
     "email": "mathischase@geoforma.com"
   },
   {
@@ -968,7 +968,7 @@ export default {
     "firstName": "Crawford",
     "lastName": "Watkins",
     "Title": "Crawford Watkins",
-    "loginName": "Crawford.Watkins",
+    "LoginName": "Crawford.Watkins",
     "email": "crawfordwatkins@geoforma.com"
   },
   {
@@ -976,7 +976,7 @@ export default {
     "firstName": "Kirsten",
     "lastName": "Rojas",
     "Title": "Kirsten Rojas",
-    "loginName": "Kirsten.Rojas",
+    "LoginName": "Kirsten.Rojas",
     "email": "kirstenrojas@geoforma.com"
   },
   {
@@ -984,7 +984,7 @@ export default {
     "firstName": "Elva",
     "lastName": "Bishop",
     "Title": "Elva Bishop",
-    "loginName": "Elva.Bishop",
+    "LoginName": "Elva.Bishop",
     "email": "elvabishop@geoforma.com"
   },
   {
@@ -992,7 +992,7 @@ export default {
     "firstName": "June",
     "lastName": "Mclean",
     "Title": "June Mclean",
-    "loginName": "June.Mclean",
+    "LoginName": "June.Mclean",
     "email": "junemclean@geoforma.com"
   },
   {
@@ -1000,7 +1000,7 @@ export default {
     "firstName": "Langley",
     "lastName": "Garrison",
     "Title": "Langley Garrison",
-    "loginName": "Langley.Garrison",
+    "LoginName": "Langley.Garrison",
     "email": "langleygarrison@geoforma.com"
   },
   {
@@ -1008,7 +1008,7 @@ export default {
     "firstName": "Singleton",
     "lastName": "Sanders",
     "Title": "Singleton Sanders",
-    "loginName": "Singleton.Sanders",
+    "LoginName": "Singleton.Sanders",
     "email": "singletonsanders@geoforma.com"
   },
   {
@@ -1016,7 +1016,7 @@ export default {
     "firstName": "Bass",
     "lastName": "Beard",
     "Title": "Bass Beard",
-    "loginName": "Bass.Beard",
+    "LoginName": "Bass.Beard",
     "email": "bassbeard@geoforma.com"
   },
   {
@@ -1024,7 +1024,7 @@ export default {
     "firstName": "Annie",
     "lastName": "Benton",
     "Title": "Annie Benton",
-    "loginName": "Annie.Benton",
+    "LoginName": "Annie.Benton",
     "email": "anniebenton@geoforma.com"
   },
   {
@@ -1032,7 +1032,7 @@ export default {
     "firstName": "Earnestine",
     "lastName": "Burris",
     "Title": "Earnestine Burris",
-    "loginName": "Earnestine.Burris",
+    "LoginName": "Earnestine.Burris",
     "email": "earnestineburris@geoforma.com"
   },
   {
@@ -1040,7 +1040,7 @@ export default {
     "firstName": "Mcdonald",
     "lastName": "Price",
     "Title": "Mcdonald Price",
-    "loginName": "Mcdonald.Price",
+    "LoginName": "Mcdonald.Price",
     "email": "mcdonaldprice@geoforma.com"
   },
   {
@@ -1048,7 +1048,7 @@ export default {
     "firstName": "Beard",
     "lastName": "Shelton",
     "Title": "Beard Shelton",
-    "loginName": "Beard.Shelton",
+    "LoginName": "Beard.Shelton",
     "email": "beardshelton@geoforma.com"
   },
   {
@@ -1056,7 +1056,7 @@ export default {
     "firstName": "Petra",
     "lastName": "Newman",
     "Title": "Petra Newman",
-    "loginName": "Petra.Newman",
+    "LoginName": "Petra.Newman",
     "email": "petranewman@geoforma.com"
   },
   {
@@ -1064,7 +1064,7 @@ export default {
     "firstName": "Mcdaniel",
     "lastName": "Obrien",
     "Title": "Mcdaniel Obrien",
-    "loginName": "Mcdaniel.Obrien",
+    "LoginName": "Mcdaniel.Obrien",
     "email": "mcdanielobrien@geoforma.com"
   },
   {
@@ -1072,7 +1072,7 @@ export default {
     "firstName": "Bonner",
     "lastName": "Page",
     "Title": "Bonner Page",
-    "loginName": "Bonner.Page",
+    "LoginName": "Bonner.Page",
     "email": "bonnerpage@geoforma.com"
   },
   {
@@ -1080,7 +1080,7 @@ export default {
     "firstName": "Holden",
     "lastName": "Olsen",
     "Title": "Holden Olsen",
-    "loginName": "Holden.Olsen",
+    "LoginName": "Holden.Olsen",
     "email": "holdenolsen@geoforma.com"
   },
   {
@@ -1088,7 +1088,7 @@ export default {
     "firstName": "Joan",
     "lastName": "Humphrey",
     "Title": "Joan Humphrey",
-    "loginName": "Joan.Humphrey",
+    "LoginName": "Joan.Humphrey",
     "email": "joanhumphrey@geoforma.com"
   },
   {
@@ -1096,7 +1096,7 @@ export default {
     "firstName": "Powell",
     "lastName": "Byrd",
     "Title": "Powell Byrd",
-    "loginName": "Powell.Byrd",
+    "LoginName": "Powell.Byrd",
     "email": "powellbyrd@geoforma.com"
   },
   {
@@ -1104,7 +1104,7 @@ export default {
     "firstName": "Stone",
     "lastName": "Hubbard",
     "Title": "Stone Hubbard",
-    "loginName": "Stone.Hubbard",
+    "LoginName": "Stone.Hubbard",
     "email": "stonehubbard@geoforma.com"
   },
   {
@@ -1112,7 +1112,7 @@ export default {
     "firstName": "Bush",
     "lastName": "Barber",
     "Title": "Bush Barber",
-    "loginName": "Bush.Barber",
+    "LoginName": "Bush.Barber",
     "email": "bushbarber@geoforma.com"
   },
   {
@@ -1120,7 +1120,7 @@ export default {
     "firstName": "Gross",
     "lastName": "Flynn",
     "Title": "Gross Flynn",
-    "loginName": "Gross.Flynn",
+    "LoginName": "Gross.Flynn",
     "email": "grossflynn@geoforma.com"
   },
   {
@@ -1128,7 +1128,7 @@ export default {
     "firstName": "Elliott",
     "lastName": "Dennis",
     "Title": "Elliott Dennis",
-    "loginName": "Elliott.Dennis",
+    "LoginName": "Elliott.Dennis",
     "email": "elliottdennis@geoforma.com"
   },
   {
@@ -1136,7 +1136,7 @@ export default {
     "firstName": "Elise",
     "lastName": "Sloan",
     "Title": "Elise Sloan",
-    "loginName": "Elise.Sloan",
+    "LoginName": "Elise.Sloan",
     "email": "elisesloan@geoforma.com"
   },
   {
@@ -1144,7 +1144,7 @@ export default {
     "firstName": "Beasley",
     "lastName": "Dejesus",
     "Title": "Beasley Dejesus",
-    "loginName": "Beasley.Dejesus",
+    "LoginName": "Beasley.Dejesus",
     "email": "beasleydejesus@geoforma.com"
   },
   {
@@ -1152,7 +1152,7 @@ export default {
     "firstName": "Haley",
     "lastName": "Mack",
     "Title": "Haley Mack",
-    "loginName": "Haley.Mack",
+    "LoginName": "Haley.Mack",
     "email": "haleymack@geoforma.com"
   },
   {
@@ -1160,7 +1160,7 @@ export default {
     "firstName": "Roseann",
     "lastName": "Kirkland",
     "Title": "Roseann Kirkland",
-    "loginName": "Roseann.Kirkland",
+    "LoginName": "Roseann.Kirkland",
     "email": "roseannkirkland@geoforma.com"
   },
   {
@@ -1168,7 +1168,7 @@ export default {
     "firstName": "Koch",
     "lastName": "Aguilar",
     "Title": "Koch Aguilar",
-    "loginName": "Koch.Aguilar",
+    "LoginName": "Koch.Aguilar",
     "email": "kochaguilar@geoforma.com"
   },
   {
@@ -1176,7 +1176,7 @@ export default {
     "firstName": "Conrad",
     "lastName": "Strong",
     "Title": "Conrad Strong",
-    "loginName": "Conrad.Strong",
+    "LoginName": "Conrad.Strong",
     "email": "conradstrong@geoforma.com"
   },
   {
@@ -1184,7 +1184,7 @@ export default {
     "firstName": "Melisa",
     "lastName": "Rodriquez",
     "Title": "Melisa Rodriquez",
-    "loginName": "Melisa.Rodriquez",
+    "LoginName": "Melisa.Rodriquez",
     "email": "melisarodriquez@geoforma.com"
   },
   {
@@ -1192,7 +1192,7 @@ export default {
     "firstName": "Hawkins",
     "lastName": "Perry",
     "Title": "Hawkins Perry",
-    "loginName": "Hawkins.Perry",
+    "LoginName": "Hawkins.Perry",
     "email": "hawkinsperry@geoforma.com"
   },
   {
@@ -1200,7 +1200,7 @@ export default {
     "firstName": "Robyn",
     "lastName": "Delaney",
     "Title": "Robyn Delaney",
-    "loginName": "Robyn.Delaney",
+    "LoginName": "Robyn.Delaney",
     "email": "robyndelaney@geoforma.com"
   },
   {
@@ -1208,7 +1208,7 @@ export default {
     "firstName": "Marilyn",
     "lastName": "Lloyd",
     "Title": "Marilyn Lloyd",
-    "loginName": "Marilyn.Lloyd",
+    "LoginName": "Marilyn.Lloyd",
     "email": "marilynlloyd@geoforma.com"
   },
   {
@@ -1216,7 +1216,7 @@ export default {
     "firstName": "Cole",
     "lastName": "Duncan",
     "Title": "Cole Duncan",
-    "loginName": "Cole.Duncan",
+    "LoginName": "Cole.Duncan",
     "email": "coleduncan@geoforma.com"
   },
   {
@@ -1224,7 +1224,7 @@ export default {
     "firstName": "Cain",
     "lastName": "Maynard",
     "Title": "Cain Maynard",
-    "loginName": "Cain.Maynard",
+    "LoginName": "Cain.Maynard",
     "email": "cainmaynard@geoforma.com"
   },
   {
@@ -1232,7 +1232,7 @@ export default {
     "firstName": "Serrano",
     "lastName": "Britt",
     "Title": "Serrano Britt",
-    "loginName": "Serrano.Britt",
+    "LoginName": "Serrano.Britt",
     "email": "serranobritt@geoforma.com"
   },
   {
@@ -1240,7 +1240,7 @@ export default {
     "firstName": "Kathie",
     "lastName": "Odom",
     "Title": "Kathie Odom",
-    "loginName": "Kathie.Odom",
+    "LoginName": "Kathie.Odom",
     "email": "kathieodom@geoforma.com"
   },
   {
@@ -1248,7 +1248,7 @@ export default {
     "firstName": "Whitehead",
     "lastName": "Harris",
     "Title": "Whitehead Harris",
-    "loginName": "Whitehead.Harris",
+    "LoginName": "Whitehead.Harris",
     "email": "whiteheadharris@geoforma.com"
   },
   {
@@ -1256,7 +1256,7 @@ export default {
     "firstName": "Crosby",
     "lastName": "Justice",
     "Title": "Crosby Justice",
-    "loginName": "Crosby.Justice",
+    "LoginName": "Crosby.Justice",
     "email": "crosbyjustice@geoforma.com"
   },
   {
@@ -1264,7 +1264,7 @@ export default {
     "firstName": "Barbra",
     "lastName": "Pruitt",
     "Title": "Barbra Pruitt",
-    "loginName": "Barbra.Pruitt",
+    "LoginName": "Barbra.Pruitt",
     "email": "barbrapruitt@geoforma.com"
   },
   {
@@ -1272,7 +1272,7 @@ export default {
     "firstName": "Clare",
     "lastName": "Rivers",
     "Title": "Clare Rivers",
-    "loginName": "Clare.Rivers",
+    "LoginName": "Clare.Rivers",
     "email": "clarerivers@geoforma.com"
   },
   {
@@ -1280,7 +1280,7 @@ export default {
     "firstName": "Howell",
     "lastName": "Pacheco",
     "Title": "Howell Pacheco",
-    "loginName": "Howell.Pacheco",
+    "LoginName": "Howell.Pacheco",
     "email": "howellpacheco@geoforma.com"
   },
   {
@@ -1288,7 +1288,7 @@ export default {
     "firstName": "Solis",
     "lastName": "Welch",
     "Title": "Solis Welch",
-    "loginName": "Solis.Welch",
+    "LoginName": "Solis.Welch",
     "email": "soliswelch@geoforma.com"
   },
   {
@@ -1296,7 +1296,7 @@ export default {
     "firstName": "Lindsay",
     "lastName": "Farley",
     "Title": "Lindsay Farley",
-    "loginName": "Lindsay.Farley",
+    "LoginName": "Lindsay.Farley",
     "email": "lindsayfarley@geoforma.com"
   },
   {
@@ -1304,7 +1304,7 @@ export default {
     "firstName": "Parrish",
     "lastName": "West",
     "Title": "Parrish West",
-    "loginName": "Parrish.West",
+    "LoginName": "Parrish.West",
     "email": "parrishwest@geoforma.com"
   },
   {
@@ -1312,7 +1312,7 @@ export default {
     "firstName": "Margarita",
     "lastName": "Burch",
     "Title": "Margarita Burch",
-    "loginName": "Margarita.Burch",
+    "LoginName": "Margarita.Burch",
     "email": "margaritaburch@geoforma.com"
   },
   {
@@ -1320,7 +1320,7 @@ export default {
     "firstName": "Rowland",
     "lastName": "Berger",
     "Title": "Rowland Berger",
-    "loginName": "Rowland.Berger",
+    "LoginName": "Rowland.Berger",
     "email": "rowlandberger@geoforma.com"
   },
   {
@@ -1328,7 +1328,7 @@ export default {
     "firstName": "Melba",
     "lastName": "Gillespie",
     "Title": "Melba Gillespie",
-    "loginName": "Melba.Gillespie",
+    "LoginName": "Melba.Gillespie",
     "email": "melbagillespie@geoforma.com"
   },
   {
@@ -1336,7 +1336,7 @@ export default {
     "firstName": "Case",
     "lastName": "Johns",
     "Title": "Case Johns",
-    "loginName": "Case.Johns",
+    "LoginName": "Case.Johns",
     "email": "casejohns@geoforma.com"
   },
   {
@@ -1344,7 +1344,7 @@ export default {
     "firstName": "Lancaster",
     "lastName": "Pollard",
     "Title": "Lancaster Pollard",
-    "loginName": "Lancaster.Pollard",
+    "LoginName": "Lancaster.Pollard",
     "email": "lancasterpollard@geoforma.com"
   },
   {
@@ -1352,7 +1352,7 @@ export default {
     "firstName": "Hardin",
     "lastName": "May",
     "Title": "Hardin May",
-    "loginName": "Hardin.May",
+    "LoginName": "Hardin.May",
     "email": "hardinmay@geoforma.com"
   },
   {
@@ -1360,7 +1360,7 @@ export default {
     "firstName": "Phillips",
     "lastName": "Dale",
     "Title": "Phillips Dale",
-    "loginName": "Phillips.Dale",
+    "LoginName": "Phillips.Dale",
     "email": "phillipsdale@geoforma.com"
   },
   {
@@ -1368,7 +1368,7 @@ export default {
     "firstName": "Raymond",
     "lastName": "Nixon",
     "Title": "Raymond Nixon",
-    "loginName": "Raymond.Nixon",
+    "LoginName": "Raymond.Nixon",
     "email": "raymondnixon@geoforma.com"
   },
   {
@@ -1376,7 +1376,7 @@ export default {
     "firstName": "Delacruz",
     "lastName": "Montgomery",
     "Title": "Delacruz Montgomery",
-    "loginName": "Delacruz.Montgomery",
+    "LoginName": "Delacruz.Montgomery",
     "email": "delacruzmontgomery@geoforma.com"
   },
   {
@@ -1384,7 +1384,7 @@ export default {
     "firstName": "Crystal",
     "lastName": "Williams",
     "Title": "Crystal Williams",
-    "loginName": "Crystal.Williams",
+    "LoginName": "Crystal.Williams",
     "email": "crystalwilliams@geoforma.com"
   },
   {
@@ -1392,7 +1392,7 @@ export default {
     "firstName": "Glenna",
     "lastName": "Key",
     "Title": "Glenna Key",
-    "loginName": "Glenna.Key",
+    "LoginName": "Glenna.Key",
     "email": "glennakey@geoforma.com"
   },
   {
@@ -1400,7 +1400,7 @@ export default {
     "firstName": "Terri",
     "lastName": "Miranda",
     "Title": "Terri Miranda",
-    "loginName": "Terri.Miranda",
+    "LoginName": "Terri.Miranda",
     "email": "terrimiranda@geoforma.com"
   },
   {
@@ -1408,7 +1408,7 @@ export default {
     "firstName": "Kellie",
     "lastName": "Gilliam",
     "Title": "Kellie Gilliam",
-    "loginName": "Kellie.Gilliam",
+    "LoginName": "Kellie.Gilliam",
     "email": "kelliegilliam@geoforma.com"
   },
   {
@@ -1416,7 +1416,7 @@ export default {
     "firstName": "Sheryl",
     "lastName": "Mejia",
     "Title": "Sheryl Mejia",
-    "loginName": "Sheryl.Mejia",
+    "LoginName": "Sheryl.Mejia",
     "email": "sherylmejia@geoforma.com"
   },
   {
@@ -1424,7 +1424,7 @@ export default {
     "firstName": "Oliver",
     "lastName": "Curtis",
     "Title": "Oliver Curtis",
-    "loginName": "Oliver.Curtis",
+    "LoginName": "Oliver.Curtis",
     "email": "olivercurtis@geoforma.com"
   },
   {
@@ -1432,7 +1432,7 @@ export default {
     "firstName": "Betty",
     "lastName": "Morgan",
     "Title": "Betty Morgan",
-    "loginName": "Betty.Morgan",
+    "LoginName": "Betty.Morgan",
     "email": "bettymorgan@geoforma.com"
   },
   {
@@ -1440,7 +1440,7 @@ export default {
     "firstName": "Rosalinda",
     "lastName": "Slater",
     "Title": "Rosalinda Slater",
-    "loginName": "Rosalinda.Slater",
+    "LoginName": "Rosalinda.Slater",
     "email": "rosalindaslater@geoforma.com"
   },
   {
@@ -1448,7 +1448,7 @@ export default {
     "firstName": "Wilda",
     "lastName": "Oconnor",
     "Title": "Wilda Oconnor",
-    "loginName": "Wilda.Oconnor",
+    "LoginName": "Wilda.Oconnor",
     "email": "wildaoconnor@geoforma.com"
   },
   {
@@ -1456,7 +1456,7 @@ export default {
     "firstName": "Santana",
     "lastName": "Morales",
     "Title": "Santana Morales",
-    "loginName": "Santana.Morales",
+    "LoginName": "Santana.Morales",
     "email": "santanamorales@geoforma.com"
   },
   {
@@ -1464,7 +1464,7 @@ export default {
     "firstName": "Meyer",
     "lastName": "Carpenter",
     "Title": "Meyer Carpenter",
-    "loginName": "Meyer.Carpenter",
+    "LoginName": "Meyer.Carpenter",
     "email": "meyercarpenter@geoforma.com"
   },
   {
@@ -1472,7 +1472,7 @@ export default {
     "firstName": "Giles",
     "lastName": "Pearson",
     "Title": "Giles Pearson",
-    "loginName": "Giles.Pearson",
+    "LoginName": "Giles.Pearson",
     "email": "gilespearson@geoforma.com"
   },
   {
@@ -1480,7 +1480,7 @@ export default {
     "firstName": "Nita",
     "lastName": "Larsen",
     "Title": "Nita Larsen",
-    "loginName": "Nita.Larsen",
+    "LoginName": "Nita.Larsen",
     "email": "nitalarsen@geoforma.com"
   },
   {
@@ -1488,7 +1488,7 @@ export default {
     "firstName": "Stafford",
     "lastName": "Dudley",
     "Title": "Stafford Dudley",
-    "loginName": "Stafford.Dudley",
+    "LoginName": "Stafford.Dudley",
     "email": "stafforddudley@geoforma.com"
   },
   {
@@ -1496,7 +1496,7 @@ export default {
     "firstName": "Rosario",
     "lastName": "Walton",
     "Title": "Rosario Walton",
-    "loginName": "Rosario.Walton",
+    "LoginName": "Rosario.Walton",
     "email": "rosariowalton@geoforma.com"
   },
   {
@@ -1504,7 +1504,7 @@ export default {
     "firstName": "Mejia",
     "lastName": "Curry",
     "Title": "Mejia Curry",
-    "loginName": "Mejia.Curry",
+    "LoginName": "Mejia.Curry",
     "email": "mejiacurry@geoforma.com"
   },
   {
@@ -1512,7 +1512,7 @@ export default {
     "firstName": "Louisa",
     "lastName": "Nieves",
     "Title": "Louisa Nieves",
-    "loginName": "Louisa.Nieves",
+    "LoginName": "Louisa.Nieves",
     "email": "louisanieves@geoforma.com"
   },
   {
@@ -1520,7 +1520,7 @@ export default {
     "firstName": "Becky",
     "lastName": "Francis",
     "Title": "Becky Francis",
-    "loginName": "Becky.Francis",
+    "LoginName": "Becky.Francis",
     "email": "beckyfrancis@geoforma.com"
   },
   {
@@ -1528,7 +1528,7 @@ export default {
     "firstName": "Logan",
     "lastName": "Chandler",
     "Title": "Logan Chandler",
-    "loginName": "Logan.Chandler",
+    "LoginName": "Logan.Chandler",
     "email": "loganchandler@geoforma.com"
   },
   {
@@ -1536,7 +1536,7 @@ export default {
     "firstName": "Ophelia",
     "lastName": "Banks",
     "Title": "Ophelia Banks",
-    "loginName": "Ophelia.Banks",
+    "LoginName": "Ophelia.Banks",
     "email": "opheliabanks@geoforma.com"
   },
   {
@@ -1544,7 +1544,7 @@ export default {
     "firstName": "Stein",
     "lastName": "Gibson",
     "Title": "Stein Gibson",
-    "loginName": "Stein.Gibson",
+    "LoginName": "Stein.Gibson",
     "email": "steingibson@geoforma.com"
   },
   {
@@ -1552,7 +1552,7 @@ export default {
     "firstName": "Harriet",
     "lastName": "Burke",
     "Title": "Harriet Burke",
-    "loginName": "Harriet.Burke",
+    "LoginName": "Harriet.Burke",
     "email": "harrietburke@geoforma.com"
   },
   {
@@ -1560,7 +1560,7 @@ export default {
     "firstName": "Rachael",
     "lastName": "Witt",
     "Title": "Rachael Witt",
-    "loginName": "Rachael.Witt",
+    "LoginName": "Rachael.Witt",
     "email": "rachaelwitt@geoforma.com"
   },
   {
@@ -1568,7 +1568,7 @@ export default {
     "firstName": "Renee",
     "lastName": "Guy",
     "Title": "Renee Guy",
-    "loginName": "Renee.Guy",
+    "LoginName": "Renee.Guy",
     "email": "reneeguy@geoforma.com"
   },
   {
@@ -1576,7 +1576,7 @@ export default {
     "firstName": "Blake",
     "lastName": "Russell",
     "Title": "Blake Russell",
-    "loginName": "Blake.Russell",
+    "LoginName": "Blake.Russell",
     "email": "blakerussell@geoforma.com"
   },
   {
@@ -1584,7 +1584,7 @@ export default {
     "firstName": "Mendez",
     "lastName": "Browning",
     "Title": "Mendez Browning",
-    "loginName": "Mendez.Browning",
+    "LoginName": "Mendez.Browning",
     "email": "mendezbrowning@geoforma.com"
   },
   {
@@ -1592,7 +1592,7 @@ export default {
     "firstName": "Carole",
     "lastName": "Woods",
     "Title": "Carole Woods",
-    "loginName": "Carole.Woods",
+    "LoginName": "Carole.Woods",
     "email": "carolewoods@geoforma.com"
   },
   {
@@ -1600,7 +1600,7 @@ export default {
     "firstName": "Huber",
     "lastName": "Walters",
     "Title": "Huber Walters",
-    "loginName": "Huber.Walters",
+    "LoginName": "Huber.Walters",
     "email": "huberwalters@geoforma.com"
   },
   {
@@ -1608,7 +1608,7 @@ export default {
     "firstName": "Diann",
     "lastName": "Bonner",
     "Title": "Diann Bonner",
-    "loginName": "Diann.Bonner",
+    "LoginName": "Diann.Bonner",
     "email": "diannbonner@geoforma.com"
   },
   {
@@ -1616,7 +1616,7 @@ export default {
     "firstName": "Kris",
     "lastName": "Davis",
     "Title": "Kris Davis",
-    "loginName": "Kris.Davis",
+    "LoginName": "Kris.Davis",
     "email": "krisdavis@geoforma.com"
   },
   {
@@ -1624,7 +1624,7 @@ export default {
     "firstName": "Copeland",
     "lastName": "Weber",
     "Title": "Copeland Weber",
-    "loginName": "Copeland.Weber",
+    "LoginName": "Copeland.Weber",
     "email": "copelandweber@geoforma.com"
   },
   {
@@ -1632,7 +1632,7 @@ export default {
     "firstName": "Lawson",
     "lastName": "Parrish",
     "Title": "Lawson Parrish",
-    "loginName": "Lawson.Parrish",
+    "LoginName": "Lawson.Parrish",
     "email": "lawsonparrish@geoforma.com"
   },
   {
@@ -1640,7 +1640,7 @@ export default {
     "firstName": "Weaver",
     "lastName": "Burns",
     "Title": "Weaver Burns",
-    "loginName": "Weaver.Burns",
+    "LoginName": "Weaver.Burns",
     "email": "weaverburns@geoforma.com"
   },
   {
@@ -1648,7 +1648,7 @@ export default {
     "firstName": "Sara",
     "lastName": "Bray",
     "Title": "Sara Bray",
-    "loginName": "Sara.Bray",
+    "LoginName": "Sara.Bray",
     "email": "sarabray@geoforma.com"
   },
   {
@@ -1656,7 +1656,7 @@ export default {
     "firstName": "Lenora",
     "lastName": "White",
     "Title": "Lenora White",
-    "loginName": "Lenora.White",
+    "LoginName": "Lenora.White",
     "email": "lenorawhite@geoforma.com"
   },
   {
@@ -1664,7 +1664,7 @@ export default {
     "firstName": "Kristina",
     "lastName": "Merritt",
     "Title": "Kristina Merritt",
-    "loginName": "Kristina.Merritt",
+    "LoginName": "Kristina.Merritt",
     "email": "kristinamerritt@geoforma.com"
   },
   {
@@ -1672,7 +1672,7 @@ export default {
     "firstName": "Gardner",
     "lastName": "Harmon",
     "Title": "Gardner Harmon",
-    "loginName": "Gardner.Harmon",
+    "LoginName": "Gardner.Harmon",
     "email": "gardnerharmon@geoforma.com"
   },
   {
@@ -1680,7 +1680,7 @@ export default {
     "firstName": "Tisha",
     "lastName": "Sweeney",
     "Title": "Tisha Sweeney",
-    "loginName": "Tisha.Sweeney",
+    "LoginName": "Tisha.Sweeney",
     "email": "tishasweeney@geoforma.com"
   },
   {
@@ -1688,7 +1688,7 @@ export default {
     "firstName": "Graham",
     "lastName": "Lambert",
     "Title": "Graham Lambert",
-    "loginName": "Graham.Lambert",
+    "LoginName": "Graham.Lambert",
     "email": "grahamlambert@geoforma.com"
   },
   {
@@ -1696,7 +1696,7 @@ export default {
     "firstName": "Hurley",
     "lastName": "Alford",
     "Title": "Hurley Alford",
-    "loginName": "Hurley.Alford",
+    "LoginName": "Hurley.Alford",
     "email": "hurleyalford@geoforma.com"
   },
   {
@@ -1704,7 +1704,7 @@ export default {
     "firstName": "Bianca",
     "lastName": "Gill",
     "Title": "Bianca Gill",
-    "loginName": "Bianca.Gill",
+    "LoginName": "Bianca.Gill",
     "email": "biancagill@geoforma.com"
   },
   {
@@ -1712,7 +1712,7 @@ export default {
     "firstName": "Laverne",
     "lastName": "Warner",
     "Title": "Laverne Warner",
-    "loginName": "Laverne.Warner",
+    "LoginName": "Laverne.Warner",
     "email": "lavernewarner@geoforma.com"
   },
   {
@@ -1720,7 +1720,7 @@ export default {
     "firstName": "Zimmerman",
     "lastName": "Stark",
     "Title": "Zimmerman Stark",
-    "loginName": "Zimmerman.Stark",
+    "LoginName": "Zimmerman.Stark",
     "email": "zimmermanstark@geoforma.com"
   },
   {
@@ -1728,7 +1728,7 @@ export default {
     "firstName": "Matthews",
     "lastName": "Kaufman",
     "Title": "Matthews Kaufman",
-    "loginName": "Matthews.Kaufman",
+    "LoginName": "Matthews.Kaufman",
     "email": "matthewskaufman@geoforma.com"
   },
   {
@@ -1736,7 +1736,7 @@ export default {
     "firstName": "Michael",
     "lastName": "Kidd",
     "Title": "Michael Kidd",
-    "loginName": "Michael.Kidd",
+    "LoginName": "Michael.Kidd",
     "email": "michaelkidd@geoforma.com"
   },
   {
@@ -1744,7 +1744,7 @@ export default {
     "firstName": "Leticia",
     "lastName": "Holden",
     "Title": "Leticia Holden",
-    "loginName": "Leticia.Holden",
+    "LoginName": "Leticia.Holden",
     "email": "leticiaholden@geoforma.com"
   },
   {
@@ -1752,7 +1752,7 @@ export default {
     "firstName": "Mcconnell",
     "lastName": "Garner",
     "Title": "Mcconnell Garner",
-    "loginName": "Mcconnell.Garner",
+    "LoginName": "Mcconnell.Garner",
     "email": "mcconnellgarner@geoforma.com"
   },
   {
@@ -1760,7 +1760,7 @@ export default {
     "firstName": "Luann",
     "lastName": "Vance",
     "Title": "Luann Vance",
-    "loginName": "Luann.Vance",
+    "LoginName": "Luann.Vance",
     "email": "luannvance@geoforma.com"
   },
   {
@@ -1768,7 +1768,7 @@ export default {
     "firstName": "Rachelle",
     "lastName": "Albert",
     "Title": "Rachelle Albert",
-    "loginName": "Rachelle.Albert",
+    "LoginName": "Rachelle.Albert",
     "email": "rachellealbert@geoforma.com"
   },
   {
@@ -1776,7 +1776,7 @@ export default {
     "firstName": "Fisher",
     "lastName": "Emerson",
     "Title": "Fisher Emerson",
-    "loginName": "Fisher.Emerson",
+    "LoginName": "Fisher.Emerson",
     "email": "fisheremerson@geoforma.com"
   },
   {
@@ -1784,7 +1784,7 @@ export default {
     "firstName": "Kemp",
     "lastName": "Guzman",
     "Title": "Kemp Guzman",
-    "loginName": "Kemp.Guzman",
+    "LoginName": "Kemp.Guzman",
     "email": "kempguzman@geoforma.com"
   },
   {
@@ -1792,7 +1792,7 @@ export default {
     "firstName": "Morgan",
     "lastName": "Murphy",
     "Title": "Morgan Murphy",
-    "loginName": "Morgan.Murphy",
+    "LoginName": "Morgan.Murphy",
     "email": "morganmurphy@geoforma.com"
   },
   {
@@ -1800,7 +1800,7 @@ export default {
     "firstName": "Pearson",
     "lastName": "Pierce",
     "Title": "Pearson Pierce",
-    "loginName": "Pearson.Pierce",
+    "LoginName": "Pearson.Pierce",
     "email": "pearsonpierce@geoforma.com"
   },
   {
@@ -1808,7 +1808,7 @@ export default {
     "firstName": "Stephanie",
     "lastName": "Johnson",
     "Title": "Stephanie Johnson",
-    "loginName": "Stephanie.Johnson",
+    "LoginName": "Stephanie.Johnson",
     "email": "stephaniejohnson@geoforma.com"
   },
   {
@@ -1816,7 +1816,7 @@ export default {
     "firstName": "Osborne",
     "lastName": "Sears",
     "Title": "Osborne Sears",
-    "loginName": "Osborne.Sears",
+    "LoginName": "Osborne.Sears",
     "email": "osbornesears@geoforma.com"
   },
   {
@@ -1824,7 +1824,7 @@ export default {
     "firstName": "Moon",
     "lastName": "Solomon",
     "Title": "Moon Solomon",
-    "loginName": "Moon.Solomon",
+    "LoginName": "Moon.Solomon",
     "email": "moonsolomon@geoforma.com"
   },
   {
@@ -1832,7 +1832,7 @@ export default {
     "firstName": "Lara",
     "lastName": "Pennington",
     "Title": "Lara Pennington",
-    "loginName": "Lara.Pennington",
+    "LoginName": "Lara.Pennington",
     "email": "larapennington@geoforma.com"
   },
   {
@@ -1840,7 +1840,7 @@ export default {
     "firstName": "Melendez",
     "lastName": "Stewart",
     "Title": "Melendez Stewart",
-    "loginName": "Melendez.Stewart",
+    "LoginName": "Melendez.Stewart",
     "email": "melendezstewart@geoforma.com"
   },
   {
@@ -1848,7 +1848,7 @@ export default {
     "firstName": "Robertson",
     "lastName": "Hickman",
     "Title": "Robertson Hickman",
-    "loginName": "Robertson.Hickman",
+    "LoginName": "Robertson.Hickman",
     "email": "robertsonhickman@geoforma.com"
   },
   {
@@ -1856,7 +1856,7 @@ export default {
     "firstName": "Adrienne",
     "lastName": "Buckley",
     "Title": "Adrienne Buckley",
-    "loginName": "Adrienne.Buckley",
+    "LoginName": "Adrienne.Buckley",
     "email": "adriennebuckley@geoforma.com"
   },
   {
@@ -1864,7 +1864,7 @@ export default {
     "firstName": "Moore",
     "lastName": "Moss",
     "Title": "Moore Moss",
-    "loginName": "Moore.Moss",
+    "LoginName": "Moore.Moss",
     "email": "mooremoss@geoforma.com"
   },
   {
@@ -1872,7 +1872,7 @@ export default {
     "firstName": "Sue",
     "lastName": "George",
     "Title": "Sue George",
-    "loginName": "Sue.George",
+    "LoginName": "Sue.George",
     "email": "suegeorge@geoforma.com"
   },
   {
@@ -1880,7 +1880,7 @@ export default {
     "firstName": "Taylor",
     "lastName": "Fitzpatrick",
     "Title": "Taylor Fitzpatrick",
-    "loginName": "Taylor.Fitzpatrick",
+    "LoginName": "Taylor.Fitzpatrick",
     "email": "taylorfitzpatrick@geoforma.com"
   },
   {
@@ -1888,7 +1888,7 @@ export default {
     "firstName": "Gay",
     "lastName": "Merrill",
     "Title": "Gay Merrill",
-    "loginName": "Gay.Merrill",
+    "LoginName": "Gay.Merrill",
     "email": "gaymerrill@geoforma.com"
   },
   {
@@ -1896,7 +1896,7 @@ export default {
     "firstName": "Williamson",
     "lastName": "Rutledge",
     "Title": "Williamson Rutledge",
-    "loginName": "Williamson.Rutledge",
+    "LoginName": "Williamson.Rutledge",
     "email": "williamsonrutledge@geoforma.com"
   },
   {
@@ -1904,7 +1904,7 @@ export default {
     "firstName": "Cheryl",
     "lastName": "Garcia",
     "Title": "Cheryl Garcia",
-    "loginName": "Cheryl.Garcia",
+    "LoginName": "Cheryl.Garcia",
     "email": "cherylgarcia@geoforma.com"
   },
   {
@@ -1912,7 +1912,7 @@ export default {
     "firstName": "Maricela",
     "lastName": "Whitley",
     "Title": "Maricela Whitley",
-    "loginName": "Maricela.Whitley",
+    "LoginName": "Maricela.Whitley",
     "email": "maricelawhitley@geoforma.com"
   },
   {
@@ -1920,7 +1920,7 @@ export default {
     "firstName": "Janet",
     "lastName": "Campos",
     "Title": "Janet Campos",
-    "loginName": "Janet.Campos",
+    "LoginName": "Janet.Campos",
     "email": "janetcampos@geoforma.com"
   },
   {
@@ -1928,7 +1928,7 @@ export default {
     "firstName": "Sofia",
     "lastName": "Bullock",
     "Title": "Sofia Bullock",
-    "loginName": "Sofia.Bullock",
+    "LoginName": "Sofia.Bullock",
     "email": "sofiabullock@geoforma.com"
   },
   {
@@ -1936,7 +1936,7 @@ export default {
     "firstName": "Reyna",
     "lastName": "Lester",
     "Title": "Reyna Lester",
-    "loginName": "Reyna.Lester",
+    "LoginName": "Reyna.Lester",
     "email": "reynalester@geoforma.com"
   },
   {
@@ -1944,7 +1944,7 @@ export default {
     "firstName": "Anthony",
     "lastName": "Waters",
     "Title": "Anthony Waters",
-    "loginName": "Anthony.Waters",
+    "LoginName": "Anthony.Waters",
     "email": "anthonywaters@geoforma.com"
   },
   {
@@ -1952,7 +1952,7 @@ export default {
     "firstName": "Mari",
     "lastName": "Morrow",
     "Title": "Mari Morrow",
-    "loginName": "Mari.Morrow",
+    "LoginName": "Mari.Morrow",
     "email": "marimorrow@geoforma.com"
   },
   {
@@ -1960,7 +1960,7 @@ export default {
     "firstName": "Krista",
     "lastName": "Henson",
     "Title": "Krista Henson",
-    "loginName": "Krista.Henson",
+    "LoginName": "Krista.Henson",
     "email": "kristahenson@geoforma.com"
   },
   {
@@ -1968,7 +1968,7 @@ export default {
     "firstName": "Cassandra",
     "lastName": "Small",
     "Title": "Cassandra Small",
-    "loginName": "Cassandra.Small",
+    "LoginName": "Cassandra.Small",
     "email": "cassandrasmall@geoforma.com"
   },
   {
@@ -1976,7 +1976,7 @@ export default {
     "firstName": "Richmond",
     "lastName": "Molina",
     "Title": "Richmond Molina",
-    "loginName": "Richmond.Molina",
+    "LoginName": "Richmond.Molina",
     "email": "richmondmolina@geoforma.com"
   },
   {
@@ -1984,7 +1984,7 @@ export default {
     "firstName": "Fry",
     "lastName": "Franklin",
     "Title": "Fry Franklin",
-    "loginName": "Fry.Franklin",
+    "LoginName": "Fry.Franklin",
     "email": "fryfranklin@geoforma.com"
   },
   {
@@ -1992,7 +1992,7 @@ export default {
     "firstName": "Pauline",
     "lastName": "Bowen",
     "Title": "Pauline Bowen",
-    "loginName": "Pauline.Bowen",
+    "LoginName": "Pauline.Bowen",
     "email": "paulinebowen@geoforma.com"
   },
   {
@@ -2000,7 +2000,7 @@ export default {
     "firstName": "Santiago",
     "lastName": "Rocha",
     "Title": "Santiago Rocha",
-    "loginName": "Santiago.Rocha",
+    "LoginName": "Santiago.Rocha",
     "email": "santiagorocha@geoforma.com"
   },
   {
@@ -2008,7 +2008,7 @@ export default {
     "firstName": "Eula",
     "lastName": "Gregory",
     "Title": "Eula Gregory",
-    "loginName": "Eula.Gregory",
+    "LoginName": "Eula.Gregory",
     "email": "eulagregory@geoforma.com"
   },
   {
@@ -2016,7 +2016,7 @@ export default {
     "firstName": "Ina",
     "lastName": "Yang",
     "Title": "Ina Yang",
-    "loginName": "Ina.Yang",
+    "LoginName": "Ina.Yang",
     "email": "inayang@geoforma.com"
   },
   {
@@ -2024,7 +2024,7 @@ export default {
     "firstName": "Charles",
     "lastName": "Conway",
     "Title": "Charles Conway",
-    "loginName": "Charles.Conway",
+    "LoginName": "Charles.Conway",
     "email": "charlesconway@geoforma.com"
   },
   {
@@ -2032,7 +2032,7 @@ export default {
     "firstName": "Gregory",
     "lastName": "Steele",
     "Title": "Gregory Steele",
-    "loginName": "Gregory.Steele",
+    "LoginName": "Gregory.Steele",
     "email": "gregorysteele@geoforma.com"
   },
   {
@@ -2040,7 +2040,7 @@ export default {
     "firstName": "Esther",
     "lastName": "Weeks",
     "Title": "Esther Weeks",
-    "loginName": "Esther.Weeks",
+    "LoginName": "Esther.Weeks",
     "email": "estherweeks@geoforma.com"
   },
   {
@@ -2048,7 +2048,7 @@ export default {
     "firstName": "Fay",
     "lastName": "Smith",
     "Title": "Fay Smith",
-    "loginName": "Fay.Smith",
+    "LoginName": "Fay.Smith",
     "email": "faysmith@geoforma.com"
   },
   {
@@ -2056,7 +2056,7 @@ export default {
     "firstName": "Booth",
     "lastName": "Pickett",
     "Title": "Booth Pickett",
-    "loginName": "Booth.Pickett",
+    "LoginName": "Booth.Pickett",
     "email": "boothpickett@geoforma.com"
   },
   {
@@ -2064,7 +2064,7 @@ export default {
     "firstName": "Ochoa",
     "lastName": "Ochoa",
     "Title": "Ochoa Ochoa",
-    "loginName": "Ochoa.Ochoa",
+    "LoginName": "Ochoa.Ochoa",
     "email": "ochoaochoa@geoforma.com"
   },
   {
@@ -2072,7 +2072,7 @@ export default {
     "firstName": "Jane",
     "lastName": "Boyd",
     "Title": "Jane Boyd",
-    "loginName": "Jane.Boyd",
+    "LoginName": "Jane.Boyd",
     "email": "janeboyd@geoforma.com"
   },
   {
@@ -2080,7 +2080,7 @@ export default {
     "firstName": "Ramona",
     "lastName": "Santiago",
     "Title": "Ramona Santiago",
-    "loginName": "Ramona.Santiago",
+    "LoginName": "Ramona.Santiago",
     "email": "ramonasantiago@geoforma.com"
   },
   {
@@ -2088,7 +2088,7 @@ export default {
     "firstName": "Deann",
     "lastName": "Maxwell",
     "Title": "Deann Maxwell",
-    "loginName": "Deann.Maxwell",
+    "LoginName": "Deann.Maxwell",
     "email": "deannmaxwell@geoforma.com"
   },
   {
@@ -2096,7 +2096,7 @@ export default {
     "firstName": "Selena",
     "lastName": "Kirby",
     "Title": "Selena Kirby",
-    "loginName": "Selena.Kirby",
+    "LoginName": "Selena.Kirby",
     "email": "selenakirby@geoforma.com"
   },
   {
@@ -2104,7 +2104,7 @@ export default {
     "firstName": "Holman",
     "lastName": "Moreno",
     "Title": "Holman Moreno",
-    "loginName": "Holman.Moreno",
+    "LoginName": "Holman.Moreno",
     "email": "holmanmoreno@geoforma.com"
   },
   {
@@ -2112,7 +2112,7 @@ export default {
     "firstName": "Ellison",
     "lastName": "Andrews",
     "Title": "Ellison Andrews",
-    "loginName": "Ellison.Andrews",
+    "LoginName": "Ellison.Andrews",
     "email": "ellisonandrews@geoforma.com"
   },
   {
@@ -2120,7 +2120,7 @@ export default {
     "firstName": "Carter",
     "lastName": "Gonzales",
     "Title": "Carter Gonzales",
-    "loginName": "Carter.Gonzales",
+    "LoginName": "Carter.Gonzales",
     "email": "cartergonzales@geoforma.com"
   },
   {
@@ -2128,7 +2128,7 @@ export default {
     "firstName": "Emma",
     "lastName": "Doyle",
     "Title": "Emma Doyle",
-    "loginName": "Emma.Doyle",
+    "LoginName": "Emma.Doyle",
     "email": "emmadoyle@geoforma.com"
   },
   {
@@ -2136,7 +2136,7 @@ export default {
     "firstName": "Joyce",
     "lastName": "Workman",
     "Title": "Joyce Workman",
-    "loginName": "Joyce.Workman",
+    "LoginName": "Joyce.Workman",
     "email": "joyceworkman@geoforma.com"
   },
   {
@@ -2144,7 +2144,7 @@ export default {
     "firstName": "Holly",
     "lastName": "Middleton",
     "Title": "Holly Middleton",
-    "loginName": "Holly.Middleton",
+    "LoginName": "Holly.Middleton",
     "email": "hollymiddleton@geoforma.com"
   },
   {
@@ -2152,7 +2152,7 @@ export default {
     "firstName": "Howard",
     "lastName": "Jarvis",
     "Title": "Howard Jarvis",
-    "loginName": "Howard.Jarvis",
+    "LoginName": "Howard.Jarvis",
     "email": "howardjarvis@geoforma.com"
   },
   {
@@ -2160,7 +2160,7 @@ export default {
     "firstName": "Kara",
     "lastName": "Cervantes",
     "Title": "Kara Cervantes",
-    "loginName": "Kara.Cervantes",
+    "LoginName": "Kara.Cervantes",
     "email": "karacervantes@geoforma.com"
   },
   {
@@ -2168,7 +2168,7 @@ export default {
     "firstName": "Alice",
     "lastName": "Byers",
     "Title": "Alice Byers",
-    "loginName": "Alice.Byers",
+    "LoginName": "Alice.Byers",
     "email": "alicebyers@geoforma.com"
   },
   {
@@ -2176,7 +2176,7 @@ export default {
     "firstName": "Vaughan",
     "lastName": "Ward",
     "Title": "Vaughan Ward",
-    "loginName": "Vaughan.Ward",
+    "LoginName": "Vaughan.Ward",
     "email": "vaughanward@geoforma.com"
   },
   {
@@ -2184,7 +2184,7 @@ export default {
     "firstName": "Carmen",
     "lastName": "Berg",
     "Title": "Carmen Berg",
-    "loginName": "Carmen.Berg",
+    "LoginName": "Carmen.Berg",
     "email": "carmenberg@geoforma.com"
   },
   {
@@ -2192,7 +2192,7 @@ export default {
     "firstName": "Alissa",
     "lastName": "Tate",
     "Title": "Alissa Tate",
-    "loginName": "Alissa.Tate",
+    "LoginName": "Alissa.Tate",
     "email": "alissatate@geoforma.com"
   },
   {
@@ -2200,7 +2200,7 @@ export default {
     "firstName": "Holland",
     "lastName": "Allison",
     "Title": "Holland Allison",
-    "loginName": "Holland.Allison",
+    "LoginName": "Holland.Allison",
     "email": "hollandallison@geoforma.com"
   },
   {
@@ -2208,7 +2208,7 @@ export default {
     "firstName": "Riley",
     "lastName": "Hobbs",
     "Title": "Riley Hobbs",
-    "loginName": "Riley.Hobbs",
+    "LoginName": "Riley.Hobbs",
     "email": "rileyhobbs@geoforma.com"
   },
   {
@@ -2216,7 +2216,7 @@ export default {
     "firstName": "Colleen",
     "lastName": "Palmer",
     "Title": "Colleen Palmer",
-    "loginName": "Colleen.Palmer",
+    "LoginName": "Colleen.Palmer",
     "email": "colleenpalmer@geoforma.com"
   },
   {
@@ -2224,7 +2224,7 @@ export default {
     "firstName": "Mccall",
     "lastName": "Hicks",
     "Title": "Mccall Hicks",
-    "loginName": "Mccall.Hicks",
+    "LoginName": "Mccall.Hicks",
     "email": "mccallhicks@geoforma.com"
   },
   {
@@ -2232,7 +2232,7 @@ export default {
     "firstName": "Velasquez",
     "lastName": "Sampson",
     "Title": "Velasquez Sampson",
-    "loginName": "Velasquez.Sampson",
+    "LoginName": "Velasquez.Sampson",
     "email": "velasquezsampson@geoforma.com"
   },
   {
@@ -2240,7 +2240,7 @@ export default {
     "firstName": "Davidson",
     "lastName": "Jacobs",
     "Title": "Davidson Jacobs",
-    "loginName": "Davidson.Jacobs",
+    "LoginName": "Davidson.Jacobs",
     "email": "davidsonjacobs@geoforma.com"
   },
   {
@@ -2248,7 +2248,7 @@ export default {
     "firstName": "Johnnie",
     "lastName": "Parsons",
     "Title": "Johnnie Parsons",
-    "loginName": "Johnnie.Parsons",
+    "LoginName": "Johnnie.Parsons",
     "email": "johnnieparsons@geoforma.com"
   },
   {
@@ -2256,7 +2256,7 @@ export default {
     "firstName": "Latisha",
     "lastName": "Kane",
     "Title": "Latisha Kane",
-    "loginName": "Latisha.Kane",
+    "LoginName": "Latisha.Kane",
     "email": "latishakane@geoforma.com"
   },
   {
@@ -2264,7 +2264,7 @@ export default {
     "firstName": "Hammond",
     "lastName": "Wong",
     "Title": "Hammond Wong",
-    "loginName": "Hammond.Wong",
+    "LoginName": "Hammond.Wong",
     "email": "hammondwong@geoforma.com"
   },
   {
@@ -2272,7 +2272,7 @@ export default {
     "firstName": "Shelley",
     "lastName": "Chapman",
     "Title": "Shelley Chapman",
-    "loginName": "Shelley.Chapman",
+    "LoginName": "Shelley.Chapman",
     "email": "shelleychapman@geoforma.com"
   },
   {
@@ -2280,7 +2280,7 @@ export default {
     "firstName": "Kristine",
     "lastName": "Ortega",
     "Title": "Kristine Ortega",
-    "loginName": "Kristine.Ortega",
+    "LoginName": "Kristine.Ortega",
     "email": "kristineortega@geoforma.com"
   },
   {
@@ -2288,7 +2288,7 @@ export default {
     "firstName": "Enid",
     "lastName": "Lane",
     "Title": "Enid Lane",
-    "loginName": "Enid.Lane",
+    "LoginName": "Enid.Lane",
     "email": "enidlane@geoforma.com"
   },
   {
@@ -2296,7 +2296,7 @@ export default {
     "firstName": "Tiffany",
     "lastName": "Wells",
     "Title": "Tiffany Wells",
-    "loginName": "Tiffany.Wells",
+    "LoginName": "Tiffany.Wells",
     "email": "tiffanywells@geoforma.com"
   },
   {
@@ -2304,7 +2304,7 @@ export default {
     "firstName": "Sylvia",
     "lastName": "Harding",
     "Title": "Sylvia Harding",
-    "loginName": "Sylvia.Harding",
+    "LoginName": "Sylvia.Harding",
     "email": "sylviaharding@geoforma.com"
   },
   {
@@ -2312,7 +2312,7 @@ export default {
     "firstName": "Gena",
     "lastName": "Underwood",
     "Title": "Gena Underwood",
-    "loginName": "Gena.Underwood",
+    "LoginName": "Gena.Underwood",
     "email": "genaunderwood@geoforma.com"
   }
 ],

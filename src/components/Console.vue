@@ -91,7 +91,7 @@
             </v-list>
             <span class="message" v-if="!isSiteCollectionSelected && !isLoading && !isSaving"> To start, please select a site collection. <span class="blinking-cursor">|</span></span>
             <span class="message" v-if="!isItemSelected && isSiteCollectionSelected && !isLoading && !isSaving"> Please select a {{type.user ? 'group' : 'user'}}. <span class="blinking-cursor">|</span></span>
-            <transition name="fade">
+            <transition name="fade" v-if="!isIE">
             <div
             :style="{position: 'sticky', bottom: '20px'}" v-if="!isBottomScroll">
             <v-btn
@@ -106,6 +106,21 @@
           </div>
         </transition>
           </div>
+          <transition name="fade" >
+          <div
+          :style="{position: 'relative'}"
+           v-if="isIE && !isBottomScroll">
+          <v-btn
+           color="pink"
+           dark
+           small
+           absolute
+           :style="{right: '30px', top: '-40px'}"
+           @click="goToEnd"
+           class="goToEndBtn"
+          >Go to End</v-btn>
+        </div>
+      </transition>
         </v-flex>
       </v-layout>
     </v-container>
@@ -186,7 +201,7 @@ export default {
   methods: {
     onScroll: function(){
       var elem = this.$refs.consoleMessages;
-      this.isBottomScroll = elem.scrollHeight - elem.scrollTop - elem.clientHeight < 40;
+      this.isBottomScroll = elem.scrollHeight - elem.scrollTop - elem.clientHeight < (this.isIE ? 20 : 40);
     },
     goToEnd: function(){
       this.$refs.consoleMessages.scrollTop = this.$refs.consoleMessages.scrollHeight;
@@ -386,7 +401,7 @@ svg.icon-size {
 }
 
 .fade-enter {
-  opacity: 1;
+  opacity: 0;
 }
 /* Enter and leave animations can use different */
 /* durations and timing functions.              */
