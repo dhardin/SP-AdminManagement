@@ -208,9 +208,19 @@ export default {
     },
     resize: function(){
       this.$emit('resize');
+      (function(that){
+        setTimeout(function(){
+          that.onScroll();
+        },100);
+      })(this);
     },
     clear: function() {
       this.$emit('clear-console');
+      (function(that){
+        setTimeout(function(){
+          that.onScroll();
+        },100);
+      })(this);
     },
     getClassObject: function(item) {
       return {
