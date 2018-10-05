@@ -68,6 +68,7 @@ import axios from 'axios'
         }
       }).then(function (response) {
       // handle success
+      console.log('SUCCESS');
       console.log(response);
           var groups = response.data.d.results;
           if (callback) {
@@ -79,7 +80,8 @@ import axios from 'axios'
          responseError = {message: error.response.data.error.message.value};
        } catch(err){
          responseError = error;
-         console.log(err);
+         console.log('ERROR');
+         console.log( err);
        }
         if (errorCallback) {
           errorCallback(responseError);

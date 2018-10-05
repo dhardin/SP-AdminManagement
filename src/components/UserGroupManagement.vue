@@ -866,7 +866,7 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
           resolve({siteCollection: item, children: groups});
         }, function(error){
           console.log(error);
-          reject();
+          resolve();
         }
       );
     });
