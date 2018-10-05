@@ -68,6 +68,7 @@ import axios from 'axios'
         }
       }).then(function (response) {
       // handle success
+      console.log(response);
           var groups = response.data.d.results;
           if (callback) {
             callback(groups);

@@ -201,7 +201,11 @@ export default {
   methods: {
     onScroll: function(){
       var elem = this.$refs.consoleMessages;
-      this.isBottomScroll = elem.scrollHeight - elem.scrollTop - elem.clientHeight < (this.isIE ? 20 : 40);
+      if(elem && elem.scrollHeight){
+        this.isBottomScroll = elem.scrollHeight - elem.scrollTop - elem.clientHeight < (this.isIE ? 20 : 40);
+      } else {
+        this.isBottomScroll = true;
+      }
     },
     goToEnd: function(){
       this.$refs.consoleMessages.scrollTop = this.$refs.consoleMessages.scrollHeight;
