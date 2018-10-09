@@ -101,12 +101,14 @@ export default {
     return {
       selectedItem: null,
       searchFocus: false,
-      search: '',
-      treeData: {
-        label: '',
-        root: true,
-        children: JSON.parse(JSON.stringify(this.availableUsersSiteCollectionGroups))
-      }
+      search: ''
+    }
+  },
+  computed: {
+    treeData: {
+      label: '',
+      root: true,
+      children: JSON.parse(JSON.stringify(this.availableUsersSiteCollectionGroups))
     }
   },
   mounted: function(){
