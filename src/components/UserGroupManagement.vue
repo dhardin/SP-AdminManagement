@@ -866,8 +866,6 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
         messageList.push({status: 'pending', url: item.url, target: user.Title, operation:  'Fetching Groups', error: {expanded: false, message: '', title: ''}});
         that.getGroups(item, user.Id, function(groups){
           var message = messageList[messageList.length - 1];
-          var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-          var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
           that.metrics.numSuccesses++;
           item.isNew = false;
           item.hasError = false;
@@ -876,8 +874,6 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
           resolve({siteCollection: item, children: groups});
         }, function(error){
             var message = messageList[messageList.length - 1];
-          var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-          var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
           item.hasError = true;
           that.failedItems.push(item);
           message.status = 'done';
