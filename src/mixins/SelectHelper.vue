@@ -153,14 +153,6 @@
   margin: 0;
  }
 
- .v-btn, .v-btn::before, .v-btn::after {
-   -webkit-transition: none !important;
-    -moz-transition: none !important;
-    -o-transition: none !important;
-    transition: none !important;
-    transition-timing-function: step-end !important;
- }
-
 .footer {
   text-align: right;
 }
