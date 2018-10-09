@@ -9,7 +9,7 @@ import axios from 'axios'
         "accept": "application/json;odata=verbose"
       }
     }).then(function (response) {
-    // handle success
+      // handle success
         var data = response.data.d.query;
         var numRows = data.PrimaryQueryResult.RelevantResults.RowCount;
         var siteCollections = [];
@@ -54,6 +54,31 @@ import axios from 'axios'
        } catch(err){
          responseError = error;
          console.log(err);
+       }
+        if (errorCallback) {
+          errorCallback(responseError);
+        }
+      });
+    },
+    getUserGroupsByLoginName: function(siteCollection, loginName, callback, errorCallback){
+      return axios({
+        url: siteCollection.url + "/_api/web/siteusers(@v)/groups?@v='" + encodeURIComponent(loginName) + "'",
+        method: 'get',
+        headers: {
+          'accept': 'application/json; odata=verbose'
+        }
+      }).then(function(response){
+        // handle success
+        var groups = response.data.d.results;
+        if (callback) {
+          callback(groups);
+        }
+      }).catch(function(error){
+        var responseError;
+        try{
+         responseError = {message: error.response.data.error.message.value};
+       } catch(err){
+         responseError = error;
        }
         if (errorCallback) {
           errorCallback(responseError);
