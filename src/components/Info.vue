@@ -22,7 +22,6 @@
         </v-layout>
       </v-container>
     </v-card-text>
-
     <v-card-actions>
       <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
         <v-btn flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" v-if="type.users">Copy</v-btn>
@@ -98,7 +97,7 @@
       <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :href="csv" @click="downloadCSV" download="download.csv">Export</v-btn>
     </v-card-actions>
   </div>
-    <Copy @get-site-collections-for-user="getSiteCollectionsForUser" :items="items" :type="type" @copy-items="copyItems" @close-copy="closeCopy" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :label="'Select ' + (type.users ? 'User' : 'Group') + ' To Copy To'" v-else></Copy>
+    <Copy :is-loading="isLoading" @get-site-collections-for-user="getSiteCollectionsForUser" :items="availableUsersSiteCollectionGroups" :type="type" @copy-items="copyItems" @close-copy="closeCopy" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :label="'Select ' + (type.users ? 'User' : 'Group') + ' To Copy To'" v-else></Copy>
   </transition>
   </v-card>
 
@@ -152,7 +151,14 @@ export default {
     updateSelectedItem: {
       type: Object,
       default: null
-    }
+    },
+    availableUsersSiteCollectionGroups: {
+      type: Array,
+      default: function(){
+        return []
+      }
+    },
+
   },
   data: function(){
     return {

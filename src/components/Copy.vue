@@ -20,7 +20,10 @@
                <h3 class="font-weight-regular mb-0">Available Site Collections &amp; {{type.users ? 'Groups' : 'Users'}}</h3>
     </v-card-title>
     <v-card-text>
-     <tree :search="search" :model="treeData"></tree>
+     <tree :search="search" :model="treeData" v-if="!isLoading"></tree>
+     <div v-else class="v-align"><svg role="img" title="drop down" class="loading">
+         <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_refresh_24px" />
+       </svg> <span class="pl-2">Loading</span></div>
    </v-card-text>
  </v-card>
  </v-flex>
@@ -77,10 +80,20 @@ export default {
       type: Boolean,
       default: false
     },
+    isLoading: {
+      type: Boolean,
+      default: false
+    },
     type: {
       type: Object,
       default: function(){
         return {users: true, groups: false}
+      }
+    },
+    availableUsersSiteCollectionGroups: {
+      type: Array,
+      default: function() {
+        return [];
       }
     }
   },
@@ -90,20 +103,10 @@ export default {
       searchFocus: false,
       search: '',
       treeData: {
-      label: '',
-      root: true,
-      children: [
-        {
-          label: "A cool sub-folder 1",
-          expandedBySearch: false,
-          children: [
-            { label: "A cool sub-sub-folder 1" },
-            { label: "A cool sub-sub-folder 2" }
-          ]
-        },
-        { label: "This one is not that cool" }
-      ]
-    }
+        label: '',
+        root: true,
+        children: JSON.parse(JSON.stringify(this.availableUsersSiteCollectionGroups))
+      }
     }
   },
   mounted: function(){
@@ -139,3 +142,24 @@ export default {
   }
 }
 </script>
+<style scoped>
+svg.loading {
+  -webkit-animation: rotation 2s infinite linear;
+
+  }
+  .v-align {
+    display: flex;
+  align-items: center
+  }
+
+  @-webkit-keyframes rotation {
+  		from {
+  				-webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+  		}
+  		to {
+  				-webkit-transform: rotate(359deg);
+          transform: rotate(359deg);
+  		}
+  }
+</style>

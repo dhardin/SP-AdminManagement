@@ -5,7 +5,7 @@
         <Console :maximize="maximize" :is-item-selected="isItemSelected" :type="type" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <Info @get-site-collections-for-user="getSiteCollectionsGroupsForUser" @copy-dialog-opened="copyDialogOpened" :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>
+        <Info @get-site-collections-for-user="getSiteCollectionsGroupsForUser" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" @copy-dialog-opened="copyDialogOpened" :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>
       </v-flex>
       <v-flex xs6 order-xs3 >
         <SelectAvailable :type="type" :num-selected="itemsSelected.available" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving || copyDialogOpen" :is-loading="isLoading || copyDialogOpen" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
@@ -162,6 +162,7 @@ export default {
       isItemSelected: false,
       maximize: false,
       copyDialogOpen: false,
+      availableUsersSiteCollectionGroups: [],
       itemsSelected: {
         available: 0,
         assigned: 0
@@ -973,7 +974,7 @@ getSiteCollectionsGroupsForUser: function(){
     var siteCollections = [];
     that.metrics.start = new Date();
     that.progress = 0;
-    that.isSaving = true;
+    that.isLoading = true;
 
     that.messages.push({
       date: new Date(),
@@ -999,14 +1000,14 @@ getSiteCollectionsGroupsForUser: function(){
         that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
         that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
         that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
-        that.isSaving = false;
+        that.isLoading = false;
         siteCollections = result;
         resolve();
       });
     }).then(function(result){
       that.metrics.start = new Date();
       that.progress = 0;
-      that.isSaving = true;
+      that.isLoading = true;
       that.messages.push({
         date: new Date(),
         verb: that.actions.Starting,
@@ -1030,8 +1031,11 @@ getSiteCollectionsGroupsForUser: function(){
         that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
         that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
         that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
-        that.isSaving = false;
-        console.log(result);
+        that.isLoading = false;
+        var userGroups = that.$lodash.filter(result, function(o){
+          return o.children.length > 0;
+        });
+        that.availableUsersSiteCollectionGroups = userGroups;
       });
     });
   })(this);
