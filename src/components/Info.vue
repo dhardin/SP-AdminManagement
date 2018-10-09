@@ -337,5 +337,11 @@ export default {
   fill: #E53935;
   margin-top: -5px;
 }
-
+.v-btn, .v-btn::before, .v-btn::after {
+  -webkit-transition: none !important;
+   -moz-transition: none !important;
+   -o-transition: none !important;
+   transition: none !important;
+   transition-timing-function: step-end !important;
+}
 </style>

@@ -2,10 +2,10 @@
   <div>
   <transition-group name="list"
   :class="{
-    'enter-right': enterRight && !pageChange,
-    'enter-left': enterLeft && !pageChange,
-    'leave-right': leaveRight && !pageChange,
-    'leave-left': leaveLeft && !pageChange
+    'enter-right': enterRight && !pageChange && !isIE,
+    'enter-left': enterLeft && !pageChange && !isIE,
+    'leave-right': leaveRight && !pageChange && !isIE,
+    'leave-left': leaveLeft && !pageChange && !isIE
   }"
   @leave="onLeave"
     tag="ul">
@@ -92,6 +92,9 @@
     },
     numPages: function(){
       return this.rowsPerPage > 0 ? Math.ceil(this.filteredItems.length / this.rowsPerPage) : 1;
+    },
+    isIE: function(){
+      return (navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true ); //IF IE > 10
     },
     currentPageItems: function(){
       //return items between two indecies.

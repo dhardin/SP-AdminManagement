@@ -99,6 +99,9 @@
     isAnySelected: function(){
       return this.numSelected > 0;
     },
+    isIE: function(){
+      return (navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true ); //IF IE > 10
+    },
     disabled: function(){
       return this.isSaving || this.isLoading  || !this.isSiteCollectionSelected || !this.isItemSelected || !this.siteCollectionHasItem;
     },
@@ -187,7 +190,13 @@
 .v-progress-circular {
   float: right;
 }
-
+.v-btn, .v-btn::before, .v-btn::after {
+  -webkit-transition: none !important;
+   -moz-transition: none !important;
+   -o-transition: none !important;
+   transition: none !important;
+   transition-timing-function: step-end !important;
+}
 ul, li {
   list-style-type: none;
   padding: 0;
