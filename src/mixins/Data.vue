@@ -67,9 +67,6 @@ import axios from 'axios'
           "accept": "application/json;odata=verbose"
         }
       }).then(function (response) {
-      // handle success
-      console.log('SUCCESS');
-      console.log(response);
           var groups = response.data.d.results;
           if (callback) {
             callback(groups);
@@ -80,8 +77,6 @@ import axios from 'axios'
          responseError = {message: error.response.data.error.message.value};
        } catch(err){
          responseError = error;
-         console.log('ERROR');
-         console.log( err);
        }
         if (errorCallback) {
           errorCallback(responseError);

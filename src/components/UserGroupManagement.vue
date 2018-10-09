@@ -864,8 +864,9 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
       promise = new Promise(function(resolve, reject){
           //var message = messageList[messageList.length - 1];
         messageList.push({status: 'pending', url: item.url, target: user.Title, operation:  'Fetching Groups', error: {expanded: false, message: '', title: ''}});
+        var messageIndex = messageList.length - 1;
         that.getGroups(item, user.Id, function(groups){
-          var message = messageList[messageList.length - 1];
+          var message = messageList[messageIndex];
           that.metrics.numSuccesses++;
           item.isNew = false;
           item.hasError = false;
@@ -873,7 +874,7 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
           message.status = 'done';
           resolve({siteCollection: item, children: groups});
         }, function(error){
-            var message = messageList[messageList.length - 1];
+            var message = messageList[messageIndex];
           item.hasError = true;
           that.failedItems.push(item);
           message.status = 'done';
