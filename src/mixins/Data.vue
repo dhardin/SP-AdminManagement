@@ -44,8 +44,8 @@ import axios from 'axios'
       for(key in updates){
         data[key] = updates[key];
       }
-      return axios.get(siteCollection.url + "/_api/web/siteusers(@v)?@v='" + encodeURIComponent(loginName) + "'",
-      {
+      return axios({
+        url: siteCollection.url + "/_api/web/siteusers(@v)?@v='" + encodeURIComponent(loginName) + "'",
         method: 'post',
         data: data,
         headers: {
