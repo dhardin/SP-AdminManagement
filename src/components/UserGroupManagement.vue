@@ -1031,11 +1031,7 @@ getSiteCollectionsGroupsForUser: function(){
         that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
         that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
         that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
-        setTimeout(function(){
-
-
-       that.isLoading = true;
-        },5000);
+        that.isLoading = false;
         if(that.isTesting){
           result = [{title: 'blah', siteCollection: {title:'blah'}, children: that.$lodash.sampleSize(that.testGroups, Math.floor(Math.random() * 10) + 5)}];
         }
