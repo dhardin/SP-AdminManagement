@@ -229,14 +229,14 @@ export default {
             resolve();
           });
         }).then(function(result){
+          that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Updating',  preposition: 'for', target: user.LoginName,   url: that.siteCollection.url,  type: 'warning'});
           that.updateUser(that.siteCollection, that.digest, user.LoginName, {isSiteAdmin: false}, function(result){
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Updating User', preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Updating', preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'info'});
             that.isSaving = false;
             that.metrics.end = new Date();
-            that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'});
           }, function(error){
               that.metrics.end = new Date();
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Updating User', hasError: true, message: error.message,  preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Updating', hasError: true, message: error.message,  preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'error'});
             that.isSaving = false;
           });
         });

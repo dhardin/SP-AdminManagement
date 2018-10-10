@@ -57,6 +57,9 @@ import axios from 'axios'
       }).then(function (response) {
     // handle success
       console.log(response);
+      if(callback){
+        callback(response);
+      }
     }).catch(function(error) {
       var responseError;
       try{
