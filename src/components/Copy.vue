@@ -151,7 +151,9 @@ export default {
 <style scoped>
 svg.loading {
   -webkit-animation: rotation 2s infinite linear;
-
+  animation: rotation 2s infinite linear;
+  -moz-animation: rotation 2s infinite linear;
+  -o-animation: rotation 2s infinite linear;
 }
 .v-align {
   display: flex;
@@ -159,6 +161,38 @@ svg.loading {
 }
 
 @-webkit-keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+@-o-keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@-moz-keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+@keyframes rotation {
   from {
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
