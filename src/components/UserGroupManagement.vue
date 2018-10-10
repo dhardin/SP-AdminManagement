@@ -1036,7 +1036,7 @@ getSiteCollectionsGroupsForUser: function(){
           result = [{title: 'blah', siteCollection: {title:'blah'}, children: that.$lodash.sampleSize(that.testGroups, Math.floor(Math.random() * 10) + 5)}];
         }
         var userGroups = that.$lodash.filter(result, function(o){
-           return o.children.length > 0;
+           return o.children && o.children.length > 0;
         });
         that.availableUsersSiteCollectionGroups = userGroups;
       });
