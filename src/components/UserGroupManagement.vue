@@ -230,7 +230,7 @@ export default {
           });
         }).then(function(result){
           that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Updating',  preposition: 'for', target: user.LoginName,   url: that.siteCollection.url,  type: 'warning'});
-          that.updateUser(that.siteCollection, that.digest, user.LoginName, {isSiteAdmin: false}, function(result){
+          that.updateUser(that.siteCollection, that.digest, user.LoginName, {IsSiteAdmin: !user.IsSiteAdmin}, function(result){
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Updating', preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'info'});
             that.isSaving = false;
             that.metrics.end = new Date();
