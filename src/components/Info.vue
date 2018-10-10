@@ -12,6 +12,7 @@
               <div v-if="type.users == true">
                 <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
                 <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
+                <Checkbox :disabled="selectedItem == null || isSaving || isLoading || !isSiteCollectionSelected" @toggle-checked="toggleIsSiteAdmin" :isChecked="selectedItem !== null ? selectedItem.IsSiteAdmin : false">Is Site Admin</Checkbox>
               </div>
               <div v-else>
                 <v-text-field label="Owner" readonly disabled :value="selectedItem !== null ? selectedItem.OwnerTitle: ''"></v-text-field>
@@ -108,11 +109,13 @@
 <script>
 import SearchSelect from './SearchSelect'
 import Copy from './Copy'
+import Checkbox from './Checkbox.vue'
 
 export default {
   components: {
     SearchSelect: SearchSelect,
-    Copy: Copy
+    Copy: Copy,
+    Checkbox: Checkbox
   },
  props:{
     items: {
@@ -207,6 +210,9 @@ export default {
     }
   },
   methods: {
+    toggleIsSiteAdmin: function(){
+      this.$emit('toggle-site-admin', this.selectedItem);
+    },
     copyItems: function(selectedItem, items){
 
     },

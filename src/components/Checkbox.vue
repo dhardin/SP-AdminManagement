@@ -41,6 +41,13 @@ export default {
 }
 </script>
 <style>
+.v-btn:disabled .subheading{
+  color: rgba(0,0,0,0.38);
+}
+
+.v-btn:disabled svg {
+  opacity: 0.37;
+}
 .checkbox-icon{
   padding: 0;
   background-color: white;

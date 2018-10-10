@@ -35,6 +35,41 @@ import axios from 'axios'
       }
     });
     },
+    updateUser: function(siteCollection, digest, loginName, updates, callback, errorCallback){
+      var data = {  __metadata: {
+          type: 'SP.User'
+        }
+      };
+      var key;
+      for(key in updates){
+        data[key] = updates[key];
+      }
+      return axios.get(siteCollection.url + "/_api/web/siteusers(@v)?@v='" + encodeURIComponent(loginName) + "'",
+      {
+        method: 'post',
+        data: data,
+        headers: {
+          "accept": "application/json; odata=verbose",
+          "content-type": "application/json; odata=verbose",
+          "x-http-method": "MERGE",
+          "X-RequestDigest": digest
+        }
+      }).then(function (response) {
+    // handle success
+      console.log(response);
+    }).catch(function(error) {
+      var responseError;
+      try{
+       responseError = {message: error.response.data.error.message.value};
+     } catch(err){
+       responseError = {message: error.message, stack: error.stack};
+       console.log(err);
+     }
+      if (errorCallback) {
+        errorCallback(responseError);
+      }
+    });
+    },
     getUsers: function(siteCollection, groupId, callback, errorCallback){
         return axios.get(siteCollection.url + "/_api/web/" + (groupId !== false ? 'sitegroups('+groupId+')/users' : 'siteusers'),
         {
@@ -232,8 +267,6 @@ import axios from 'axios'
     },
     addUserToGroup: function(siteCollection, digest, groupId, user, callback, errorCallback){
       setTimeout(function(){
-
-
         return axios({
           url:  siteCollection.url + '/_api/web/sitegroups('+groupId+')/users',
         method: 'post',
@@ -291,8 +324,7 @@ import axios from 'axios'
           try{
            responseError = {message: error.response.data.error.message.value};
          } catch(err){
-           responseError = error;
-           console.log(err);
+           responseError = {message: error.message, stack: error.stack};
          }
           if (errorCallback) {
             errorCallback(responseError);

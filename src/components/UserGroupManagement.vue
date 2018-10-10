@@ -5,7 +5,7 @@
         <Console :maximize="maximize" :is-item-selected="isItemSelected" :type="type" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <Info @get-site-collections-for-user="getSiteCollectionsGroupsForUser" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" @copy-dialog-opened="copyDialogOpened" :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>
+        <Info @toggle-site-admin="toggleSiteAdmin" @get-site-collections-for-user="getSiteCollectionsGroupsForUser" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" @copy-dialog-opened="copyDialogOpened" :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>
       </v-flex>
       <v-flex xs6 order-xs3 >
         <SelectAvailable :type="type" :num-selected="itemsSelected.available" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving || copyDialogOpen" :is-loading="isLoading || copyDialogOpen" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
@@ -212,6 +212,35 @@ export default {
     },
     resize: function(){
       this.maximize = !this.maximize;
+    },
+    toggleSiteAdmin: function( user){
+      (function(that){
+        var i;
+        that.metrics.start = new Date();
+        that.isSaving = true;
+        new Promise(function(resolve, reject){
+          that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
+          that.getDigest(that.siteCollection, function(digest){
+            that.digest = digest;
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
+            resolve();
+          }, function(error){
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: that.siteCollection.url,  type: 'error'});
+            resolve();
+          });
+        }).then(function(result){
+          that.updateUser(that.siteCollection, that.digest, user.LoginName, {isSiteAdmin: false}, function(result){
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Updating User', preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'info'});
+            that.isSaving = false;
+            that.metrics.end = new Date();
+            that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'});
+          }, function(error){
+              that.metrics.end = new Date();
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Updating User', hasError: true, message: error.message,  preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'error'});
+            that.isSaving = false;
+          });
+        });
+      })(this);
     },
     checkIfUserExists: function(loginName){
       var currentItem;
