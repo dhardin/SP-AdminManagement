@@ -873,7 +873,7 @@ getGroupsForUserInSiteCollections: function(user, siteCollections){
           item.hasError = false;
           that.progress += 100/that.newItems.length;
           message.status = 'done';
-          resolve({siteCollection: item, children: groups});
+          resolve({siteCollection: item, title: siteCollection.title, children: groups});
         }, function(error){
             var message = messageList[messageIndex];
           item.hasError = true;
@@ -1032,8 +1032,11 @@ getSiteCollectionsGroupsForUser: function(){
         that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
         that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
         that.isLoading = false;
+        if(that.isTesting){
+          result = [{title: 'blah', siteCollection: {title:'blah'}, children: that.$lodash.sampleSize(that.testGroups, Math.floor(Math.random() * 10) + 5)}];
+        }
         var userGroups = that.$lodash.filter(result, function(o){
-          return o.children.length > 0;
+           return o.children.length > 0;
         });
         that.availableUsersSiteCollectionGroups = userGroups;
       });

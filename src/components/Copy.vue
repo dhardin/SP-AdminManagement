@@ -54,8 +54,10 @@
 <script>
 import SearchSelect from './SearchSelect';
 import Tree from "./Tree";
+import TestData from '../mixins/TestData.vue'
 
 export default {
+  mixins: [TestData],
   components: {
     SearchSelect: SearchSelect,
     Tree: Tree
@@ -93,7 +95,7 @@ export default {
     availableUsersSiteCollectionGroups: {
       type: Array,
       default: function() {
-        return [];
+        return []
       }
     }
   },
@@ -131,7 +133,7 @@ export default {
         }
         (function(that){
           matchedChildren = that.$lodash.find(that.treeData.children[i].children, function(o){
-            return that.search.length > 0 && o.label.indexOf(that.search) > -1;
+            return that.search.length > 0 && o.label.toLowerCase().indexOf(that.search) > -1;
           });
         })(this);
         this.treeData.children[i].expandedBySearch = typeof matchedChildren !== 'undefined';

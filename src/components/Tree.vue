@@ -84,7 +84,8 @@ export default {
     },
     getFormattedSearchText: function(model){
       var regex = new RegExp(this.search, 'g');
-      return model.label.replace(regex, '<span class="yellow">' + this.search + '</span>');
+      var title = model.title || model.Title;
+      return title.replace(regex, '<span class="yellow">' + this.search + '</span>');
     }
   }
 };
@@ -126,7 +127,7 @@ export default {
   transition: all .2s ease;
 }
 .dropdown-enter, .dropdown-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  transform: translateY(-100px);
+  transform: translateY(-1000px);
 }
 .dropdown-enter-to{
   height: translateY(0px);
