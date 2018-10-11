@@ -125,11 +125,13 @@ export default {
   },
   computed: {
     treeData: function(){
-      return {
+      var treeData = {
         label: '',
         root: true,
         children: JSON.parse(JSON.stringify(this.availableUsersSiteCollectionGroups))
       }
+      console.log(treeData);
+      return treeData;
     }
   },
   mounted: function(){
@@ -150,7 +152,8 @@ export default {
         }
         (function(that){
           matchedChildren = that.$lodash.find(that.treeData.children[i].children, function(o){
-            return that.search.length > 0 && o.label.toLowerCase().indexOf(that.search) > -1;
+            var title = o.title || o.Title;
+            return that.search.length > 0 && title.toLowerCase().indexOf(that.search) > -1;
           });
         })(this);
         this.treeData.children[i].expandedBySearch = typeof matchedChildren !== 'undefined';
