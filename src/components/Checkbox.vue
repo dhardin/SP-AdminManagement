@@ -45,6 +45,10 @@ export default {
   color: rgba(0,0,0,0.38);
 }
 
+.subheading {
+  display: flex;
+}
+
 .v-btn:disabled svg {
   opacity: 0.37;
 }

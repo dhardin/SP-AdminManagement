@@ -13,12 +13,14 @@
       </v-btn>
       <div class="expand-placeholder" v-else>
       </div>
-      <Checkbox @toggle-checked="toggleChecked" :isChecked="checked"><span v-html="displayText"></span></Checkbox>
+      <Checkbox @toggle-checked="toggleChecked" :isChecked="checked"><slot name="prepend" :node="model"></slot><span v-html="displayText"></span></Checkbox>
     </div>
     <div class="children">
       <transition name="dropdown">
         <ul v-if="model.children && model.children.length && (expand || model.root)" >
-          <node v-for="(child,index) in model.children" :model="child" :search="search" :leaf="index == model.children.length - 1" :first-child="index == 0" :checked="checkChildren"></node>
+          <node v-for="(child,index) in model.children" :model="child" :search="search" :leaf="index == model.children.length - 1" :first-child="index == 0" :checked="checkChildren">
+            <template slot="prepend" slot-scope="item"><slot name="prepend" :child="item"></slot></template>
+          </node>
         </ul>
       </transition>
     </div>
@@ -106,6 +108,9 @@ export default {
   padding: 0 5px;
   margin-left: -10px;
 
+}
+.node-tree .v-btn__content {
+  justify-content: flex-start;
 }
 .node-tree ul {
   padding-left: 37px;

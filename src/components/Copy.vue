@@ -18,9 +18,26 @@
             <v-card>
               <v-card-title primary-title>
                 <h3 class="font-weight-regular mb-0">Available Site Collections &amp; {{type.users ? 'Groups' : 'Users'}}</h3>
+                <v-divider></v-divider>
+                <div :style="{display: 'flex'}">
+                  <svg role="img" class="mr-2">
+                    <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_star_24px" />
+                  </svg>
+                <span class="mx-2">=</span><span>Site Collection Admin</span>
+              </div>
               </v-card-title>
               <v-card-text>
-                <tree :search="search" :model="treeData" v-if="!isLoading"></tree>
+
+
+                <tree :search="search" :model="treeData" v-if="!isLoading">
+                    <template slot="prepend" slot-scope="node">
+                      <span v-if="node.child && node.child.node && node.child.node.siteCollection && node.child.node.siteCollection.IsSiteAdmin">
+                        <svg role="img" class="mr-2">
+                          <use xlink:href="src/assets/svg-sprite-toggle-symbol.svg#ic_star_24px" />
+                        </svg>
+                      </span>
+                    </template>
+                </tree>
                 <div v-else class="v-align"><svg role="img" title="drop down" class="loading">
                   <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_refresh_24px" />
                 </svg> <span class="pl-2">Loading</span></div>
@@ -154,6 +171,9 @@ svg.loading {
   animation: rotation 2s infinite linear;
   -moz-animation: rotation 2s infinite linear;
   -o-animation: rotation 2s infinite linear;
+}
+.v-card__title {
+  display: block;
 }
 .v-align {
   display: flex;
