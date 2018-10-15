@@ -490,6 +490,10 @@
           that.progress += 100/numSiteCollections;
           message.status = 'done';
           that.metrics.numSuccesses++;
+          //add property to indicate whether the selected item is a site admin
+          if(result.hasOwnProperty('IsSiteAdmin')){
+            siteCollection.IsSiteAdmin = result.IsSiteAdmin;
+          }
           resolve(siteCollection);
         }, function(error){
           that.progress += 100/numSiteCollections;

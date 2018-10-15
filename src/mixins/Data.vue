@@ -183,7 +183,7 @@ import axios from 'axios'
         var results = response.d;
         if (callback) {
           console.log('User Checked');
-          console.log(results);
+          console.log(response);
           callback(results);
         }
       }).catch(function(error){
