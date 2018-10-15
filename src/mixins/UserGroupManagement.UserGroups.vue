@@ -286,7 +286,9 @@
           that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
           //remove assigned items from available
           that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
-            return that.$lodash.find(that.assignedItems, o) === undefined;
+            return that.$lodash.find(that.assignedItems, function(assignedItem){
+              return assignedItem.Id === o.Id;
+            }) === undefined;
           })[0];
           that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url,  type: 'info'});
           that.isLoading = false
@@ -300,14 +302,12 @@
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
             that.isLoading = false;
             that.assignedItems = groups;
-            console.log('Assigned items:');
-            console.log(that.assignedItems);
             that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
             that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
-              return that.$lodash.find(that.assignedItems, o) === undefined;
+              return that.$lodash.find(that.assignedItems, function(assignedItem){
+                return assignedItem.Id === o.Id;
+              }) === undefined;
             })[0];
-            console.log('Available items:');
-            console.log(that.availableItems);
           }, function(error){
             var message = '';
             if(error.hasOwnProperty('error') && error.error.hasOwnProperty('message')){
@@ -324,7 +324,9 @@
             that.assignedItems = users;
             that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
             that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
-              return that.$lodash.find(that.assignedItems, o) === undefined;
+              return that.$lodash.find(that.assignedItems, function(assignedItem){
+                return assignedItem.Id === o.Id;
+              }) === undefined;
             })[0];
             if(callback){
               callback();

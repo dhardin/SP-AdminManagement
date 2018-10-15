@@ -297,7 +297,6 @@ export default {
 
     selectItem: function(type, item){
       this.$set(item, 'selected', item.hasOwnProperty('selected') ? !item.selected : true);
-      console.log('Item Selected: ' + item.Title + ' - ' + item.selected);
       this.itemsSelected[type] += (item.selected ? 1 : -1);
     },
     giveAll: function(sourceType){
