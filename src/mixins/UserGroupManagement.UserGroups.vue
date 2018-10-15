@@ -282,7 +282,7 @@
     (function(that){
       if(that.isTesting){
         setTimeout(function(){
-          that.assignedItems =  [];//that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
+          that.assignedItems =  that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
           that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
           //remove assigned items from available
           that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
@@ -300,10 +300,12 @@
             that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
             that.isLoading = false;
             that.assignedItems = groups;
+            console.log('Assigned items:\n' + that.assignedItems);
             that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
             that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
               return that.$lodash.find(that.assignedItems, o) === undefined;
             })[0];
+            console.log('Available items:\n' + that.availableItems);
           }, function(error){
             var message = '';
             if(error.hasOwnProperty('error') && error.error.hasOwnProperty('message')){
