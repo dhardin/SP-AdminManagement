@@ -180,11 +180,9 @@ import axios from 'axios'
         }
       }).then(function(response){
         // handle success
-        var results = response.d;
+        var result = response.data.d;
         if (callback) {
-          console.log('User Checked');
-          console.log(response);
-          callback(results);
+          callback(result);
         }
       }).catch(function(error){
         var responseError;
