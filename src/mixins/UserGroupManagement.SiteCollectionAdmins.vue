@@ -95,7 +95,6 @@
         })(this);
         return promise;
       },
-
     toggleSiteAdmin: function(user){
       (function(that){
         var i;
@@ -124,54 +123,6 @@
           });
         });
       })(this);
-    },
-
-    getGroupsForUserInSiteCollections: function(user, siteCollections){
-      this.metrics.numFailed = 0;
-      this.metrics.numSuccesses = 0;
-      this.progress = 0;
-      var message =  {
-        type: 'table',
-        pagination: {
-          sortBy: 'operation',
-          descending: false
-        },
-        search: '',
-        headers: [{text: 'Operation', value: 'operation'}, {text: 'URL', value: 'url'}, {text: 'Target', value: 'target'}, {text: 'Status', value: 'status'}], rows: []
-      };
-      var messageList = message.rows;
-      this.messages.push(message);
-      var promiseArr;
-      (function(that){
-        promiseArr = siteCollections.map(function(item){
-          var promise;
-          promise = new Promise(function(resolve, reject){
-              //var message = messageList[messageList.length - 1];
-            messageList.push({status: 'pending', url: item.url, target: user.Title, operation:  'Fetching Groups', error: {expanded: false, message: '', title: ''}});
-            var messageIndex = messageList.length - 1;
-            that.getUserGroupsByLoginName(item, user.LoginName, function(groups){
-              var message = messageList[messageIndex];
-              that.metrics.numSuccesses++;
-              item.isNew = false;
-              item.hasError = false;
-              that.progress += 100/that.newItems.length;
-              message.status = 'done';
-              resolve({siteCollection: item, title: item.title, children: groups});
-            }, function(error){
-                var message = messageList[messageIndex];
-              item.hasError = true;
-              that.failedItems.push(item);
-              message.status = 'error';
-              message.error = {expanded: false, message: error.stack, title: error.message};
-              that.progress += 100/that.newItems.length;
-              that.metrics.numFailed++;
-               resolve();
-            });
-        });
-        return promise;
-      });
-    })(this);
-    return Promise.all(promiseArr);
     }
     }
         }
