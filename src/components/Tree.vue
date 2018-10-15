@@ -146,18 +146,18 @@ export default {
 }
 .dot .top {
   height:20px;
-  border-left: 3px dotted black;
-  border-bottom: 3px dotted black;
+  border-left: 1px solid #555;
+  border-bottom: 1px solid #555;
 }
 .dot .bottom.right {
   margin-top: 0px;
   height: 21px;
-  border-right: 3px dotted black;
+  border-right: 1px solid #555;
 }
 .dot .bottom.left {
   margin-top: 3px;
   height: 100%;
-  border-left: 3px dotted black;
+  border-left: 1px solid #555;
 }
 .v-btn.expand-button {
   min-width: auto;

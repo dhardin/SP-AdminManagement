@@ -81,9 +81,6 @@ export default {
             that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
             that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
             that.isLoading = false;
-            console.log('--Site Collections--');
-            console.log(targetSiteCollections);
-            //siteCollections = result;
             resolve();
           });
         }).then(function(result){
@@ -118,11 +115,11 @@ export default {
             if(that.isTesting){
               result = [{title: 'blah', siteCollection: {title:'blah', IsSiteAdmin: true}, children: that.$lodash.sampleSize(that.testGroups, Math.floor(Math.random() * 10) + 5)}];
             }
-            var userGroups = that.$lodash.filter(result, function(o){
+            /*var userGroups = that.$lodash.filter(result, function(o){
               return o.children && o.children.length > 0;
-            });
+            });*/
 
-            that.availableUsersSiteCollectionGroups = userGroups;
+            that.availableUsersSiteCollectionGroups = result;
           });
         });
       })(this);

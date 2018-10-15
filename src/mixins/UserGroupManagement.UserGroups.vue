@@ -599,8 +599,6 @@
     (function(that){
       promiseArr = siteCollections.map(function(siteCollection){
         return that.getItemFromSiteCollectionAsync(user, siteCollection, siteCollections.length, messageList).then(function(result){
-          console.log('Site Collection Fetched');
-          console.log(result);
           return result ? targetSiteCollections.push(siteCollection) : targetSiteCollections;
         });
       });
