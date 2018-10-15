@@ -81,6 +81,8 @@ export default {
             that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
             that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
             that.isLoading = false;
+            console.log('--Site Collections--');
+            console.log(targetSiteCollections);
             //siteCollections = result;
             resolve();
           });
@@ -97,8 +99,7 @@ export default {
             url: '',
             type: 'warning'
           });
-          console.log('--Site Collections--');
-          console.log(targetSiteCollections);
+
           that.getGroupsForUserInSiteCollections(that.selectedItem, targetSiteCollections).then(function(result){
             that.metrics.end = new Date();
             that.messages.push({
