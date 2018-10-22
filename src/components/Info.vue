@@ -24,10 +24,10 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
-      <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
-        <v-btn flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" v-if="type.users">Copy</v-btn>
+      <v-btn :ripple="false" flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
+        <v-btn :ripple="false"  flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" v-if="type.users">Copy</v-btn>
       <v-dialog :persistent="true" id="purge-warning" v-model="dialog"  width="500" v-if="type.users" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
-        <v-btn flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
+        <v-btn :ripple="false" flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
         <v-card :style="{ overflow: 'hidden'}">
                 <v-card-title
                   class="headline grey lighten-2"
@@ -55,6 +55,7 @@
                 <v-card-actions :class="{'slide-leave-active': isPurging, 'slide-leave-to': isPurging}">
                   <v-spacer></v-spacer>
                   <v-btn
+                  :ripple="false"
                     color="primary"
                     flat
                     @click="isPurging = true"
@@ -62,6 +63,7 @@
                    Yes
                   </v-btn>
                   <v-btn
+                  :ripple="false"
                     color="primary"
                     flat
                     @click="dialog = false"
@@ -72,6 +74,7 @@
                 <v-card-actions :class="{'slide-enter-active': isPurging, 'slide-enter': !isPurging}">
                   <v-spacer></v-spacer>
                   <v-btn
+                  :ripple="false"
                     color="primary"
                     flat
                     @click="purgeUser(true)"
@@ -79,6 +82,7 @@
                    All
                   </v-btn>
                   <v-btn
+                  :ripple="false"
                     color="primary"
                     flat
                     @click="purgeUser(false)"
@@ -86,6 +90,7 @@
                    Currently Selected
                      </v-btn>
                   <v-btn
+                  :ripple="false"
                     color="primary"
                     flat
                     @click="isPurging = false; dialog = false"
@@ -95,7 +100,7 @@
                 </v-card-actions>
               </v-card>
       </v-dialog>
-      <v-btn flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :href="csv" @click="downloadCSV" download="download.csv">Export</v-btn>
+      <v-btn :ripple="false" flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :href="csv" @click="downloadCSV" download="download.csv">Export</v-btn>
     </v-card-actions>
   </div>
     <Copy :is-loading="isLoading" @get-site-collections-for-user="getSiteCollectionsForUser" :items="items" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" :type="type" @copy-items="copyItems" @close-copy="closeCopy" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :label="'Select ' + (type.users ? 'User' : 'Group') + ' To Copy To'" v-else></Copy>
@@ -221,6 +226,7 @@ export default {
     },
     closeCopy: function(){
       this.copyDialog = false;
+      this.selectedItem = this.selectedItem;
     },
     purgeUser: function(purgeAll){
       purgeAll = purgeAll !== 'undefined' ? purgeAll : false;

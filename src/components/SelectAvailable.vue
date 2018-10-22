@@ -25,7 +25,28 @@
       </div>
     </div>
     <v-card-text class="grow">
-<DataIterator :enter-right="true" :leave-right="true" :filteredItems="isSearching ? [] : sortedItems" :items="items" :loading="isSearching ? 'primary' : false" :rows-per-page-items="[-1, 10, 20, 50]">
+<DataIterator :enter-right="true" :leave-right="true" :filteredItems="isSearching ? [] : sortedItems" :is-searching="isSearching" :items="items" :loading="isSearching ? 'primary' : false" :rows-per-page-items="[-1, 10, 20, 50]">
+  <template slot="no-data">
+    <span>No Data</span>
+  </template>
+  <template slot="no-results">
+    <div>
+      <v-container fill-height>
+<v-layout row wrap align-center>
+<v-flex>
+  <v-progress-circular
+indeterminate
+color="primary"
+size="24"
+></v-progress-circular>
+</v-flex>
+<v-flex>
+  Searching
+</v-flex>
+</v-layout>
+</v-container>
+</div>
+  </template>
   <v-flex slot="item" slot-scope="props" xs12 class="pa-0">
     <v-btn block :ripple="false" :disabled="disabled"
     :style="{'min-height': '52px'}"
@@ -52,9 +73,9 @@
 </DataIterator>
 </v-card-text>
 <v-card-actions>
-  <v-btn block color="green darken-4" outline :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected ({{numSelected}})</v-btn>
-  <v-btn block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="green darken-3"  @click="giveSelected">Give Selected ({{numSelected}})</v-btn>
-  <v-btn block :disabled="disabled || sortedItems.length == 0" color="green darken-3" :dark="!disabled && items.length > 0"  @click="giveAll">Give All</v-btn>
+  <v-btn :ripple="false" block color="green darken-4" outline :disabled="disabled || !isAnySelected" @click="clearSelected">Clear Selected ({{numSelected}})</v-btn>
+  <v-btn :ripple="false" block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="green darken-3"  @click="giveSelected">Give Selected ({{numSelected}})</v-btn>
+  <v-btn :ripple="false" block :disabled="disabled || sortedItems.length == 0" color="green darken-3" :dark="!disabled && items.length > 0"  @click="giveAll">Give All</v-btn>
 </v-card-actions>
 </v-card>
 </template>

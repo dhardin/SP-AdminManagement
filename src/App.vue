@@ -95,6 +95,7 @@ export default {
       },
       menuItems: [
         { title: 'User/Group Management', icon: 'src/assets/svg-sprite-social-symbol.svg#ic_group_add_24px', path: '/' },
+          { title: 'Site Collection Admins', icon: 'src/assets/svg-sprite-social-symbol.svg#ic_group_24px', path: '/sca' },
         { title: 'About', icon: 'src/assets/svg-sprite-action-symbol.svg#ic_help_24px', path: '/about' }
       ],
       siteCollections: []

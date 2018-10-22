@@ -1,6 +1,6 @@
 <template>
   <div>
-  <transition-group name="list"
+  <transition-group name="list" v-if="!isSearching && currentPageItems.length > 0"
   :class="{
     'enter-right': enterRight && !pageChange && !isIE,
     'enter-left': enterLeft && !pageChange && !isIE,
@@ -14,18 +14,37 @@
          <v-divider dark></v-divider>
     </li>
   </transition-group>
+  <div v-if="!isSearching && currentPageItems.length == 0">
+    No results
+  </div>
+  <div v-if="isSearching">
+    <v-container fill-height>
+<v-layout row wrap align-center>
+<v-flex>
+<v-progress-circular
+indeterminate
+color="primary"
+size="24"
+></v-progress-circular>
+</v-flex>
+<v-flex>
+Searching
+</v-flex>
+</v-layout>
+</v-container>
+  </div>
   <v-container fluid>
     <v-layout >
       <v-flex xs8>
   <div class="text-xs-center">
-    <v-pagination
-    ref="pagination"
+    <v-pagination v-if="currentPageItems.length > 0"
+      ref="pagination"
       v-model="pagination.page"
       :length="numPages"
     ></v-pagination>
     </div>
   </v-flex>
-  <v-flex xs2><span v-if="filteredItems.length > rowsPerPage">{{(pagination.page  - 1 ) * rowsPerPage + 1}}-{{(pagination.page  - 1 ) * rowsPerPage + currentPageItems.length}}</span><span v-else>{{currentPageItems.length}}</span> of {{items.length}}</v-flex>
+  <v-flex xs2><span v-if="filteredItems.length > rowsPerPage">{{pagination.page > 0 ? (pagination.page  - 1 ) * rowsPerPage + 1 : 1}}-{{ pagination.page > 0 ? (pagination.page  - 1 ) * rowsPerPage + currentPageItems.length : currentPageItems.length}}</span><span v-else>{{currentPageItems.length}}</span> of {{items.length}}</v-flex>
   <v-flex xs2><v-select
           :items="rowsPerPageItems"
           v-model="pagination.rowsPerPageNumItems"
@@ -37,7 +56,6 @@
       </v-flex>
     </v-layout>
   </v-container>
-
 </div>
 </template>
 
@@ -50,6 +68,10 @@
     isSearchable: {
       type: Boolean,
       default: true
+    },
+    isSearching: {
+      type: Boolean,
+      default: false
     },
     dark: {
       type: Boolean,
@@ -99,7 +121,7 @@
     currentPageItems: function(){
       //return items between two indecies.
       //start index is current page
-      var startIndex = (this.pagination.page  - 1 ) * this.rowsPerPage;
+      var startIndex = this.pagination.page > 0 ? (this.pagination.page - 1 ) * this.rowsPerPage : 0;
       var endIndex = startIndex + this.rowsPerPage < this.filteredItems.length ? startIndex + this.rowsPerPage : this.filteredItems.length;
       return this.filteredItems.slice(startIndex, endIndex );
     }
@@ -117,10 +139,16 @@
       },
       deep: true
     },
+    isSearching: function(newVal, oldVal){
+      this.pagination.page = 1;
+      if(!newVal){
+        this.replacePaginationIcons();
+      }
+    },
     items: function(newVal, oldVal){
       this.pageChange = false;
       if(this.pagination.page > this.numPages || (this.pagination.page == 0 && this.numPages > 0)){
-        this.pagination.page = this.numPages;
+        this.pagination.page = 0;
       }
     }
   },
@@ -141,12 +169,15 @@
       if(this.pageChange){
         el.style.display = 'none';
       }
+    },
+    replacePaginationIcons: function(){
+      var paginationButtons = this.$refs.pagination.$el.querySelectorAll('.v-pagination__navigation');
+      paginationButtons[0].innerHTML = '<svg role="img" title="Prev" :style="{ opacity: disabled == true || pagination.page == 1 ? .38 : .87}"><use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_left_24px"/></svg>';
+      paginationButtons[1].innerHTML = '<svg role="img" title="Next"  :style="{ opacity: disabled == true || (pagination.page == pages || pages == 0) ? .38 : .87}"><use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_right_24px"/></svg>';
     }
  },
  mounted: function(){
-   var paginationButtons = this.$refs.pagination.$el.querySelectorAll('.v-pagination__navigation');
-   paginationButtons[0].innerHTML = '<svg role="img" title="Prev" :style="{ opacity: disabled == true || pagination.page == 1 ? .38 : .87}"><use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_left_24px"/></svg>';
-   paginationButtons[1].innerHTML = '<svg role="img" title="Next"  :style="{ opacity: disabled == true || (pagination.page == pages || pages == 0) ? .38 : .87}"><use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_right_24px"/></svg>';
+   this.replacePaginationIcons();
  }
 }
 </script>

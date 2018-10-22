@@ -25,7 +25,26 @@
       </div>
     </div>
     <v-card-text class="grow">
-<DataIterator :enter-left="true" :leave-left="true" :filteredItems="isSearching ? [] : sortedItems" :items="items" :loading="isSearching ? 'primary' : false" :rows-per-page-items="[-1, 10, 20, 50]">
+<DataIterator :enter-left="true" :leave-left="true" :filteredItems="isSearching ? [] : sortedItems" :items="items" :is-searching="isSearching" :loading="isSearching ? 'primary' : false" :rows-per-page-items="[-1, 10, 20, 50]">
+  <v-flex slot="no-data">
+    <span v-if="!isSearching">No Data</span>
+    <div v-else>
+      <v-container fill-height>
+<v-layout row wrap align-center>
+<v-flex>
+  <v-progress-circular
+indeterminate
+color="primary"
+size="24"
+></v-progress-circular>
+</v-flex>
+<v-flex>
+  Searching
+</v-flex>
+</v-layout>
+</v-container>
+</div>
+  </v-flex>
   <v-flex slot="item" slot-scope="props" xs12 class="pa-0">
     <v-btn block :ripple="false" :disabled="disabled"
     :style="{'min-height': '52px'}"
@@ -52,9 +71,9 @@
 </DataIterator>
 </v-card-text>
 <v-card-actions>
-  <v-btn block color="red darken-4" :disabled="disabled || items.length == 0" :dark="!disabled && items.length > 0"  @click="giveAll">Remove All</v-btn>
-  <v-btn block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="red darken-4" @click="giveSelected">Remove Selected ({{numSelected}})</v-btn>
-  <v-btn block outline :disabled="disabled || !isAnySelected" color="red darken-4" @click="clearSelected">Clear Selected ({{numSelected}})</v-btn>
+  <v-btn :ripple="false" block color="red darken-4" :disabled="disabled || items.length == 0" :dark="!disabled && items.length > 0"  @click="giveAll">Remove All</v-btn>
+  <v-btn :ripple="false" block :disabled="disabled || !isAnySelected" :dark="!disabled && isAnySelected" color="red darken-4" @click="giveSelected">Remove Selected ({{numSelected}})</v-btn>
+  <v-btn :ripple="false" block outline :disabled="disabled || !isAnySelected" color="red darken-4" @click="clearSelected">Clear Selected ({{numSelected}})</v-btn>
 </v-card-actions>
 </v-card>
 </template>

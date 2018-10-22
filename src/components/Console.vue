@@ -2,7 +2,7 @@
   <v-card class="flexcard" :min-height="maximize ? '800px' : '480px'">
     <v-card-title primary-title>
       <h3 class="grey--text text--darken-2">Console</h3>
-      <v-btn flat class="resize-btn" small right @click="resize"><div v-if="!maximize" class="maximize">
+      <v-btn :ripple="false" flat class="resize-btn" small right @click="resize"><div v-if="!maximize" class="maximize">
         <svg role="img" class="text-xs-right icon-size">
           <use xlink:href="src/assets/svg-sprite-av-symbol.svg#ic_web_asset_24px" />
         </svg></div>
@@ -74,7 +74,7 @@
                         <v-progress-linear :indeterminate="true" v-if="props.item.status == 'pending'"></v-progress-linear>
                           <span v-if="props.item.status != 'pending' && props.item.status !='error'" :class="{'green--text': props.item.status == 'done','text--darken-1': props.item.status == 'done', 'font-weight-black': props.item.status == 'done', 'text-uppercase': props.item.status == 'done'}">{{props.item.status}}</span>
                           <span v-if="props.item.status == 'error'">
-                            <v-btn small flat outline color="error" class="errorBtn" @click="props.item.error.expanded = !props.item.error.expanded">{{props.item.error.expanded ? '-' : '+'}} Error: {{props.item.error.title}}</v-btn>
+                            <v-btn :ripple="false" small flat outline color="error" class="errorBtn" @click="props.item.error.expanded = !props.item.error.expanded">{{props.item.error.expanded ? '-' : '+'}} Error: {{props.item.error.title}}</v-btn>
                             <div v-if="props.item.error.expanded" class="red--text text--accent-1">{{props.item.error.message}}</div>
                           </span>
                         </td>
@@ -95,6 +95,7 @@
             <div
             :style="{position: 'sticky', bottom: '20px'}" v-if="!isBottomScroll">
             <v-btn
+            :ripple="false"
              color="pink"
              dark
              small
@@ -111,6 +112,7 @@
           :style="{position: 'relative'}"
            v-if="isIE && !isBottomScroll">
           <v-btn
+          :ripple="false"
            color="pink"
            dark
            small
@@ -133,7 +135,7 @@
     </v-container>
   </v-card-text>
   <v-card-actions>
-    <v-btn flat color="pink" @click="clear" :disabled="isSaving || messages.length == 0">Clear</v-btn>
+    <v-btn :ripple="false"  flat color="pink" @click="clear" :disabled="isSaving || messages.length == 0">Clear</v-btn>
   </v-card-actions>
 </v-card>
 

@@ -51,6 +51,7 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn
+      :ripple="false"
       color="danger"
       flat
       @click="closeCopy"
@@ -58,6 +59,7 @@
       Cancel
     </v-btn>
     <v-btn
+    :ripple="false" 
     color="pink"
     flat
     @click="copyItems"
@@ -126,7 +128,8 @@ export default {
   computed: {
     treeData: function(){
       var treeData = {
-        label: '',
+        title: '',
+        showRoot: false,
         root: true,
         children: JSON.parse(JSON.stringify(this.availableUsersSiteCollectionGroups))
       }

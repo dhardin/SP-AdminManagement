@@ -1,23 +1,24 @@
 <template>
   <li class="node-tree" :class="{'first-child': firstChild}">
-    <div v-if="!model.root">
-      <div class="dot">
+    <div>
+      <div class="dot"  v-if="!model.root">
         <div class="top"></div>
         <div class="bottom left" v-if="!leaf && typeof leaf !== 'undefined'"></div>
         <div class="bottom right" v-if="expand"></div>
       </div>
-      <v-btn class="expand-button" @click="expanded = model.children && model.children.length > 0 && !expand" flat v-if="model.children && model.children.length">
+      <v-btn class="expand-button" @click="onExpandClick" flat v-if="model.children && model.children.length && ((model.root && model.showRoot) || !model.root)">
         <svg role="img" title="drop down" class="expand-icon" :class="{opened: expand, closed: !expand}">
           <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" />
         </svg>
       </v-btn>
       <div class="expand-placeholder" v-else>
       </div>
-      <Checkbox @toggle-checked="toggleChecked" :isChecked="checked"><slot name="prepend" :node="model"></slot><span v-html="displayText"></span></Checkbox>
+      <Checkbox @toggle-checked="toggleChecked" :isChecked="checked" v-if="!model.root"><slot name="prepend" :node="model"></slot><span v-html="displayText"></span></Checkbox>
+      <span v-html="displayText" v-else></span>
     </div>
     <div class="children">
       <transition name="dropdown">
-        <ul v-if="model.children && model.children.length && (expand || model.root)" >
+        <ul v-if="model.children && model.children.length && (expand || (model.root && model.showRoot && expand) || (model.root && !model.showRoot))" >
           <node v-for="(child,index) in model.children" :model="child" :search="search" :leaf="index == model.children.length - 1" :first-child="index == 0" :checked="checkChildren">
             <template slot="prepend" slot-scope="item"><slot name="prepend" :child="item"></slot></template>
           </node>
@@ -56,9 +57,6 @@ export default {
   computed: {
     displayText: function(){
       return this.getFormattedSearchText(this.model);
-    },
-    expand: function(){
-      return this.model.expandedBySearch || this.expanded;
     }
   },
   watch: {
@@ -68,8 +66,8 @@ export default {
   },
   data: function(){
     return {
-      expanded: false,
-      checkChildren: false
+      checkChildren: false,
+      expand: this.model.expanded
     }
   },
   methods: {
@@ -84,9 +82,13 @@ export default {
         return;
       }
     },
+    onExpandClick: function(e){
+      this.model.expanded = !this.model.expanded;
+      this.expand = this.expandedBySearch || this.model.expanded;
+    },
     getFormattedSearchText: function(model){
       var regex = new RegExp(this.search, 'g');
-      var title = model.title || model.Title;
+      var title = model.hasOwnProperty('title') ? model.title : model.Title;
       return title.replace(regex, '<span class="yellow">' + this.search + '</span>');
     }
   }
@@ -94,11 +96,9 @@ export default {
 </script>
 <style>
 .node-tree {
-
-}
-.node-tree {
   position: relative;
   overflow-y: hidden;
+  list-style: none;
 }
 .children {
   overflow-y: hidden;

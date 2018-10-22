@@ -4,7 +4,7 @@
       <template slot="item" slot-scope="{ item, tile, parent }">
         <slot name="foo" :item="item"></slot>
       </template>
-      <v-flex slot="no-data">
+      <template slot="no-data">
         <span v-if="!isSearching">No Data</span>
         <div v-else>
           <v-container fill-height>
@@ -22,7 +22,7 @@
   </v-layout>
 </v-container>
 </div>
-      </v-flex>
+</template>
     </v-autocomplete>
     <v-autocomplete ref="autocomplete" :loading="isSearching" no-filter v-model="selectedItem" :item-text="itemText" @keydown="isSearching=true" @keyup="searchStuff" item-subtitle="itemSubtitle"  @click="active=true" @select="active=true" @focus="active=true;filteredItems=items;" @blur="active=false" clear-icon="" append-icon="" :items="sortedItems" :label="label"  :item-value="itemValue" return-object clearable attach :color="color" :light="light" :dark="dark" :disabled="disabled" :value="value" @change="onChange" v-else>
       <v-flex slot="no-data">
@@ -153,7 +153,7 @@ export default {
           that.searchTimeout = setTimeout(function(){
             that.customFilter(that.items, newVal);
             that.isSearching = false;
-          },  350);
+          },  500);
         } else {
           that.customFilter(that.items, newVal);
           that.isSearching = false;

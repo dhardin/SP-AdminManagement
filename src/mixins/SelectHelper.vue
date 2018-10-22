@@ -54,17 +54,13 @@
   methods: {
     searchText: function(){
       (function(that){
-       if(that.items.length > 100){
-           that.isSearching = true;
+        that.isSearching = true;
+        that.filteredItems = [];
         clearTimeout(that.searchTimeout);
         that.searchTimeout = setTimeout(function(){
           that.customFilter(that.items, that.search);
           that.isSearching = false;
-        },350);
-    } else {
-        that.customFilter(that.items, that.search);
-        that.isSearching = false;
-      }
+        },500);
       })(this);
     },
     customFilter: function(items, search){
