@@ -124,8 +124,9 @@ import axios from 'axios'
       });
     },
     getSiteCollectionAdmins: function(siteCollection, callback, errorCallback){
-      return axios.get({
+      return axios({
       url: siteCollection.url + "/_vti_bin/ListData.svc/UserInformationList?$filter=IsSiteAdmin eq true",
+        method: 'get',
       headers: {
         "accept": "application/json;odata=verbose"
       }
