@@ -2,15 +2,33 @@
   <div class="flexcard" :style="{width: '100%', 'min-height': '480px'}">
     <v-card class="grow flexcard">
       <div class="grow flexcard">
+        <v-card-title primary-title>
+          <h3 class="grey--text text--darken-2">Site Collections</h3>
+        </v-card-title>
         <v-card-text class="grow">
+
           <v-container fill-height fluid>
             <v-layout fill-height>
               <v-flex xs12 align-end flexbox>
-                <v-form>
+                <div v-if="isLoading">
+                  <v-flex>
+                  <v-progress-circular
+                  indeterminate
+                  color="primary"
+                  size="24"
+                  ></v-progress-circular>
+                  </v-flex>
+                  <v-flex>
+                  Loading
+                  </v-flex>
+                </div>
+                <v-form v-else>
                   <div v-for="(siteCollection, index) in siteCollectionAdmins">
                     <h3>{{siteCollection.title}}</h3>
                     <div class="combobox-container">
                       <v-combobox
+                      :ref="'combobox-' + index"
+                      append-icon=""
                       v-model="siteCollectionAdmins[index].admins"
                       :items="siteCollectionAdmins[index].users"
                       :search-input.sync="siteCollectionAdmins[index].search"
@@ -23,6 +41,8 @@
                       multiple
                       small-chips
                       solo
+                      @focus="siteCollection.focus = true"
+                      @blur="siteCollection.focus = false"
                       >
                       <template
                       v-if="siteCollection === Object(siteCollection)"
@@ -38,7 +58,7 @@
                       <span class="pr-2">
                         {{ item.Title }}
                       </span>
-                      <svg role="img" @click="parent.selectItem(item)" class="icon close">
+                      <svg role="img" @click="toggleSiteAdmin(parent, item)" class="icon close">
                         <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" />
                       </svg>
                     </v-chip>
@@ -151,6 +171,11 @@ watch : {
   }
 },
 methods: {
+  blurCombo: function(siteCollection, index){
+    siteCollection.focus = false;
+    var combobox = this.$refs['combobox-' + index][0];
+    combobox.$el.ownerDocument.body.click();
+  },
   filter: function(item, queryText, itemText) {
       if (item.header) return false;
       var hasValue = function hasValue(val) {return val != null ? val : '';};
@@ -181,8 +206,21 @@ methods: {
       return '';
     }
   },
-  toggleIsSiteAdmin: function(){
-    this.$emit('toggle-site-admin', this.selectedItem);
+  toggleIsSiteAdmin: function(parent, item, index){
+    parent.selectItem(item);
+    this.$emit('toggle-site-admin', item);
+  },
+  focusCombo: function(siteCollection, index){
+    //find input in comboboxthis
+    var combobox = this.$refs['combobox-' + index][0];
+    var $combobox = combobox.$el;
+    var input = $combobox.getElementsByTagName('input')[0];
+    combobox.hasFocused = !siteCollection.focus;
+    if(combobox.hasFocused){
+      input.click()
+    } else {
+      input.blur();
+    }
   },
   getSiteCollectionsForUser: function(){
     this.$emit('get-site-collections-for-user', this.selectedItem);
@@ -236,6 +274,7 @@ svg.dropdown {
   position: absolute;
   right: 0;
   top: 5px;
+  cursor: pointer;
 }
 svg.dropdown.inactive {
   transition: all .2s;

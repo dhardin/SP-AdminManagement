@@ -123,6 +123,29 @@ import axios from 'axios'
         }
       });
     },
+    getSiteCollectionAdmins: function(siteCollection, callback, errorCallback){
+      return axios.get({
+      url: siteCollection.url + "/_vti_bin/ListData.svc/UserInformationList?$filter=IsSiteAdmin eq true",
+      headers: {
+        "accept": "application/json;odata=verbose"
+      }
+    }).then(function (response) {
+        var admins = response.data.d.results;
+        if (callback) {
+          callback(admins);
+        }
+    }).catch(function(error) {
+      var responseError;
+      try{
+       responseError = {message: error.response.data.error.message.value};
+     } catch(err){
+       responseError = error;
+     }
+      if (errorCallback) {
+        errorCallback(responseError);
+      }
+    });
+    },
     getGroups: function(siteCollection, userId, callback, errorCallback){
         return axios.get(siteCollection.url + "/_api/web/" + (userId !== false ? 'getuserbyid('+userId+')/Groups' : 'sitegroups?$select=*'),
         {

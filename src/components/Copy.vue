@@ -27,8 +27,6 @@
               </div>
               </v-card-title>
               <v-card-text>
-
-
                 <tree :search="search" :model="treeData" v-if="!isLoading">
                     <template slot="prepend" slot-scope="node">
                       <span v-if="node.child && node.child.node && node.child.node.siteCollection && node.child.node.siteCollection.IsSiteAdmin">
@@ -59,7 +57,7 @@
       Cancel
     </v-btn>
     <v-btn
-    :ripple="false" 
+    :ripple="false"
     color="pink"
     flat
     @click="copyItems"

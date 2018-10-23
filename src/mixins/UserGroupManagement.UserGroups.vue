@@ -134,28 +134,7 @@
         return new Promise(function(resolve, reject){
           var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
           var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
-          /*    that.messages.push({
-          date: new Date(),
-          verb: that.actions.Starting,
-          text:operationText + ' ' + item.Title,
-          preposition: preposition,
-          target: that.selectedItem.Title,
-          url: that.siteCollection.url,
-          type: 'info'
-        });*/
-
         that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? item.Id : that.selectedItem.Id, that.type.groups ? item : that.selectedItem,function(results){
-          /*  var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-          var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
-          that.messages.push({
-          date: new Date(),
-          verb: that.actions.Success,
-          text:operationText + ' ' + item.Title,
-          preposition: preposition,
-          target: that.selectedItem.Title,
-          url: that.siteCollection.url,
-          type: 'success'
-        });*/
         message.status = 'done';
         that.metrics.numSuccesses++;
         item.isNew = false;

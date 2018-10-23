@@ -25,7 +25,7 @@
                       [{{item.hasOwnProperty('date') ? item.date.getHours().toString().padStart(2, '0') : ''}}:{{item.date.getMinutes().toString().padStart(2, '0') }}:{{item.date.getSeconds().toString().padStart(2, '0')}}]
                       <span :class="getClassObject(item)">{{item.verb}}</span>
                       <span class="purple--text text--accent-1">{{item.text}}</span>
-                      <span>{{item.preposition ? item.preposition : "from"}}</span>
+                      <span>{{item.preposition ? item.preposition : item.preposition != false ? "from" : ''}}</span>
                       <span class="cyan--text text--accent-1">{{item.target}}</span>
                       <span v-if="item.url"> @ </span>
                       <span v-if="item.url" class="pink--text text--lighten-4">{{item.url}}</span>

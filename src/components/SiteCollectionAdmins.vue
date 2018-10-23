@@ -5,7 +5,7 @@
         <Console :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <admin-tree :is-testing="isTesting" :site-collections="siteCollections" :site-collection-admins="siteCollectionAdmins"></admin-tree>
+        <admin-tree :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collection-admins="siteCollectionsArr"></admin-tree>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -65,11 +65,11 @@ export default {
     return {
       toggle_select: 0,
       isSaving: false,
-      isLoading: false,
+      isLoading: true,
       progress: 0,
       isItemSelected: false,
       maximize: false,
-      siteCollectionAdmins: [],
+      siteCollectionsArr: [],
       itemsSelected: {
         available: 0,
         assigned: 0
@@ -145,27 +145,130 @@ export default {
     },
     getIsLoadingSiteCollections: function(val){
       var siteCollectionSelected;
+      var adminsArr;
+      var usersArr;
       if(this.isLoadingSiteCollections.status){
         this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
       } else {
         this.messages.push({date: new Date(), verb: this.actions.Finished, preposition: ' ', hasError: this.isLoadingSiteCollections.hasError, message: this.isLoadingSiteCollections.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
-        if(this.url != ''){
-          //double check that site collection exists
-          (function(that){
-            siteCollectionSelected = that.$lodash.find(that.siteCollections, function(o){
-              return o.url == that.url;
+        //now fetch all users and site collection admins for those site collections
+        (function(that){
+          new Promise(function(resolve, reject){
+            that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Admins', preposition: false, target: '', url: '', type: 'warning'});
+            that.getSiteCollectionsAdmins().then(function(data){
+              adminsArr = data;
+                  that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
+              resolve();
             });
-          })(this);
-          if(siteCollectionSelected){
-            this.$emit('select-site-collection', siteCollectionSelected);
-          }
-        }
+          }).then(function(result){
+            return new Promise(function(resolve, reject){
+              that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Users',  preposition: false, target: '', url: '', type: 'warning'});
+              that.getSiteCollectionsUsers().then(function(data){
+                usersArr = data;
+                  that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Users', preposition: false,  target: '', url: '', type: 'info'});
+                  resolve();
+              });
+            });
+          }).then(function(result){
+            var i;
+            for(i = 0; i < that.siteCollections.length; i++){
+              that.siteCollectionsArr.push({
+                title: that.siteCollections[i].title,
+                search: '',
+                focus: false,
+                admins:  adminsArr[i],
+                users: usersArr[i]
+              });
+            }
+            console.log(that.siteCollectionsArr);
+            that.isLoading = false;
+          });
+        })(this);
       }
+      return this.isLoadingSiteCollections.status;
     },
-
-clearConsole: function(){
-  this.messages = [];
-}
+    getSiteCollectionsAdmins: function(){
+      this.metrics.numFailed = 0;
+      this.metrics.numSuccesses = 0;
+      var message =  {
+        type: 'table',
+        pagination: {
+          sortBy: 'operation',
+          descending: false
+        },
+        search: '',
+        headers: [{text: 'Operation', value: 'operation'}, {text: 'URL', value: 'url'}, {text: 'Target', value: 'target'}, {text: 'Status', value: 'status'}], rows: []
+      };
+      var messageList = message.rows;
+      this.messages.push(message);
+      var promiseArr;
+      (function(that){
+        promiseArr = that.siteCollections.map(function(siteCollection){
+          return that.getSiteCollectionDataAsync(siteCollection, messageList);
+        });
+      })(this);
+      return Promise.all(promiseArr);
+    },
+    getSiteCollectionDataAsync: function(siteCollection, messageList){
+      messageList.push({status: 'pending', url: siteCollection.url, target: siteCollection.Title, operation: 'Get Admins', error: {expanded: false, message: '', title: ''}});
+      var message = messageList[messageList.length - 1];
+      var promise;
+      (function(that){
+        promise = new Promise(function(resolve, reject){
+          that.getSiteCollectionAdmins(siteCollection, function(results){
+            resolve(results);
+          }, function(error){
+              message.status = 'error';
+            message.error = {expanded: false, message: error.stack, title: error.message};
+            resolve();
+          })
+        })
+      })(this);
+      return promise;
+    },
+    getSiteCollectionsUsers: function(){
+      this.metrics.numFailed = 0;
+      this.metrics.numSuccesses = 0;
+      var message =  {
+        type: 'table',
+        pagination: {
+          sortBy: 'operation',
+          descending: false
+        },
+        search: '',
+        headers: [{text: 'Operation', value: 'operation'}, {text: 'URL', value: 'url'}, {text: 'Target', value: 'target'}, {text: 'Status', value: 'status'}], rows: []
+      };
+      var messageList = message.rows;
+      this.messages.push(message);
+      var promiseArr;
+      (function(that){
+        promiseArr = that.siteCollections.map(function(siteCollection){
+          return that.getSiteCollectionUsersAsync(siteCollection, messageList);
+        });
+      })(this);
+      return Promise.all(promiseArr);
+    },
+    getSiteCollectionUsersAsync: function(siteCollection, messageList){
+      messageList.push({status: 'pending', url: siteCollection.url, target: siteCollection.Title, operation: 'Get Users', error: {expanded: false, message: '', title: ''}});
+      var message = messageList[messageList.length - 1];
+      var promise;
+      (function(that){
+        promise = new Promise(function(resolve, reject){
+          that.getUsers(siteCollection, false, function(users){
+            message.status = 'done';
+            resolve(users);
+          }, function(error){
+            message.status = 'error';
+            message.error = {expanded: false, message: error.stack, title: error.message};
+            resolve();
+          })
+        })
+      })(this);
+      return promise;
+    },
+    clearConsole: function(){
+      this.messages = [];
+    }
 },
 created: function(){
   this.getIsLoadingSiteCollections();
