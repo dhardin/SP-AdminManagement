@@ -22,10 +22,10 @@
                   </v-flex>
                 </div>
                 <v-form v-else>
-                  <div v-for="(siteCollection, index) in siteCollectionAdmins">
+                  <div v-for="(siteCollection, index) in siteCollectionsAdmins">
                     <h3>{{siteCollection.title}}</h3>
                     <div class="combobox-container">
-                      <combobox :url="siteCollection.url" :isAsyncSearch="true" item-title="Name" item-value="LoginName" :filter="customUserFilter"></combobox>
+                      <combobox :url="siteCollection.url" :initialSelectedItems="siteCollection.admins" :items="isTesting ? siteCollection.users : []" :isAsyncSearch="true" :is-testing="isTesting" :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'LoginName'" :filter="customUserFilter"></combobox>
                     </di>
             <svg role="img" @click="" title="drop down" class="dropdown" :class="{active: siteCollection.focus == true, inactive: siteCollection.focus == false}">
               <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" />
@@ -46,13 +46,11 @@
 </template>
 
 <script>
-import TestData from '../mixins/TestData.vue';
 import Combobox from './Combobox.vue';
 export default {
   components: {
     Combobox: Combobox
   },
-  mixins: [TestData],
   props:{
     /*  items: {
     type: Array
@@ -86,13 +84,18 @@ export default {
     default: function(){
       return [];
     }
+  },
+  siteCollectionsAdmins: {
+    type: Array,
+    default: function(){
+      return [];
+    }
   }
 },
 data: function(){
   return {
     searchMap: {},
     colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
-  siteCollectionAdmins: [],
   model: ''
   }
 },
@@ -100,25 +103,6 @@ mounted: function(){
 
 },
 watch : {
-  siteCollections: {
-    handler: function(newVal, oldVal) {
-      var i;
-      var testAdminData;
-      if(this.isTesting){
-        for(i = 0; i < this.siteCollections.length; i++){
-          testAdminData = this.getTestAdminData();
-          this.siteCollectionAdmins.push({
-            title: this.siteCollections[i].title,
-            search: '',
-            focus: false,
-            admins:  testAdminData.admins,
-            users: testAdminData.users
-          });
-        }
-      }
-    },
-    deep: true
-  }
 },
 methods: {
   customUserFilter: function(url, search, callback, errorCallback){
@@ -154,14 +138,6 @@ methods: {
 
       return matches;
     },
-  getTestAdminData: function(){
-    var admins = this.$lodash.sampleSize(this.testUsers, Math.floor(Math.random() * 10) + 1);
-    var users = this.testUsers;
-    return {
-      admins: admins,
-      users: users
-    }
-  },
   getValue: function(text){
 
   },

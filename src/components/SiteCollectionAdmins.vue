@@ -5,7 +5,7 @@
         <Console :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <admin-tree :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collection-admins="siteCollectionsArr"></admin-tree>
+        <admin-tree :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -143,6 +143,14 @@ export default {
       }
       return false;
     },
+    getTestAdminData: function(){
+      var admins = this.$lodash.sampleSize(this.testUsers, Math.floor(Math.random() * 10) + 1);
+      var users = this.testUsers;
+      return {
+        admins: admins,
+        users: users
+      }
+    },
     getIsLoadingSiteCollections: function(){
       var siteCollectionSelected;
       var adminsArr;
@@ -152,6 +160,23 @@ export default {
       } else {
         this.messages.push({date: new Date(), verb: this.actions.Finished, preposition: ' ', hasError: this.isLoadingSiteCollections.hasError, message: this.isLoadingSiteCollections.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
         //now fetch all users and site collection admins for those site collections
+        if(this.isTesting){
+          var i;
+          var testAdminData;
+          if(this.isTesting){
+            for(i = 0; i < this.siteCollections.length; i++){
+              testAdminData = this.getTestAdminData();
+              this.siteCollectionsArr.push({
+                title: this.siteCollections[i].title,
+                search: '',
+                focus: false,
+                admins:  testAdminData.admins,
+                users: testAdminData.users
+              });
+            }
+                this.isLoading = false;
+          }
+        } else{
         (function(that){
           new Promise(function(resolve, reject){
             that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Admins', preposition: false, target: '', url: '', type: 'warning'});
@@ -186,6 +211,7 @@ export default {
             that.isLoading = false;
           });
         })(this);
+      }
       }
       return this.isLoadingSiteCollections.status;
     },

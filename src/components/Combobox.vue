@@ -78,6 +78,10 @@
         return []
       }
     },
+    isTesting: {
+      type: Boolean,
+      default: false
+    },
     filter: {
       type: Function,
       default: function(){
@@ -176,7 +180,7 @@
     searchItems: function(search, callback){
       var searchResults;
           (function(that){
-      if(!that.isAsyncSearch){
+      if(!that.isAsyncSearch || that.isTesting){
           searchResults = that.$lodash.filter(that.items, function(o){
             return that.getTitle(o).toLowerCase().indexOf(search.toLowerCase()) > -1;
           });
@@ -184,7 +188,7 @@
             callback(searchResults);
           }
         } else {
-          that.filter(url, search, function(results){
+          that.filter(that.url, search, function(results){
             that.searchResults = results;
           }, function(error){
             console.log(error);
@@ -291,7 +295,7 @@ width: 100%;
     position: absolute;
     left: 0;
     right: 0;
-    z-index:1;
+    z-index:9999;
 }
 
 .icon.close{
