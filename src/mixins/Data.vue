@@ -117,7 +117,7 @@ export default {
     var value;
     var val_type;
     var val_type_query_mod;
-    for (i = 0; i < queryArr; i++){
+    for (i = 0; i < queryArr.length; i++){
       try {
         fieldName = queryArr[i].fieldName;
         value = queryArr[i].value;
