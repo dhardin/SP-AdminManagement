@@ -55,7 +55,7 @@ export default {
   watch: {
     isLoadingSiteCollections: {
       handler: function(newVal, oldVal){
-        //this.getIsLoadingSiteCollections(newVal.status);
+        this.getIsLoadingSiteCollections(newVal.status);
       },
       deep: true
     }
@@ -271,7 +271,7 @@ export default {
     }
 },
 created: function(){
-  //this.getIsLoadingSiteCollections();
+  this.getIsLoadingSiteCollections();
 }
 }
 </script>

@@ -171,9 +171,12 @@ Searching
       }
     },
     replacePaginationIcons: function(){
-      var paginationButtons = this.$refs.pagination.$el.querySelectorAll('.v-pagination__navigation');
-      paginationButtons[0].innerHTML = '<svg role="img" title="Prev" :style="{ opacity: disabled == true || pagination.page == 1 ? .38 : .87}"><use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_left_24px"/></svg>';
-      paginationButtons[1].innerHTML = '<svg role="img" title="Next"  :style="{ opacity: disabled == true || (pagination.page == pages || pages == 0) ? .38 : .87}"><use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_right_24px"/></svg>';
+      var paginationButtons;
+      if(this.$refs.pagination){
+        paginationButtons = this.$refs.pagination.$el.querySelectorAll('.v-pagination__navigation');
+        paginationButtons[0].innerHTML = '<svg role="img" title="Prev" :style="{ opacity: disabled == true || pagination.page == 1 ? .38 : .87}"><use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_left_24px"/></svg>';
+        paginationButtons[1].innerHTML = '<svg role="img" title="Next"  :style="{ opacity: disabled == true || (pagination.page == pages || pages == 0) ? .38 : .87}"><use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_chevron_right_24px"/></svg>';
+      }
     }
  },
  mounted: function(){
