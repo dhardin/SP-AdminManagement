@@ -53,8 +53,8 @@
              @click="selectItem(item, index)"
            >
            <v-list-tile-avatar :color="getColor(item)">
-<span class="white--text headline">{{item.Title.charAt(0)}}</span>
-</v-list-tile-avatar>
+             <span class="white--text headline">{{item.Title.charAt(0)}}</span>
+            </v-list-tile-avatar>
            <v-list-tile-content>
             <v-list-tile-title v-text="getTitle(item)"></v-list-tile-title>
           </v-list-tile-content>

@@ -160,7 +160,6 @@ export default {
             console.log(data);
             that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
             resolve();
-            console.log('resolved');
             });
           })/*.then(function(result){
             return new Promise(function(resolve, reject){
@@ -172,18 +171,18 @@ export default {
               });
             });
           })*/.then(function(result){
-          console.log('in then');
             var i;
             for(i = 0; i < that.siteCollections.length; i++){
               that.siteCollectionsArr.push({
                 title: that.siteCollections[i].title,
+                url: that.siteCollections[i].url,
                 search: '',
                 focus: false,
                 admins:  adminsArr[i],
                 users:  []
               });
             }
-            console.log(that.siteCollectionsArr);
+            console.log(JSON.stringify(that.siteCollectionsArr));
             that.isLoading = false;
           });
         })(this);
