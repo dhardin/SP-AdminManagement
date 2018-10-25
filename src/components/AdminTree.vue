@@ -25,7 +25,7 @@
                   <div v-for="(siteCollection, index) in siteCollectionAdmins">
                     <h3>{{siteCollection.title}}</h3>
                     <div class="combobox-container">
-                      <combobox :url="siteCollection.url" :isAsyncSearch="true" :item-title="Name" :item-value="LoginName" :filter="customUserFilter"></combobox>
+                      <combobox :url="siteCollection.url" :isAsyncSearch="true" item-title="Name" item-value="LoginName" :filter="customUserFilter"></combobox>
                     </di>
             <svg role="img" @click="" title="drop down" class="dropdown" :class="{active: siteCollection.focus == true, inactive: siteCollection.focus == false}">
               <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" />

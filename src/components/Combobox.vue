@@ -21,7 +21,6 @@
             </v-chip>
           </slot>
         </span>
-
         <input v-model="search" type="text" ref="input" @focus="isFocused=true" @blur="onBlur"/>
     </div>
     <svg role="img" @click="dropdownClick" title="drop down" class="dropdown" :class="{active: isFocused == true, inactive: isFocused == false}">

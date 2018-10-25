@@ -55,7 +55,7 @@ export default {
   watch: {
     isLoadingSiteCollections: {
       handler: function(newVal, oldVal){
-        this.getIsLoadingSiteCollections(newVal.status);
+        this.getIsLoadingSiteCollections();
       },
       deep: true
     }
@@ -143,7 +143,7 @@ export default {
       }
       return false;
     },
-    getIsLoadingSiteCollections: function(val){
+    getIsLoadingSiteCollections: function(){
       var siteCollectionSelected;
       var adminsArr;
       var usersArr;
@@ -156,9 +156,11 @@ export default {
           new Promise(function(resolve, reject){
             that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Admins', preposition: false, target: '', url: '', type: 'warning'});
             that.getSiteCollectionsAdmins().then(function(data){
-              adminsArr = data;
-                  that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
-              resolve();
+            adminsArr = data;
+            console.log(data);
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
+            resolve();
+            console.log('resolved');
             });
           })/*.then(function(result){
             return new Promise(function(resolve, reject){
@@ -170,6 +172,7 @@ export default {
               });
             });
           })*/.then(function(result){
+          console.log('in then');
             var i;
             for(i = 0; i < that.siteCollections.length; i++){
               that.siteCollectionsArr.push({
@@ -177,7 +180,7 @@ export default {
                 search: '',
                 focus: false,
                 admins:  adminsArr[i],
-                users: usersArr[i]
+                users:  []
               });
             }
             console.log(that.siteCollectionsArr);
