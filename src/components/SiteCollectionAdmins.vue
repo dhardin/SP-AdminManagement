@@ -182,7 +182,6 @@ export default {
             that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Admins', preposition: false, target: '', url: '', type: 'warning'});
             that.getSiteCollectionsAdmins().then(function(data){
             adminsArr = data;
-            console.log(data);
             that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
             resolve();
             });
@@ -207,7 +206,6 @@ export default {
                 users:  []
               });
             }
-            console.log(JSON.stringify(that.siteCollectionsArr));
             that.isLoading = false;
           });
         })(this);

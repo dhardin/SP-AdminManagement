@@ -78,20 +78,41 @@ export default {
     var i;
     //valid string operators
     var str_operators = {
-      startsWith: true,
-      substringof: true,
-      Eq: true,
-      Ne: true
+      startsWith:  function(value, fieldName){
+        return 'startsWith("'+value+'", '+fieldName+')';
+      },
+      substringof: function(value, fieldName){
+        return 'substringof("'+value+'", '+fieldName+')';
+      },
+      Eq: function(value, fieldName){
+        return fieldName + ' Eq ' + '"'+value+'"';
+      },
+      Ne: function(value, fieldName){
+        return fieldName + ' Ne ' + '"'+value+'"';
+      }
     };
     var num_operators = {
-      Lt: true,
-      Le: true,
-      Gt: true,
-      Ge: true,
-      Eq: true,
-      Ne: true
+      Lt: function(value, fieldName){
+        return fieldName + ' Lt ' + value;
+      },
+      Le: function(value, fieldName){
+        return fieldName + ' Le ' + value;
+      },
+      Gt: function(value, fieldName){
+        return fieldName + ' Gt ' + value;
+      },
+      Ge: function(value, fieldName){
+        return fieldName + ' Ge ' + value;
+      },
+      Eq: function(value, fieldName){
+        return fieldName + ' Eq ' + value;
+      },
+      Ne: function(value, fieldName){
+        return fieldName + ' Ne ' + value;
+      }
     }
     var operator;
+    var operatorQuery = '';
     var fieldName;
     var value;
     var val_type;
@@ -102,21 +123,22 @@ export default {
         value = queryArr[i].value;
         operator = queryArr[i].operator;
         val_type = typeof value;
-
+        console.log(queryArr[i]);
         switch(val_type){
           case 'number':
           case 'string':
           if(!str_operators.hasOwnProperty(operator) && !num_operators.hasOwnProperty(operator)){
             throw new Error('Unsupported query '+val_type+' operator "'+operator+'"');
           } else{
-            val_type_query_mod = val_type == 'string' ? '"' : '';
+            operatorQuery = val_type == 'string' ? str_operators(value, fieldName) : num_operators(value, fieldName);
           }
           break;
           default:
           throw new Error('Unsuppored query of type ' + val_type);
           break;
         }
-        query += (query.length > 0 ? ' or ' : '') + operator + '(\'' + val_type_query_mod + value + val_type_query_mod + '\',' + fieldName + ')';
+        query += (query.length > 0 ? ' or ' : '') + operatorQuery;
+        console.log(query);
       } catch(error){
         errorCallback(error);
         return;
