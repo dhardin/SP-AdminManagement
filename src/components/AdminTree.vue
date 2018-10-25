@@ -6,7 +6,6 @@
           <h3 class="grey--text text--darken-2">Site Collections</h3>
         </v-card-title>
         <v-card-text class="grow">
-
           <v-container fill-height fluid>
             <v-layout fill-height>
               <v-flex xs12 align-end flexbox>
@@ -26,59 +25,8 @@
                   <div v-for="(siteCollection, index) in siteCollectionAdmins">
                     <h3>{{siteCollection.title}}</h3>
                     <div class="combobox-container">
-                      <v-combobox
-                      :ref="'combobox-' + index"
-                      append-icon=""
-                      v-model="siteCollectionAdmins[index].admins"
-                      :items="siteCollectionAdmins[index].users"
-                      :search-input.sync="siteCollectionAdmins[index].search"
-                      hide-selected
-                           :hide-no-data="!siteCollectionAdmins[index].search"
-                      item-text="Title"
-                      item-value="Title"
-                      :filter="filter"
-                      label="Search for an option"
-                      multiple
-                      small-chips
-                      solo
-                      @focus="siteCollection.focus = true"
-                      @blur="siteCollection.focus = false"
-                      >
-                      <template
-                      v-if="siteCollection === Object(siteCollection)"
-                      slot="selection"
-                      slot-scope="{ index, item, parent, selected }"
-                      >
-                      <v-chip
-                      :color="`${getColor(item.Title)} lighten-3`"
-                      :selected="selected"
-                      label
-                      small
-                      >
-                      <span class="pr-2">
-                        {{ item.Title }}
-                      </span>
-                      <svg role="img" @click="toggleSiteAdmin(parent, item)" class="icon close">
-                        <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" />
-                      </svg>
-                    </v-chip>
-                  </template>
-                  <template
-                  slot="item"
-                  slot-scope="{ tile, item, parent }"
-                  >
-                  <v-list-tile-content>
-                    <v-chip
-                    :color="`${getColor(item.Title)} lighten-3`"
-                    dark
-                    label
-                    small
-                    >
-                    {{ item.Title}}
-                  </v-chip>
-                </v-list-tile-content>
-              </template>
-            </v-combobox>
+                      <combobox :url="siteCollection.url" :isAsyncSearch="true" :item-title="Name" :item-value="LoginName" :filter="customUserFilter"></combobox>
+                    </di>
             <svg role="img" @click="" title="drop down" class="dropdown" :class="{active: siteCollection.focus == true, inactive: siteCollection.focus == false}">
               <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" />
             </svg>
@@ -99,8 +47,10 @@
 
 <script>
 import TestData from '../mixins/TestData.vue';
+import Combobox from './Combobox.vue';
 export default {
   components: {
+    Combobox: Combobox
   },
   mixins: [TestData],
   props:{
@@ -171,6 +121,22 @@ watch : {
   }
 },
 methods: {
+  customUserFilter: function(url, search, callback, errorCallback){
+    (function(that){
+      var queryArr = [{fieldName: 'Name', value: search, operator: 'substringof'}];
+      that.getUsersQuery(url, queryArr, function(results){
+        console.log(results);
+        if(callback){
+          callback(results);
+        }
+      }, function(error){
+        console.log(error);
+        if(errorCalback){
+          errorCalback(error);
+        }
+      });
+    })(this);
+  },
   blurCombo: function(siteCollection, index){
     siteCollection.focus = false;
     var combobox = this.$refs['combobox-' + index][0];

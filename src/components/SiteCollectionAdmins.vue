@@ -55,7 +55,7 @@ export default {
   watch: {
     isLoadingSiteCollections: {
       handler: function(newVal, oldVal){
-        this.getIsLoadingSiteCollections(newVal.status);
+        //this.getIsLoadingSiteCollections(newVal.status);
       },
       deep: true
     }
@@ -160,7 +160,7 @@ export default {
                   that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
               resolve();
             });
-          }).then(function(result){
+          })/*.then(function(result){
             return new Promise(function(resolve, reject){
               that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Users',  preposition: false, target: '', url: '', type: 'warning'});
               that.getSiteCollectionsUsers().then(function(data){
@@ -169,7 +169,7 @@ export default {
                   resolve();
               });
             });
-          }).then(function(result){
+          })*/.then(function(result){
             var i;
             for(i = 0; i < that.siteCollections.length; i++){
               that.siteCollectionsArr.push({
@@ -271,7 +271,7 @@ export default {
     }
 },
 created: function(){
-  this.getIsLoadingSiteCollections();
+  //this.getIsLoadingSiteCollections();
 }
 }
 </script>
