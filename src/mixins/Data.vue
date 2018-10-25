@@ -123,7 +123,7 @@ export default {
       }
     }
     return axios({
-      url: siteCollectionUrl + "/_vti_bin/ListData.svc/UserInformationList" + (query.length > 0 ? "?$filter=" + query : ""),
+      url: siteCollectionUrl + "/_vti_bin/ListData.svc/UserInformationList?$select=Name,Accoun,IsSiteAdmint" + (query.length > 0 ? "&$filter=" + query : ""),
       method: 'get',
       headers: {
         "accept": "application/json;odata=verbose"
@@ -197,7 +197,7 @@ export default {
   },
   getSiteCollectionAdmins: function(siteCollection, callback, errorCallback){
     return axios({
-      url: siteCollection.url + "/_vti_bin/ListData.svc/UserInformationList?$filter=IsSiteAdmin eq true",
+      url: siteCollection.url + "/_vti_bin/ListData.svc/UserInformationList?$select=Name,Account,IsSiteAdmin&$filter=IsSiteAdmin eq true",
       method: 'get',
       headers: {
         "accept": "application/json;odata=verbose"

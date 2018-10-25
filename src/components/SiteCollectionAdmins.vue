@@ -216,13 +216,14 @@ export default {
       (function(that){
         promise = new Promise(function(resolve, reject){
           that.getSiteCollectionAdmins(siteCollection, function(results){
+            message.status="done"
             resolve(results);
           }, function(error){
               message.status = 'error';
-            message.error = {expanded: false, message: error.stack, title: error.message};
-            resolve();
-          })
-        })
+              message.error = {expanded: false, message: error.stack, title: error.message};
+              resolve();
+          });
+        });
       })(this);
       return promise;
     },

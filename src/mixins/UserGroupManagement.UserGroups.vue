@@ -324,8 +324,8 @@
     var message = messageList[messageList.length - 1];
     (function(that){
       promise = new Promise(function(resolve, reject){
-        message.status = 'done';
         that.removeUserFromSiteCollection(siteCollection, '', user, function(result){
+          message.status = 'done';
           that.progress += 100/numSiteCollections;
           that.metrics.numSuccesses++;
           resolve();
