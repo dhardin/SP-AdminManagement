@@ -11,7 +11,7 @@
               >
               <span class="pr-2 pl-2">
                 <v-avatar :color="getColor(item)">
-     <span class="white--text headline">{{item.Title.charAt(0)}}</span>
+     <span class="white--text headline">{{getTitle(item).charAt(0)}}</span>
      </v-avatar>
                 {{ getTitle(item) }}
               </span>
@@ -53,7 +53,7 @@
              @click="selectItem(item, index)"
            >
            <v-list-tile-avatar :color="getColor(item)">
-             <span class="white--text headline">{{item.Title.charAt(0)}}</span>
+             <span class="white--text headline">{{getTitle(item).charAt(0)}}</span>
             </v-list-tile-avatar>
            <v-list-tile-content>
             <v-list-tile-title v-text="getTitle(item)"></v-list-tile-title>
