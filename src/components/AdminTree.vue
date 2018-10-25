@@ -47,10 +47,12 @@
 
 <script>
 import Combobox from './Combobox.vue';
+import Data from '../mixins/Data.vue';
 export default {
   components: {
     Combobox: Combobox
   },
+    mixins: [Data],
   props:{
     /*  items: {
     type: Array
