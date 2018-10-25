@@ -123,7 +123,7 @@ export default {
       }
     }
     return axios({
-      url: siteCollectionUrl + "/_vti_bin/ListData.svc/UserInformationList?$select=Name,Accoun,IsSiteAdmint" + (query.length > 0 ? "&$filter=" + query : ""),
+      url: siteCollectionUrl + "/_vti_bin/ListData.svc/UserInformationList?$select=Name,Account,IsSiteAdmin" + (query.length > 0 ? "&$filter=" + query : ""),
       method: 'get',
       headers: {
         "accept": "application/json;odata=verbose"
