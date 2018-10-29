@@ -89,7 +89,7 @@
               </template>
               <span class="blinking-cursor" v-if="!isLoading && !isSaving && messages.length > 0 && isSiteCollectionSelected && isItemSelected">|</span>
             </v-list>
-            <span class="message" v-if="!isSiteCollectionSelected && !isLoading && !isSaving"> To start, please select a site collection. <span class="blinking-cursor">|</span></span>
+            <span class="message" v-if="!isSiteCollectionSelected && !isLoading && !isSaving"> {{defaultMessage}} <span class="blinking-cursor">|</span></span>
             <span class="message" v-if="!isItemSelected && isSiteCollectionSelected && !isLoading && !isSaving"> Please select a {{type.user ? 'group' : 'user'}}. <span class="blinking-cursor">|</span></span>
             <transition name="fade" v-if="!isIE">
             <div
@@ -168,6 +168,10 @@ export default {
     saveProgress: {
       type: Number,
       default: 0
+    },
+    defaultMessage: {
+      type: String,
+      default: ''
     },
     messages: {
       type: Array,

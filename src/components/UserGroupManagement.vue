@@ -2,7 +2,7 @@
   <v-container fluid grid-list-md>
     <v-layout row wrap class="full-height">
       <v-flex :xs6="!maximize" :xs12="maximize" :order-xs2="!maximize" :order-xs1="maximize">
-        <Console :maximize="maximize" :is-item-selected="isItemSelected" :type="type" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
+        <Console default-message="To start, please select a site collection." :maximize="maximize" :is-item-selected="isItemSelected" :type="type" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
         <Info @toggle-site-admin="toggleSiteAdmin(user, siteCollection)" @get-site-collections-for-user="getSiteCollectionsGroupsForUser" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" @copy-dialog-opened="copyDialogOpened" :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>

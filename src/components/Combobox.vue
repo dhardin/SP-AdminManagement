@@ -241,8 +241,6 @@
       this.searchResults.push(item);
       this.selectedItems.splice(index, 1);
       this.$emit('remove-item', item);
-      this.isSelecting = false;
-      this.isFocused = false;
     },
     dropdownClick: function(){
       this.$refs.input.focus();
