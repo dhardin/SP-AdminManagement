@@ -232,6 +232,9 @@
 <style>
 svg.dropdown {
   cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 svg.dropdown.inactive {
   transition: all .2s;

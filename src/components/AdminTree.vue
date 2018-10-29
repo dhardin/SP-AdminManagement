@@ -23,14 +23,16 @@
                 </div>
                 <v-form v-else>
                   <div v-for="(siteCollection, index) in siteCollectionsAdmins">
+                      <v-flex>
+                    <v-card>
+                <v-card-title>
                     <h3>{{siteCollection.title}}</h3>
-                    <div class="combobox-container">
-                      <combobox :url="siteCollection.url" :initialSelectedItems="siteCollection.admins" :items="isTesting ? siteCollection.users : []" :isAsyncSearch="true" :is-testing="isTesting" :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'LoginName'" :filter="customUserFilter"></combobox>
-                    </di>
-            <svg role="img" @click="" title="drop down" class="dropdown" :class="{active: siteCollection.focus == true, inactive: siteCollection.focus == false}">
-              <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" />
-            </svg>
-          </div>
+                  </v-card-title>
+                        <v-card-actions>
+                      <combobox :url="siteCollection.url" :initialSelectedItems="siteCollection.admins" :items="isTesting ? siteCollection.users : []" :isAsyncSearch="true" :is-testing="isTesting" :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'LoginName'" :filter="customUserFilter"></combobox>        
+        </v-card-actions>
+        </v-card>
+      </v-flex>
         </div>
       </v-form>
     </v-flex>
