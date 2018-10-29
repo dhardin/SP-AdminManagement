@@ -50,20 +50,12 @@
 <script>
 import Combobox from './Combobox.vue';
 import Data from '../mixins/Data.vue';
-import SiteCollectionAdmins from '../mixins/UserGroupManagement.SiteCollectionAdmins.vue';
 export default {
   components: {
     Combobox: Combobox
   },
-    mixins: [Data, SiteCollectionAdmins],
+    mixins: [Data],
   props:{
-    /*  items: {
-    type: Array
-  },*/
-  isSaving: {
-    type: Boolean,
-    default: false
-  },
   isLoading: {
     type: Boolean,
     default: false
@@ -101,8 +93,15 @@ data: function(){
   return {
     searchMap: {},
     colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
+    isSaving: false,
     digets: '',
-    model: ''
+    model: '',
+    metrics: {
+      numSuccesses: 0,
+      numFailed: 0,
+      start: null,
+      end: null
+    }
   }
 },
 mounted: function(){
@@ -160,9 +159,35 @@ methods: {
       return '';
     }
   },
-  toggleIsSiteAdmin: function(parent, item, index){
-    parent.selectItem(item);
-    this.$emit('toggle-site-admin', item);
+  toggleIsSiteAdmin: function(item, siteCollection){
+    (function(that){
+      var i;
+      that.metrics.start = new Date();
+      that.isSaving = true;
+      var text = (item.IsSiteAdmin ? 'Removing from' : 'Adding to') + ' Site Collection Admins';
+      new Promise(function(resolve, reject){
+        that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: siteCollection.url,  type: 'warning'});
+        that.getDigest(siteCollection, function(digest){
+          that.digest = digest;
+          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: siteCollection.url,  type: 'info'});
+          resolve();
+        }, function(error){
+          that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: siteCollection.url,  type: 'error'});
+          resolve();
+        });
+      }).then(function(result){
+        that.messages.push({date: new Date(), verb: that.actions.Starting, text: text,  preposition: 'for', target: item.LoginName,   url: siteCollection.url,  type: 'warning'});
+        that.updateUser(that.siteCollection, that.digest, item.LoginName, {IsSiteAdmin: !item.IsSiteAdmin}, function(result){
+          that.messages.push({date: new Date(), verb: that.actions.Finished, text: text, preposition: 'for', target: item.LoginName, url: siteCollection.url, type: 'info'});
+          that.isSaving = false;
+          that.metrics.end = new Date();
+        }, function(error){
+            that.metrics.end = new Date();
+          that.messages.push({date: new Date(), verb: that.actions.Failed, text: text, hasError: true, message: error.message,  preposition: 'for', target: item.LoginName, url: siteCollection.url, type: 'error'});
+          that.isSaving = false;
+        });
+      });
+    })(this);
   },
   focusCombo: function(siteCollection, index){
     //find input in comboboxthis
