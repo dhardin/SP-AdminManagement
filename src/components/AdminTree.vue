@@ -29,7 +29,7 @@
                     <h3>{{siteCollection.title}}</h3>
                   </v-card-title>
                         <v-card-actions>
-                      <combobox :url="siteCollection.url" :initialSelectedItems="siteCollection.admins" :items="isTesting ? siteCollection.users : []" :isAsyncSearch="true" :is-testing="isTesting" :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'LoginName'" :filter="customUserFilter"></combobox>        
+                      <combobox @select-item="selectItem(item, siteCollection)" @remove-item="removeItem(item, siteCollection)" :url="siteCollection.url" :initialSelectedItems="siteCollection.admins" :items="isTesting ? siteCollection.users : []" :isAsyncSearch="true" :is-testing="isTesting" :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'LoginName'" :filter="customUserFilter"></combobox>
         </v-card-actions>
         </v-card>
       </v-flex>
@@ -50,11 +50,12 @@
 <script>
 import Combobox from './Combobox.vue';
 import Data from '../mixins/Data.vue';
+import SiteCollectionAdmins from '../mixins/UserGroupManagement.SiteCollectionAdmins.vue';
 export default {
   components: {
     Combobox: Combobox
   },
-    mixins: [Data],
+    mixins: [Data, SiteCollectionAdmins],
   props:{
     /*  items: {
     type: Array
@@ -100,7 +101,8 @@ data: function(){
   return {
     searchMap: {},
     colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
-  model: ''
+    digets: '',
+    model: ''
   }
 },
 mounted: function(){
@@ -109,6 +111,12 @@ mounted: function(){
 watch : {
 },
 methods: {
+  selectItem: function(item, siteCollection){
+    this.toggleSiteAdmin(item, siteCollection);
+  },
+  removeItem: function(item, siteCollection){
+    this.toggleSiteAdmin(item, siteCollection);
+  },
   customUserFilter: function(url, search, callback, errorCallback){
     (function(that){
       var queryArr = [{fieldName: 'Name', value: search, operator: 'substringof'}];
