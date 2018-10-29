@@ -159,7 +159,7 @@ methods: {
       return '';
     }
   },
-  toggleIsSiteAdmin: function(item, siteCollection){
+  toggleSiteAdmin: function(item, siteCollection){
     (function(that){
       var i;
       that.metrics.start = new Date();

@@ -107,7 +107,7 @@
     colors: {
       type: Array,
       default: function(){
-        return ['blue-grey', 'green', 'purple', 'indigo', 'brown', 'cyan',  'pink', 'teal', 'orange']
+        return [ 'green', 'purple', 'indigo', 'cyan',  'pink', 'teal', 'orange']
       }
     }
   },
@@ -200,6 +200,7 @@
     },
     selectItem: function(item){
       var index;
+      this.search = '';
       this.selectedItems.push(item);
       index = (function(that){ return that.$lodash.findIndex(that.searchResults, function(o){
           return that.getTitle(o) == that.getTitle(item);
