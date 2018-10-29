@@ -123,14 +123,13 @@ export default {
         value = queryArr[i].value;
         operator = queryArr[i].operator;
         val_type = typeof value;
-        console.log(queryArr[i]);
         switch(val_type){
           case 'number':
           case 'string':
           if(!str_operators.hasOwnProperty(operator) && !num_operators.hasOwnProperty(operator)){
             throw new Error('Unsupported query '+val_type+' operator "'+operator+'"');
           } else{
-            operatorQuery = val_type == 'string' ? str_operators(value, fieldName) : num_operators(value, fieldName);
+            operatorQuery = val_type == 'string' ? str_operators[operator](value, fieldName) : num_operators[operator](value, fieldName);
           }
           break;
           default:
@@ -138,7 +137,6 @@ export default {
           break;
         }
         query += (query.length > 0 ? ' or ' : '') + operatorQuery;
-        console.log(query);
       } catch(error){
         errorCallback(error);
         return;
