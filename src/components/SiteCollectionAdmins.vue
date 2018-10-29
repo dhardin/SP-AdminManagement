@@ -64,7 +64,6 @@ export default {
   data: function() {
     return {
       toggle_select: 0,
-      isSaving: false,
       isLoading: true,
       progress: 0,
       isItemSelected: false,

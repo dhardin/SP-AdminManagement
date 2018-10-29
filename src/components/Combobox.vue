@@ -107,7 +107,7 @@
     colors: {
       type: Array,
       default: function(){
-        return ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange']
+        return ['blue-grey', 'green', 'purple', 'indigo', 'brown', 'cyan',  'pink', 'teal', 'orange']
       }
     }
   },

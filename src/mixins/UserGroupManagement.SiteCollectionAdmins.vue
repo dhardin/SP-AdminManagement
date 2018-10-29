@@ -95,30 +95,30 @@
         })(this);
         return promise;
       },
-    toggleSiteAdmin: function(user){
+    toggleSiteAdmin: function(user, siteCollection){
       (function(that){
         var i;
         that.metrics.start = new Date();
         that.isSaving = true;
         new Promise(function(resolve, reject){
-          that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: that.siteCollection.url,  type: 'warning'});
-          that.getDigest(that.siteCollection, function(digest){
+          that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: siteCollection.url,  type: 'warning'});
+          that.getDigest(siteCollection, function(digest){
             that.digest = digest;
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: that.siteCollection.url,  type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: siteCollection.url,  type: 'info'});
             resolve();
           }, function(error){
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: that.siteCollection.url,  type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: siteCollection.url,  type: 'error'});
             resolve();
           });
         }).then(function(result){
-          that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Updating',  preposition: 'for', target: user.LoginName,   url: that.siteCollection.url,  type: 'warning'});
+          that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Updating',  preposition: 'for', target: user.LoginName,   url: siteCollection.url,  type: 'warning'});
           that.updateUser(that.siteCollection, that.digest, user.LoginName, {IsSiteAdmin: !user.IsSiteAdmin}, function(result){
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Updating', preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Updating', preposition: 'for', target: user.LoginName, url: siteCollection.url, type: 'info'});
             that.isSaving = false;
             that.metrics.end = new Date();
           }, function(error){
               that.metrics.end = new Date();
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Updating', hasError: true, message: error.message,  preposition: 'for', target: user.LoginName, url: that.siteCollection.url, type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Updating', hasError: true, message: error.message,  preposition: 'for', target: user.LoginName, url: siteCollection.url, type: 'error'});
             that.isSaving = false;
           });
         });
