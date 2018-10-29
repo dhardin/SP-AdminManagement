@@ -8,6 +8,7 @@
               :color="`${getColor(item)} lighten-3`"
               label
               class="py-1"
+              @click="itemClick"
               >
               <span class="pr-2 pl-2">
                 <v-avatar :color="getColor(item)">
@@ -15,19 +16,22 @@
      </v-avatar>
                 {{ getTitle(item) }}
               </span>
+              <svg role="img" v-if="item.hasError" @click="retrySelect(item)" class="icon error">
+                <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_report_problem_24px" />
+              </svg>
               <svg role="img" @click="closeClick(item, index)" class="icon close">
                 <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" />
               </svg>
             </v-chip>
           </slot>
         </span>
-        <input v-model="search" type="text" ref="input" @focus="isFocused=true" @blur="onBlur"/>
+        <input :disabled="disabled" v-model="search" type="text" ref="input" @focus="isFocused=true" @blur="onBlur"/>
     </div>
     <svg role="img" @click="dropdownClick" title="drop down" class="dropdown" :class="{active: isFocused == true, inactive: isFocused == false}">
       <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" />
     </svg>
   </div>
-  <div class="combobox-search" v-show="isFocused">
+  <div class="combobox-search" v-show="isFocused && !disabled">
     <v-list subheader>
           <v-subheader inset>
                 <span v-if="!isSearching && search.length < 3 && isAsyncSearch">
@@ -71,6 +75,10 @@
       default: function(){
         return []
       }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     initialSelectedItems: {
       type: Array,
@@ -162,6 +170,10 @@
     }
   },
   methods: {
+    itemClick: function(){
+      this.isSelecting = false;
+      this.isFocused = false;
+    },
     comboboxClick: function(){
       if(!this.isFocused){
         this.$refs.input.focus();
@@ -198,6 +210,9 @@
         }
       })(this);
     },
+    retrySelect: function(item){
+      this.$emit('select-item', item);
+    },
     selectItem: function(item){
       var index;
       this.search = '';
@@ -226,6 +241,8 @@
       this.searchResults.push(item);
       this.selectedItems.splice(index, 1);
       this.$emit('remove-item', item);
+      this.isSelecting = false;
+      this.isFocused = false;
     },
     dropdownClick: function(){
       this.$refs.input.focus();
@@ -306,7 +323,7 @@ width: 100%;
     z-index:9999;
 }
 
-.icon.close{
+.icon{
   height: 20px;
   width: 20px;
   cursor: pointer;
@@ -315,5 +332,11 @@ width: 100%;
 .icon.close:hover{
   fill: rgba(0,0,0, .6);
 }
-
+.icon.error {
+background-color: transparent !important;
+fill: rgba(255, 0, 0, 0.6);
+}
+.icon.error:hover {
+fill: rgba(255, 0, 0, 0.8);
+}
 </style>

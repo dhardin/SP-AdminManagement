@@ -5,7 +5,7 @@
         <Console :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <admin-tree :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
+        <admin-tree @toggle-site-admin="toggleSiteAdmin" :is-saving="isSaving" :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -65,6 +65,7 @@ export default {
     return {
       toggle_select: 0,
       isLoading: true,
+      isSaving: false,
       progress: 0,
       isItemSelected: false,
       maximize: false,
@@ -106,6 +107,39 @@ export default {
 
   },
   methods: {
+    toggleSiteAdmin: function(item, siteCollection){
+      (function(that){
+        var i;
+        that.metrics.start = new Date();
+        that.isSaving = true;
+        var text = (item.IsSiteAdmin ? 'Removing from' : 'Adding to') + ' Site Collection Admins';
+        new Promise(function(resolve, reject){
+          that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: siteCollection.url,  type: 'warning'});
+          that.getDigest(siteCollection, function(digest){
+            that.digest = digest;
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: siteCollection.url,  type: 'info'});
+            resolve();
+          }, function(error){
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: siteCollection.url,  type: 'error'});
+            resolve();
+          });
+        }).then(function(result){
+          that.messages.push({date: new Date(), verb: that.actions.Starting, text: text,  preposition: 'for', target: item.LoginName,   url: siteCollection.url,  type: 'warning'});
+          that.updateUser(siteCollection, that.digest, item.LoginName, {IsSiteAdmin: !item.IsSiteAdmin}, function(result){
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: text, preposition: 'for', target: item.LoginName, url: siteCollection.url, type: 'info'});
+            that.isSaving = false;
+            that.metrics.end = new Date();
+            that.$set(item, 'hasError', false);
+
+          }, function(error){
+              that.metrics.end = new Date();
+              that.$set(item, 'hasError', true);
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: text, hasError: true, message: error.message,  preposition: 'for', target: item.LoginName, url: siteCollection.url, type: 'error'});
+            that.isSaving = false;
+          });
+        });
+      })(this);
+    },
     resize: function(){
       this.maximize = !this.maximize;
     },
@@ -145,6 +179,10 @@ export default {
     getTestAdminData: function(){
       var admins = this.$lodash.sampleSize(this.testUsers, Math.floor(Math.random() * 10) + 1);
       var users = this.testUsers;
+      var i;
+      for(i = 0; i < admins.length; i++){
+        admins[i].IsSiteAdmin = true;
+      }
       return {
         admins: admins,
         users: users

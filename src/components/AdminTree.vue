@@ -29,7 +29,7 @@
                     <h3>{{siteCollection.title}}</h3>
                   </v-card-title>
                         <v-card-actions>
-                      <combobox @select-item="selectItem(item, siteCollection)" @remove-item="removeItem(item, siteCollection)" :url="siteCollection.url" :initialSelectedItems="siteCollection.admins" :items="isTesting ? siteCollection.users : []" :isAsyncSearch="true" :is-testing="isTesting" :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'LoginName'" :filter="customUserFilter"></combobox>
+                      <combobox :disabled="isSaving" @select-item="selectItem($event, siteCollection)" @remove-item="removeItem($event, siteCollection)" :url="siteCollection.url" :initialSelectedItems="siteCollection.admins" :items="isTesting ? siteCollection.users : []" :isAsyncSearch="true" :is-testing="isTesting" :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'LoginName'" :filter="customUserFilter"></combobox>
         </v-card-actions>
         </v-card>
       </v-flex>
@@ -56,6 +56,10 @@ export default {
   },
     mixins: [Data],
   props:{
+    isSaving: {
+      type: Boolean,
+      default: false
+    },
   isLoading: {
     type: Boolean,
     default: false
@@ -92,16 +96,8 @@ export default {
 data: function(){
   return {
     searchMap: {},
-    colors: ['green', 'purple', 'indigo', 'cyan', 'teal', 'orange'],
-    isSaving: false,
     digets: '',
-    model: '',
-    metrics: {
-      numSuccesses: 0,
-      numFailed: 0,
-      start: null,
-      end: null
-    }
+    model: ''
   }
 },
 mounted: function(){
@@ -114,7 +110,10 @@ methods: {
     this.toggleSiteAdmin(item, siteCollection);
   },
   removeItem: function(item, siteCollection){
-    this.toggleSiteAdmin(item, siteCollection);
+    if(item.IsSiteAdmin){
+      this.toggleSiteAdmin(item, siteCollection);
+      item.hasError = false;
+    }
   },
   customUserFilter: function(url, search, callback, errorCallback){
     (function(that){
@@ -160,34 +159,7 @@ methods: {
     }
   },
   toggleSiteAdmin: function(item, siteCollection){
-    (function(that){
-      var i;
-      that.metrics.start = new Date();
-      that.isSaving = true;
-      var text = (item.IsSiteAdmin ? 'Removing from' : 'Adding to') + ' Site Collection Admins';
-      new Promise(function(resolve, reject){
-        that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: '',  url: siteCollection.url,  type: 'warning'});
-        that.getDigest(siteCollection, function(digest){
-          that.digest = digest;
-          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching Digest', target: '', url: siteCollection.url,  type: 'info'});
-          resolve();
-        }, function(error){
-          that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching Digest', target: '',  hasError: true, message: error.message, url: siteCollection.url,  type: 'error'});
-          resolve();
-        });
-      }).then(function(result){
-        that.messages.push({date: new Date(), verb: that.actions.Starting, text: text,  preposition: 'for', target: item.LoginName,   url: siteCollection.url,  type: 'warning'});
-        that.updateUser(that.siteCollection, that.digest, item.LoginName, {IsSiteAdmin: !item.IsSiteAdmin}, function(result){
-          that.messages.push({date: new Date(), verb: that.actions.Finished, text: text, preposition: 'for', target: item.LoginName, url: siteCollection.url, type: 'info'});
-          that.isSaving = false;
-          that.metrics.end = new Date();
-        }, function(error){
-            that.metrics.end = new Date();
-          that.messages.push({date: new Date(), verb: that.actions.Failed, text: text, hasError: true, message: error.message,  preposition: 'for', target: item.LoginName, url: siteCollection.url, type: 'error'});
-          that.isSaving = false;
-        });
-      });
-    })(this);
+    this.$emit('toggle-site-admin', item, siteCollection);
   },
   focusCombo: function(siteCollection, index){
     //find input in comboboxthis
