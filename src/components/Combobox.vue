@@ -229,7 +229,7 @@
     getColor: function(item){
       var text = item[this.itemTitle]
       if(text && text.length > 0){
-        return this.colors[text.charCodeAt(0)% (this.colors.length - 1)];
+        return this.colors[text.charCodeAt(0)%this.colors.length];
       } else {
         return '';
       }
