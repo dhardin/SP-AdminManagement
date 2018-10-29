@@ -185,11 +185,13 @@
             return that.getTitle(o).toLowerCase().indexOf(search.toLowerCase()) > -1;
           });
           if(callback){
+            that.isSearching = false;
             callback(searchResults);
           }
         } else {
           that.filter(that.url, search, function(results){
             that.searchResults = results;
+            that.isSearching = false;
           }, function(error){
             console.log(error);
           })
@@ -206,6 +208,7 @@
       this.searchResults.splice(index, 1);
       this.isSelecting = false;
       this.isFocused = false;
+      this.$emit('select-item', item);
     },
     getColor: function(item){
       var text = item[this.itemTitle]
@@ -221,7 +224,7 @@
     closeClick: function(item, index){
       this.searchResults.push(item);
       this.selectedItems.splice(index, 1);
-
+      this.$emit('remove-item', item);
     },
     dropdownClick: function(){
       this.$refs.input.focus();
