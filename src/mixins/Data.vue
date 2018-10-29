@@ -79,16 +79,16 @@ export default {
     //valid string operators
     var str_operators = {
       startsWith:  function(value, fieldName){
-        return 'startsWith("'+value+'", '+fieldName+')';
+        return 'startsWith(\''+value+'\', '+fieldName+')';
       },
       substringof: function(value, fieldName){
-        return 'substringof("'+value+'", '+fieldName+')';
+        return 'substringof(\''+value+'\', '+fieldName+')';
       },
       Eq: function(value, fieldName){
-        return fieldName + ' Eq ' + '"'+value+'"';
+        return fieldName + ' Eq ' + '\''+value+'\'';
       },
       Ne: function(value, fieldName){
-        return fieldName + ' Ne ' + '"'+value+'"';
+        return fieldName + ' Ne ' + '\''+value+'\'';
       }
     };
     var num_operators = {
