@@ -183,9 +183,6 @@
   background-color: white;
   opacity: 0.25;
 }
-.v-progress-circular {
-  float: right;
-}
 .v-btn, .v-btn::before, .v-btn::after {
   -webkit-transition: none !important;
    -moz-transition: none !important;

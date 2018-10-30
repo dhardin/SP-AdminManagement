@@ -37,14 +37,14 @@
                 <span v-if="!isSearching && search.length < 3 && isAsyncSearch">
                   Please type {{3 - search.length}} more characters.
                 </span>
-          <span v-if="isSearching">
+          <v-flex v-if="isSearching">
               <v-progress-circular
               indeterminate
               color="primary"
               size="24"
               ></v-progress-circular>
-              Searching
-            </span>
+              <span>Searching</span>
+            </v-flex>
             <span v-if="(!isSearching && search.length >= 3 && isAsyncSearch) || (!isAsyncSearch)">
               Search returned with {{searchResults.length}} results.
             </span>
@@ -324,7 +324,7 @@ width: 100%;
     position: absolute;
     left: 0;
     right: 0;
-    z-index:9999;
+    z-index:2;
 }
 
 .icon{

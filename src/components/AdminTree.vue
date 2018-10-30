@@ -24,6 +24,7 @@
                 </div>
                 <v-form v-else>
                   <div v-for="(siteCollection, index) in filteredItems">
+                    <keep-alive>
                     <v-flex>
                       <v-card>
                         <v-card-title>
@@ -36,8 +37,9 @@
                           :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'Account'"
                           :filter="customUserFilter"></combobox>
                         </v-card-actions>
-                      </v-card>
+                      </v-card>                    
                     </v-flex>
+                  </keep-alive>
                   </div>
                 </v-form>
               </v-flex>
