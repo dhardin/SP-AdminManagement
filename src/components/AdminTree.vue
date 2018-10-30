@@ -37,7 +37,7 @@
                           :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'Account'"
                           :filter="customUserFilter"></combobox>
                         </v-card-actions>
-                      </v-card>                    
+                      </v-card>
                     </v-flex>
                   </keep-alive>
                   </div>
@@ -140,12 +140,10 @@ export default {
       (function(that){
         var queryArr = [{fieldName: 'Name', value: search, operator: 'substringof'}];
         that.getUsersQuery(url, queryArr, function(results){
-          console.log(results);
           if(callback){
             callback(results);
           }
         }, function(error){
-          console.log(error);
           if(errorCalback){
             errorCalback(error);
           }

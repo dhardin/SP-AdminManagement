@@ -19,7 +19,7 @@
               <svg role="img" v-if="item.hasError" @click="retrySelect(item)" class="icon error">
                 <use xlink:href="src/assets/svg-sprite-action-symbol.svg#ic_report_problem_24px" />
               </svg>
-              <svg role="img" @click="closeClick(item, index)" class="icon close">
+              <svg role="img" @click="closeClick(item)" class="icon close">
                 <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" />
               </svg>
             </v-chip>
@@ -202,13 +202,11 @@
             return that.getTitle(o).toLowerCase().indexOf(search.toLowerCase()) > -1;
           });
           if(callback){
-            that.isSearching = false;
             callback(searchResults);
           }
         } else {
           that.filter(that.url, search, function(results){
-            that.searchResults = results;
-            that.isSearching = false;
+            callback(results);
           }, function(error){
             console.log(error);
           })
@@ -242,7 +240,19 @@
     getTitle: function(item){
       return item[this.itemTitle];
     },
-    closeClick: function(item, index){
+    getValue: function(item){
+      return item[this.itemValue];
+    },
+    closeClick: function(item){
+      //find index of removed item
+      var index;
+      var currentItem;
+      for(index = 0; index < this.selectedItems.length; index++){
+        currentItem = this.selectedItems[index];
+        if(this.getValue(currentItem) == this.getValue(item)){
+          break;
+        }
+      }
       this.selectedItems.splice(index, 1);
       this.$emit('remove-item', item);
     },
