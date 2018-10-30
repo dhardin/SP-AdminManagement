@@ -282,8 +282,7 @@ svg.dropdown.active {
 .combobox {
   box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
   cursor: text;
-  padding: 0 12px;
-
+  padding: 15px 12px;
   border-radius: 2px;
 background: #fff;
   transition: background 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
@@ -312,6 +311,9 @@ width: 100%;
   align-self: center;
   border-style: none;
   position: relative;
+}
+.combobox-selection input:focus {
+  border: 1px solid #1976d2;
 }
 
 .combobox-search {
