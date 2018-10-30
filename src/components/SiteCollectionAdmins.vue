@@ -124,9 +124,9 @@ export default {
             resolve();
           });
         }).then(function(result){
-          that.messages.push({date: new Date(), verb: that.actions.Starting, text: text,  preposition: 'for', target: item.Account,   url: siteCollection.url,  type: 'warning'});
+          that.messages.push({date: new Date(), verb: that.actions.Starting, text: text,  preposition: 'for', target: item.Account ? item.Account : item.Name,   url: siteCollection.url,  type: 'warning'});
           that.updateUser(siteCollection, that.digest, item.Account, {IsSiteAdmin: !item.IsSiteAdmin}, function(result){
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: text, preposition: 'for', target: item.Account, url: siteCollection.url, type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: text, preposition: 'for', target: item.Account ? item.Account : item.Name, url: siteCollection.url, type: 'info'});
             that.isSaving = false;
             that.metrics.end = new Date();
             that.$set(item, 'hasError', false);
@@ -205,6 +205,7 @@ export default {
               testAdminData = this.getTestAdminData();
               this.siteCollectionsArr.push({
                 title: this.siteCollections[i].title,
+                url: this.siteCollections[i].url,
                 search: '',
                 focus: false,
                 admins:  testAdminData.admins,

@@ -2,7 +2,7 @@
   <div class="combobox-container" >
   <div class="combobox" @click="comboboxClick">
     <div class="combobox-selection">
-        <span v-for="(item, index) in selectedItems">
+        <span v-for="(item, index) in sortedSelected">
           <slot name="item">
             <v-chip
               :color="`${getColor(item)} lighten-3`"
@@ -115,7 +115,7 @@
     colors: {
       type: Array,
       default: function(){
-        return [ 'green', 'purple', 'indigo', 'cyan',  'pink', 'teal', 'orange']
+        return [ 'red', 'blue', 'brown', 'green', 'purple', 'indigo', 'cyan',  'pink', 'teal', 'orange', 'blue-grey']
       }
     }
   },
@@ -126,6 +126,11 @@
     sortedResults: function(){
       return (function(that){
         return that.$lodash.sortBy(that.searchResults, [function(o){return that.getTitle(o)}]);
+      })(this);
+    },
+    sortedSelected: function(){
+      return (function(that){
+        return that.$lodash.sortBy(that.selectedItems, [function(o){return that.getTitle(o)}]);
       })(this);
     }
   },
@@ -238,7 +243,6 @@
       return item[this.itemTitle];
     },
     closeClick: function(item, index){
-      this.searchResults.push(item);
       this.selectedItems.splice(index, 1);
       this.$emit('remove-item', item);
     },
