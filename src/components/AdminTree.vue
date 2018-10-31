@@ -23,6 +23,7 @@
                   </v-flex>
                 </div>
                 <v-form v-else>
+                  <span v-if="filteredItems.length != siteCollectionsAdmins.length">Showing {{filteredItems.length}} out of {{siteCollectionsAdmins.length}} items.</span>
                   <div v-for="(siteCollection, index) in filteredItems">
                     <keep-alive>
                     <v-flex>

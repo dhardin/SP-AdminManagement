@@ -235,6 +235,9 @@ export default {
           })*/.then(function(result){
             var i;
             for(i = 0; i < that.siteCollections.length; i++){
+              if(typeof adminsArr[i] === 'undefined'){
+                continue;
+              }
               that.siteCollectionsArr.push({
                 title: that.siteCollections[i].title,
                 url: that.siteCollections[i].url,
