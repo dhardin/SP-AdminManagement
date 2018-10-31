@@ -10,7 +10,7 @@
           <v-container fill-height fluid>
             <v-layout fill-height>
               <v-flex xs12 align-end flexbox>
-                <div v-if="isLoading">
+                <div v-if="isLoading || isSearching">
                   <v-flex>
                     <v-progress-circular
                     indeterminate
@@ -19,7 +19,7 @@
                     ></v-progress-circular>
                   </v-flex>
                   <v-flex>
-                    Loading
+                    {{isLoading ? 'Loading' : 'Searching'}}
                   </v-flex>
                 </div>
                 <v-form v-else>
@@ -104,32 +104,43 @@ export default {
     return {
       searchMap: {},
       digets: '',
+      searchTimeout: null,
       search: '',
-      model: ''
+      model: '',
+      isSearching: false,
+      filteredItems: this.siteCollectionsAdmins
     }
   },
   mounted: function(){
 
   },
   computed: {
-    filteredItems: function(){
-      if(this.search.length == 0){
-        return this.siteCollectionsAdmins;
-      }
-      var items = (function(that){
-        return that.$lodash.filter(that.siteCollectionsAdmins, function(o){
-          var isTitleMatched = o.title.toLowerCase().indexOf(that.search) > -1;
-          var matchingAdmins = that.$lodash.find(o.admins, function(o){
-            return o.Name.toLowerCase().indexOf(that.search) > -1;
-          });
-            var isAdminMatched = typeof matchingAdmins !== 'undefined';
-          return isTitleMatched || isAdminMatched;
-        });
-      })(this);
-      return items;
-    }
   },
   watch : {
+    search: {
+      handler: function(newVal, oldVal){
+        this.isSearching = true;
+        if(this.search.length == 0){
+          clearTimeout(this.searchTimeout);
+          this.filteredItems = this.siteCollectionsAdmins;
+          this.isSearching = false;
+        }
+        (function(that){
+          clearTimeout(that.searchTimeout);
+          that.searchTimeout = setTimeout(function(){
+            that.filteredItems = that.$lodash.filter(that.siteCollectionsAdmins, function(o){
+              var isTitleMatched = o.title.toLowerCase().indexOf(that.search) > -1;
+              var matchingAdmins = that.$lodash.find(o.admins, function(o){
+                return o.Name.toLowerCase().indexOf(that.search) > -1;
+              });
+              var isAdminMatched = typeof matchingAdmins !== 'undefined';
+              return isTitleMatched || isAdminMatched;
+            });
+            that.isSearching = false;
+          },500);
+        })(this);
+      }
+    }
   },
   methods: {
     selectItem: function(item, siteCollection){
