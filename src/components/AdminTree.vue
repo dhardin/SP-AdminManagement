@@ -34,7 +34,7 @@
                           <combobox :key="siteCollection.url" :disabled="isSaving" @select-item="selectItem($event, siteCollection)"
                           @remove-item="removeItem($event, siteCollection)" :url="siteCollection.url" :initialSelectedItems="siteCollection.admins"
                           :items="isTesting ? siteCollection.users : []" :isAsyncSearch="true" :is-testing="isTesting"
-                          :item-title="isTesting ? 'Title' : 'Name'" :item-value="isTesting ? 'Title' : 'Account'"
+                          item-title="Name" item-value="Account"
                           :filter="customUserFilter"></combobox>
                         </v-card-actions>
                       </v-card>
@@ -118,7 +118,12 @@ export default {
       }
       var items = (function(that){
         return that.$lodash.filter(that.siteCollectionsAdmins, function(o){
-          return o.title.toLowerCase().indexOf(that.search) > -1;
+          var isTitleMatched = o.title.toLowerCase().indexOf(that.search) > -1;
+          var matchingAdmins = that.$lodash.find(o.admins, function(o){
+            return o.Name.toLowerCase().indexOf(that.search) > -1;
+          });
+            var isAdminMatched = typeof matchingAdmins !== 'undefined';
+          return isTitleMatched || isAdminMatched;
         });
       })(this);
       return items;

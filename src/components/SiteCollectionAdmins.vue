@@ -177,7 +177,7 @@ export default {
       return false;
     },
     getTestAdminData: function(){
-      var admins = this.$lodash.sampleSize(this.testUsers, Math.floor(Math.random() * 10) + 1);
+      var admins = this.$lodash.sampleSize(this.testUserProfiles, Math.floor(Math.random() * 10) + 1);
       var users = this.testUsers;
       var i;
       for(i = 0; i < admins.length; i++){
