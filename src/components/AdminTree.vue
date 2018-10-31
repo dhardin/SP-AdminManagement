@@ -48,7 +48,6 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
-          <v-btn flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected">Save</v-btn>
         </v-card-actions>
       </div>
     </v-card>
@@ -130,9 +129,9 @@ export default {
           clearTimeout(that.searchTimeout);
           that.searchTimeout = setTimeout(function(){
             that.filteredItems = that.$lodash.filter(that.siteCollectionsAdmins, function(o){
-              var isTitleMatched = o.title.toLowerCase().indexOf(that.search) > -1;
+              var isTitleMatched = o.title.toLowerCase().indexOf(that.search.toLowerCase()) > -1;
               var matchingAdmins = that.$lodash.find(o.admins, function(o){
-                return o.Name.toLowerCase().indexOf(that.search) > -1;
+                return o.Name.toLowerCase().indexOf(that.search.toLowerCase()) > -1;
               });
               var isAdminMatched = typeof matchingAdmins !== 'undefined';
               return isTitleMatched || isAdminMatched;
