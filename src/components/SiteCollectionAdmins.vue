@@ -2,7 +2,7 @@
   <v-container fluid grid-list-md>
     <v-layout row wrap class="full-height">
       <v-flex :xs6="!maximize" :xs12="maximize" :order-xs2="!maximize" :order-xs1="maximize" >
-        <Console :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
+        <Console ref="console" :width="consoleWidth" height='480px' :position="consolePosition" :top="scrollTop + 'px'" :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
         <admin-tree @toggle-site-admin="toggleSiteAdmin" :is-saving="isSaving" :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
@@ -74,6 +74,7 @@ export default {
         available: 0,
         assigned: 0
       },
+      consolePosition: 'relative',
       metrics: {
         numSuccesses: 0,
         numFailed: 0,
@@ -100,13 +101,29 @@ export default {
         Finished: 'Finished',
         Failed: 'Failed',
         Success: 'Success'
-      }
+      },
+      scrollTop: 0,
+      consoleWidth: 'auto'
     };
   },
   mounted:function(){
 
   },
+  computed: {
+    isIE: function(){
+      return (navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true ); //IF IE > 10
+    }
+  },
   methods: {
+    handleScroll: function(e){
+    //  this.scrollTop = e.srcElement.scrollingElement ? e.srcElement.scrollingElement.scrollTop : document.documentElement.scrollTop;
+  //    if(this.scrollTop > 0){
+    //    this.consolePosition = 'fixed';
+      //  this.scrollTop = this.$refs.console.$el.offsetTop +  this.$refs.console.$el.parentElement.offsetTop;
+    //  } else {
+    //    this.consolePosition = 'relative';
+    //  }
+    },
     toggleSiteAdmin: function(item, siteCollection){
       (function(that){
         var i;
@@ -338,6 +355,32 @@ export default {
       this.messages = [];
     }
 },
+beforeMount: function(){
+  window.addEventListener('scroll', this.handleScroll);
+},
+beforeDestroy: function(){
+   window.removeEventListener('scroll', this.handleScroll);
+},
+mounted: function(){
+  if(!this.isIE){
+this.consoleWidth =  '100%';
+this.consolePosition = 'sticky';
+} else {
+    this.consoleWidth =  this.$refs.console.$el.parentElement.offsetWidth + 'px';
+}
+  (function(that){
+    setTimeout(function(){
+        if(that.isIE){
+      that.consoleWidth =  that.$refs.console.$el.parentElement.offsetWidth + 'px';
+      that.consolePosition = 'fixed';
+      }
+        that.scrollTop = that.$refs.console.$el.offsetTop + that.$refs.console.$el.offsetParent.offsetTop;
+    },1000);
+  })(this);
+
+
+
+},
 created: function(){
   this.getIsLoadingSiteCollections();
 }
@@ -354,6 +397,7 @@ created: function(){
 
 .flexcard.v-card {
   width: 100%;
+  transition: width .2s;
 }
 
 

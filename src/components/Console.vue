@@ -1,5 +1,5 @@
 <template>
-  <v-card class="flexcard" :min-height="maximize ? '800px' : '480px'">
+  <v-card class="flexcard" :min-height="maximize ? '800px' : '480px'" :height="height" :style="{position:position, top:top}" :width="width">
     <v-card-title primary-title>
       <h3 class="grey--text text--darken-2">Console</h3>
       <v-btn :ripple="false" flat class="resize-btn" small right @click="resize"><div v-if="!maximize" class="maximize">
@@ -13,9 +13,9 @@
         </div>
       </v-btn>
     </v-card-title>
-    <v-card-text class="grow">
+    <v-card-text class="">
       <v-container fluid>
-        <v-layout >
+        <v-layout>
           <v-flex xs12 align-end flexbox>
             <div class="console blue-grey darken-4" @scroll="onScroll" ref="consoleMessages" :style="{height: maximize ? '400px' : '200px', position: 'relative'}">
               <v-list dark class="blue-grey darken-4">
@@ -145,9 +145,25 @@
 
 export default {
   props: {
+    position: {
+      type: String,
+      default: 'relative'
+    },
+    width: {
+      type: String,
+      default: '100%'
+    },
+    top: {
+      type: String,
+      default: '0'
+    },
     isSaving: {
       type: Boolean,
       default: false
+    },
+    height: {
+      type: String,
+      default: 'auto'
     },
     maximize: {
       type: Boolean,
@@ -439,4 +455,5 @@ svg.icon-size {
 .goToEndBtn:hover {
   opacity: 1;
 }
+
 </style>

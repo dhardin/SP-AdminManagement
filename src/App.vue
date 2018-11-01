@@ -3,7 +3,7 @@
     <v-navigation-drawer app  :clipped="true" v-model="drawer" hide-overlay dark>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        <v-list-tile v-for="item in menuItems" :key="item.title" @click="">
+        <v-list-tile v-for="item in menuItems" :key="item.title" @click="drawer=!drawer">
           <router-link :to="item.path">
             <v-list-tile-action>
               <svg role="img" class="white">
