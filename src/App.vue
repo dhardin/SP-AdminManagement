@@ -48,9 +48,7 @@
       </v-toolbar-items>
     </v-toolbar>
     <v-content class="ap">
-      <transition name="slide">
         <router-view class="view" @select-site-collection="selectSiteCollection" :site-collections="siteCollections" :isLoadingSiteCollections="isLoadingSiteCollections" @site-collection-selected="siteCollectionSelected" :is-testing="isTesting" :type="type" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected"></router-view>
-      </transition>
     </v-content>
   </v-app>
 </template>

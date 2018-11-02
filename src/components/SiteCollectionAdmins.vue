@@ -363,11 +363,17 @@ beforeDestroy: function(){
    window.removeEventListener('scroll', this.handleScroll);
 },
 mounted: function(){
+  console.log('document.documentElement.clientHeight: ' + document.documentElement.clientHeight);
+  console.log('this.$refs.console.$el.offsetTop: ' + this.$refs.console.$el.offsetTop);
+  console.log('this.$refs.console.$el.offsetParent.offsetTop: ' + this.$refs.console.$el.offsetParent.offsetTop);
+  console.log('this.$refs.adminTree.$el.clientWidth: ' + this.$refs.adminTree.$el.clientWidth);
+
+      this.consoleWidth =  '100%';
   if(!this.isIE){
-    this.consoleWidth =  '100%';
+
     this.consolePosition = 'sticky';
   } else {
-    this.consoleWidth =  this.$refs.console.$el.parentElement.offsetWidth + 'px';
+    this.consoleWidth =  this.$refs.adminTree.$el.clientWidth + 'px';
   }
     this.consoleHeight = document.documentElement.clientHeight - (this.$refs.console.$el.offsetTop + this.$refs.console.$el.offsetParent.offsetTop) - this.$refs.console.$el.offsetTop;
 
