@@ -5,7 +5,7 @@
         <Console ref="console" :width="consoleWidth" :height='consoleHeight +"px"' :position="consolePosition" :top="scrollTop + 'px'" :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <admin-tree ref="adminTree" @toggle-site-admin="toggleSiteAdmin" :is-saving="isSaving" :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
+        <admin-tree id="admin-tree" ref="adminTree" @toggle-site-admin="toggleSiteAdmin" :is-saving="isSaving" :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -74,7 +74,7 @@ export default {
         available: 0,
         assigned: 0
       },
-      consolePosition: 'relative',
+      consolePosition: this.isIE ? 'fixed' : 'sticky',
       metrics: {
         numSuccesses: 0,
         numFailed: 0,
@@ -354,6 +354,17 @@ export default {
     },
     clearConsole: function(){
       this.messages = [];
+    },
+    updateConsoleWidth: function(){
+    if(!this.isIE){
+        this.consoleWidth =  '100%';
+    } else {
+      this.consoleWidth =  this.$refs.console.$el.offsetParent.clientWidth + 'px';
+    }
+    },
+    updateConsoleHeight: function(){
+    this.consoleHeight = document.documentElement.clientHeight - (this.$refs.console.$el.offsetTop * 2 + this.$refs.console.$el.offsetParent.offsetTop);
+
     }
 },
 beforeMount: function(){
@@ -363,25 +374,13 @@ beforeDestroy: function(){
    window.removeEventListener('scroll', this.handleScroll);
 },
 mounted: function(){
-  console.log('document.documentElement.clientHeight: ' + document.documentElement.clientHeight);
-  console.log('this.$refs.console.$el.offsetTop: ' + this.$refs.console.$el.offsetTop);
-  console.log('this.$refs.console.$el.offsetParent.offsetTop: ' + this.$refs.console.$el.offsetParent.offsetTop);
-  console.log('this.$refs.adminTree.$el.clientWidth: ' + this.$refs.adminTree.$el.clientWidth);
-
-      this.consoleWidth =  '100%';
-  if(!this.isIE){
-
-    this.consolePosition = 'sticky';
-  } else {
-    this.consoleWidth =  this.$refs.adminTree.$el.clientWidth + 'px';
-  }
-    this.consoleHeight = document.documentElement.clientHeight - (this.$refs.console.$el.offsetTop + this.$refs.console.$el.offsetParent.offsetTop) - this.$refs.console.$el.offsetTop;
-
-    if(this.isIE){
-      this.consoleWidth =  this.$refs.adminTree.$el.clientWidth + 'px';
-      this.consolePosition = 'fixed';
-    }
-    this.scrollTop = this.$refs.console.$el.offsetTop + this.$refs.console.$el.offsetParent.offsetTop;
+  this.updateConsoleHeight();
+//  this.scrollTop = this.$refs.console.$el.offsetTop + this.$refs.console.$el.offsetParent.offsetTop;
+  (function(that){
+    setTimeout(function(){
+      that.updateConsoleWidth();
+    },100);
+  })(this);
 },
 created: function(){
   this.getIsLoadingSiteCollections();
@@ -390,6 +389,9 @@ created: function(){
 </script>
 
 <style scoped>
+#admin-tree {
+  height: 100%;
+}
 .full-height .flex{
   display: flex;
 }
@@ -401,6 +403,5 @@ created: function(){
   width: 100%;
   transition: width .2s;
 }
-
 
 </style>

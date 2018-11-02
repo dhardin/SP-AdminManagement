@@ -47,7 +47,7 @@
         </v-btn-toggle>
       </v-toolbar-items>
     </v-toolbar>
-    <v-content class="ap">
+    <v-content>
         <router-view class="view" @select-site-collection="selectSiteCollection" :site-collections="siteCollections" :isLoadingSiteCollections="isLoadingSiteCollections" @site-collection-selected="siteCollectionSelected" :is-testing="isTesting" :type="type" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected"></router-view>
     </v-content>
   </v-app>
@@ -167,6 +167,10 @@ export default {
 }
 </script>
 <style scoped>
+#app {
+  background-color: transparent;
+  height: 100%;
+}
 .v-list__tile.v-list__tile--link .link{
   height: 100%;
   width: 100%;
