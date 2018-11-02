@@ -1,11 +1,11 @@
 <template>
-  <v-container fluid grid-list-md>
+  <v-container fluid grid-list-md ref="container">
     <v-layout row wrap class="full-height">
       <v-flex :xs6="!maximize" :xs12="maximize" :order-xs2="!maximize" :order-xs1="maximize" >
-        <Console ref="console" :width="consoleWidth" height='480px' :position="consolePosition" :top="scrollTop + 'px'" :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
+        <Console ref="console" :width="consoleWidth" :height='consoleHeight +"px"' :position="consolePosition" :top="scrollTop + 'px'" :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <admin-tree @toggle-site-admin="toggleSiteAdmin" :is-saving="isSaving" :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
+        <admin-tree ref="adminTree" @toggle-site-admin="toggleSiteAdmin" :is-saving="isSaving" :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
       </v-flex>
     </v-layout>
     <v-snackbar :timeout="snackbar.timeout" :top="snackbar.y === 'top'" :bottom="snackbar.y === 'bottom'" :right="snackbar.x === 'right'" :left="snackbar.x === 'left'" :multi-line="snackbar.mode === 'multi-line'" :vertical="snackbar.mode === 'vertical'" v-model="snackbar.show">
@@ -103,7 +103,8 @@ export default {
         Success: 'Success'
       },
       scrollTop: 0,
-      consoleWidth: 'auto'
+      consoleWidth: 'auto',
+      consoleHeight: '480px'
     };
   },
   mounted:function(){
@@ -363,23 +364,18 @@ beforeDestroy: function(){
 },
 mounted: function(){
   if(!this.isIE){
-this.consoleWidth =  '100%';
-this.consolePosition = 'sticky';
-} else {
+    this.consoleWidth =  '100%';
+    this.consolePosition = 'sticky';
+  } else {
     this.consoleWidth =  this.$refs.console.$el.parentElement.offsetWidth + 'px';
-}
-  (function(that){
-    setTimeout(function(){
-        if(that.isIE){
-      that.consoleWidth =  that.$refs.console.$el.parentElement.offsetWidth + 'px';
-      that.consolePosition = 'fixed';
-      }
-        that.scrollTop = that.$refs.console.$el.offsetTop + that.$refs.console.$el.offsetParent.offsetTop;
-    },1000);
-  })(this);
+  }
+    this.consoleHeight = document.documentElement.clientHeight - (this.$refs.console.$el.offsetTop + this.$refs.console.$el.offsetParent.offsetTop) - this.$refs.console.$el.offsetTop;
 
-
-
+    if(this.isIE){
+      this.consoleWidth =  this.$refs.adminTree.$el.clientWidth + 'px';
+      this.consolePosition = 'fixed';
+    }
+    this.scrollTop = this.$refs.console.$el.offsetTop + this.$refs.console.$el.offsetParent.offsetTop;
 },
 created: function(){
   this.getIsLoadingSiteCollections();

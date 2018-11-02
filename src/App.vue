@@ -47,7 +47,7 @@
         </v-btn-toggle>
       </v-toolbar-items>
     </v-toolbar>
-    <v-content>
+    <v-content class="ap">
       <transition name="slide">
         <router-view class="view" @select-site-collection="selectSiteCollection" :site-collections="siteCollections" :isLoadingSiteCollections="isLoadingSiteCollections" @site-collection-selected="siteCollectionSelected" :is-testing="isTesting" :type="type" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected"></router-view>
       </transition>
@@ -113,6 +113,9 @@ export default {
     }
   },
   methods: {
+    onEscapeKeyUp: function(e){
+        this.drawer = false;
+    },
     selectSiteCollection: function(siteCollection){
       this.$set(this, 'siteCollection', siteCollection);
     },
@@ -153,6 +156,15 @@ export default {
         });
       }
     })(this);
+  },
+  mounted: function(){
+    (function(that){
+    window.addEventListener('keyup', function(e){
+      if(e.keyCode === 	27){
+        that.onEscapeKeyUp();
+      }
+    });
+  })(this)
   }
 }
 </script>
