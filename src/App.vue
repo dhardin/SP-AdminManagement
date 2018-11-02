@@ -3,8 +3,8 @@
     <v-navigation-drawer app  :clipped="true" v-model="drawer" hide-overlay dark>
       <v-list class="pt-0" dense>
         <v-divider></v-divider>
-        <v-list-tile v-for="item in menuItems" :key="item.title" @click="drawer=!drawer">
-          <router-link :to="item.path">
+        <v-list-tile v-for="item in menuItems" class="tile-link" :key="item.title" @click="drawer=!drawer">
+          <router-link :to="item.path" class="link">
             <v-list-tile-action>
               <svg role="img" class="white">
                 <use :href="item.icon"/>
@@ -169,6 +169,10 @@ export default {
 }
 </script>
 <style scoped>
+.v-list__tile.v-list__tile--link .link{
+  height: 100%;
+  width: 100%;
+}
 .toolbar .input-group--single-line:not(.input-group--solo)  {
   padding-top: 15px;
   min-width: 150px;
