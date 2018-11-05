@@ -136,7 +136,11 @@ export default {
           //populate items for current type and populate availabe items for the opposing type
           //re-select previously selected item if its available
           //trigger select change for selected item if it exists, else clear selected item
-          that.siteCollections = [{title:'Home', url: 'https://localhost:8080/#/', origin: 'https://localhost:8080'},{title:  'Engineering', url: 'https://localhost:8080/#/sites/eng', origin: 'https://localhost:8080'}, {title: 'Quality Assurance', url: 'https://localhost:8080/#/sites/qa', origin: 'https://localhost:8080'}];
+          that.siteCollections = [{
+            title:'Home',
+            url: 'https://localhost:8080/#/',
+            origin: 'https://localhost:8080'},
+            {title:  'Engineering', url: 'https://localhost:8080/#/sites/eng', origin: 'https://localhost:8080'}, {title: 'Quality Assurance', url: 'https://localhost:8080/#/sites/qa', origin: 'https://localhost:8080'}];
           that.isLoading = false;
           that.isLoadingSiteCollections.status = false;
         },1000);

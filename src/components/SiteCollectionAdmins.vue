@@ -28,7 +28,7 @@ export default {
   mixins: [Data, TestData, UserGroupManagement_SiteCollectionAdmins, UserGroupManagement_UserGroups, UserGroupManagement_Copy],
   components: {
     Console: Console,
-      AdminTree: AdminTree
+    AdminTree: AdminTree
   },
   props: {
     isLoadingSiteCollections: {
@@ -74,7 +74,6 @@ export default {
         available: 0,
         assigned: 0
       },
-      consolePosition: this.isIE ? 'fixed' : 'sticky',
       metrics: {
         numSuccesses: 0,
         numFailed: 0,
@@ -113,17 +112,20 @@ export default {
   computed: {
     isIE: function(){
       return (navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true ); //IF IE > 10
+    },
+    consolePosition: function(){
+      return this.isIE ? 'fixed' : 'sticky';
     }
   },
   methods: {
     handleScroll: function(e){
-    //  this.scrollTop = e.srcElement.scrollingElement ? e.srcElement.scrollingElement.scrollTop : document.documentElement.scrollTop;
-  //    if(this.scrollTop > 0){
-    //    this.consolePosition = 'fixed';
+      //  this.scrollTop = e.srcElement.scrollingElement ? e.srcElement.scrollingElement.scrollTop : document.documentElement.scrollTop;
+      //    if(this.scrollTop > 0){
+      //    this.consolePosition = 'fixed';
       //  this.scrollTop = this.$refs.console.$el.offsetTop +  this.$refs.console.$el.parentElement.offsetTop;
-    //  } else {
-    //    this.consolePosition = 'relative';
-    //  }
+      //  } else {
+      //    this.consolePosition = 'relative';
+      //  }
     },
     toggleSiteAdmin: function(item, siteCollection){
       (function(that){
@@ -150,8 +152,8 @@ export default {
             that.$set(item, 'hasError', false);
 
           }, function(error){
-              that.metrics.end = new Date();
-              that.$set(item, 'hasError', true);
+            that.metrics.end = new Date();
+            that.$set(item, 'hasError', true);
             that.messages.push({date: new Date(), verb: that.actions.Failed, text: text, hasError: true, message: error.message,  preposition: 'for', target: item.Account, url: siteCollection.url, type: 'error'});
             that.isSaving = false;
           });
@@ -230,46 +232,37 @@ export default {
                 users: testAdminData.users
               });
             }
-                this.isLoading = false;
+            this.isLoading = false;
           }
         } else{
-        (function(that){
-          new Promise(function(resolve, reject){
-            that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Admins', preposition: false, target: '', url: '', type: 'warning'});
-            that.getSiteCollectionsAdmins().then(function(data){
-            adminsArr = data;
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
-            resolve();
-            });
-          })/*.then(function(result){
-            return new Promise(function(resolve, reject){
-              that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Users',  preposition: false, target: '', url: '', type: 'warning'});
-              that.getSiteCollectionsUsers().then(function(data){
-                usersArr = data;
-                  that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Users', preposition: false,  target: '', url: '', type: 'info'});
-                  resolve();
+          (function(that){
+            new Promise(function(resolve, reject){
+              that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Admins', preposition: false, target: '', url: '', type: 'warning'});
+              that.getSiteCollectionsAdmins().then(function(data){
+                adminsArr = data;
+                that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
+                resolve();
               });
-            });
-          })*/.then(function(result){
-            var i;
-            for(i = 0; i < that.siteCollections.length; i++){
-              if(typeof adminsArr[i] === 'undefined'){
-                continue;
-              }
-              that.siteCollectionsArr.push({
-                title: that.siteCollections[i].title,
-                url: that.siteCollections[i].url,
-                search: '',
-                focus: false,
-                admins:  adminsArr[i],
-                users:  []
+            }).then(function(result){
+                var i;
+                for(i = 0; i < that.siteCollections.length; i++){
+                  if(typeof adminsArr[i] === 'undefined'){
+                    continue;
+                  }
+                  that.siteCollectionsArr.push({
+                    title: that.siteCollections[i].title,
+                    url: that.siteCollections[i].url,
+                    search: '',
+                    focus: false,
+                    admins:  adminsArr[i],
+                    users:  []
+                  });
+                }
+                that.isLoading = false;
               });
-            }
-            that.isLoading = false;
-          });
-        })(this);
-      }
-      }
+            })(this);
+          }
+        }
       return this.isLoadingSiteCollections.status;
     },
     getSiteCollectionsAdmins: function(){
@@ -304,9 +297,9 @@ export default {
             message.status="done"
             resolve(results);
           }, function(error){
-              message.status = 'error';
-              message.error = {expanded: false, message: error.stack, title: error.message};
-              resolve();
+            message.status = 'error';
+            message.error = {expanded: false, message: error.stack, title: error.message};
+            resolve();
           });
         });
       })(this);
@@ -356,35 +349,32 @@ export default {
       this.messages = [];
     },
     updateConsoleWidth: function(){
-    if(!this.isIE){
+      if(!this.isIE){
         this.consoleWidth =  '100%';
-    } else {
-      this.consoleWidth =  this.$refs.console.$el.offsetParent.clientWidth + 'px';
-    }
+      } else {
+
+        console.log(this.$refs.adminTree.$el);
+        this.consoleWidth =  this.$refs.adminTree.$el.offsetWidth + 'px';
+      }
     },
     updateConsoleHeight: function(){
-    this.consoleHeight = document.documentElement.clientHeight - (this.$refs.console.$el.offsetTop * 2 + this.$refs.console.$el.offsetParent.offsetTop);
-
+      this.consoleHeight = document.documentElement.clientHeight - (this.$refs.adminTree.$el.offsetTop * 2 + this.$refs.adminTree.$el.offsetParent.offsetTop);
     }
-},
-beforeMount: function(){
-  window.addEventListener('scroll', this.handleScroll);
-},
-beforeDestroy: function(){
-   window.removeEventListener('scroll', this.handleScroll);
-},
-mounted: function(){
-  this.updateConsoleHeight();
-//  this.scrollTop = this.$refs.console.$el.offsetTop + this.$refs.console.$el.offsetParent.offsetTop;
-  (function(that){
-    setTimeout(function(){
-      that.updateConsoleWidth();
-    },100);
-  })(this);
-},
-created: function(){
-  this.getIsLoadingSiteCollections();
-}
+  },
+  beforeMount: function(){
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeDestroy: function(){
+    window.removeEventListener('scroll', this.handleScroll);
+  },
+  mounted: function(){
+    this.updateConsoleWidth();
+    this.updateConsoleHeight();
+    this.scrollTop = this.$refs.adminTree.$el.offsetTop + this.$refs.adminTree.$el.offsetParent.offsetTop;
+  },
+  created: function(){
+    this.getIsLoadingSiteCollections();
+  }
 }
 </script>
 
