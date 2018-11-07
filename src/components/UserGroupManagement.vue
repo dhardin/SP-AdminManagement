@@ -125,7 +125,7 @@ export default {
               });
             }).then(function(result){
               return new Promise(function(resolve, reject){
-                if(that.selectedItem == null){
+                if(that.selectedItem == null || that.type == 'groups'){
                   return;
                 }
                 that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
@@ -139,7 +139,7 @@ export default {
                 });
               });
             }).then(function(result){
-              if(that.selectedItem == null){
+              if(that.selectedItem == null || that.type == 'groups'){
                 return;
               }
               /*  if(that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '')){
@@ -148,11 +148,12 @@ export default {
                   that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : ''}});
                 }*/
                   that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Ensuring User Exists', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
-              that.ensureUser(that.siteCollection, that.digest, that.selectedItem.LoginName, function(data){
+              that.ensureUser(that.siteCollection, that.digest, that.selectedItem.LoginName, function(user){
                   that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Ensuring User Exists', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
                 //that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '');
-                console.log(data);
-                that.$router.push({query: that.query});
+                //now that we have ensured the user in the site collection, add them to the users dropdown
+                  that.items.push(that.selectedItem);
+                  that.$router.push({query: that.query});
               }, function(error){
                     that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Ensuring User Exists', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
               })
@@ -284,7 +285,7 @@ export default {
             return true;
           } else {
             this.items.push(this.selectedItem);
-            this.messages.push({date: new Date(), verb: this.actions.Failed, text:  'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
+            this.messages.push({date: new Date(), verb: this.actions.Failed, text:  'Fetching ' + (this.type == 'users' ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
             return false;
           }
         }

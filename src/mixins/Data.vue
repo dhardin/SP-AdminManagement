@@ -177,9 +177,10 @@ export default {
        data: JSON.stringify({ 'logonName': userLoginName }),
     }).then(function (response) {
       // handle success
-      console.log(response);
+      var data = response.data.d;
+      console.log(data);
       if (callback) {
-        callback(users);
+        callback(data);
       }
     }).catch(function(error) {
       var responseError;
