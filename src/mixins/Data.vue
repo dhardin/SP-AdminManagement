@@ -165,6 +165,33 @@ export default {
       }
     });
   },
+  ensureUser: function(siteCollection, digest, userLoginName, callback, errorCallback){
+    return axios.post(siteCollection.url + "/_api/web/ensureuser",
+    {
+      headers: {
+        "accept": "application/json;odata=verbose",
+          "X-RequestDigest": digest
+      },
+       data: JSON.stringify({ 'logonName': userLoginName }),
+    }).then(function (response) {
+      // handle success
+      console.log(response);
+      if (callback) {
+        callback(users);
+      }
+    }).catch(function(error) {
+      var responseError;
+      try{
+        responseError = {message: error.response.data.error.message.value};
+      } catch(err){
+        responseError = error;
+        console.log(err);
+      }
+      if (errorCallback) {
+        errorCallback(responseError);
+      }
+    });
+  },
   getUsers: function(siteCollection, groupId, callback, errorCallback){
     return axios.get(siteCollection.url + "/_api/web/" + (groupId !== false ? 'sitegroups('+groupId+')/users' : 'siteusers'),
     {

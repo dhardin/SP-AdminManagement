@@ -2,7 +2,7 @@
   <v-container fluid grid-list-md ref="container">
     <v-layout row wrap class="full-height">
       <v-flex :xs6="!maximize" :xs12="maximize" :order-xs2="!maximize" :order-xs1="maximize" >
-        <Console ref="console" :width="consoleWidth" :height='consoleHeight +"px"' :position="consolePosition" :top="scrollTop + 'px'" :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
+        <Console ref="console" :width="consoleWidth" :height='consoleHeight +"px"' :position="consolePosition" :top="scrollTop + 'px'" :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
         <admin-tree id="admin-tree" ref="adminTree" @toggle-site-admin="toggleSiteAdmin" :is-saving="isSaving" :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
@@ -41,26 +41,11 @@ export default {
         }
       }
     },
-    siteCollections: {
-      type: Array,
-      default: function(){
-        return [];
-      }
-    },
     isTesting: {
       type: Boolean,
       default: false
     }
   },
-  watch: {
-    isLoadingSiteCollections: {
-      handler: function(newVal, oldVal){
-        this.getIsLoadingSiteCollections();
-      },
-      deep: true
-    }
-  },
-
   data: function() {
     return {
       toggle_select: 0,
@@ -69,6 +54,9 @@ export default {
       progress: 0,
       isItemSelected: false,
       maximize: false,
+      adminsArr: [],
+      usersArr:[],
+      siteCollections: [],
       siteCollectionsArr: [],
       itemsSelected: {
         available: 0,
@@ -163,9 +151,6 @@ export default {
     resize: function(){
       this.maximize = !this.maximize;
     },
-    getChildren: function(){
-      return this.$lodash.sampleSize(this.testUsers, Math.floor(Math.random() * 10) + 1)
-    },
     checkIfUserExists: function(loginName){
       var currentItem;
       if(loginName.length > 0){
@@ -198,72 +183,15 @@ export default {
     },
     getTestAdminData: function(){
       var admins = this.$lodash.sampleSize(this.testUserProfiles, Math.floor(Math.random() * 10) + 1);
-      var users = this.testUsers;
       var i;
       for(i = 0; i < admins.length; i++){
         admins[i].IsSiteAdmin = true;
       }
-      return {
-        admins: admins,
-        users: users
-      }
+      return admins;
     },
-    getIsLoadingSiteCollections: function(){
-      var siteCollectionSelected;
-      var adminsArr;
-      var usersArr;
-      if(this.isLoadingSiteCollections.status){
-        this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
-      } else {
-        this.messages.push({date: new Date(), verb: this.actions.Finished, preposition: ' ', hasError: this.isLoadingSiteCollections.hasError, message: this.isLoadingSiteCollections.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
-        //now fetch all users and site collection admins for those site collections
-        if(this.isTesting){
-          var i;
-          var testAdminData;
-          if(this.isTesting){
-            for(i = 0; i < this.siteCollections.length; i++){
-              testAdminData = this.getTestAdminData();
-              this.siteCollectionsArr.push({
-                title: this.siteCollections[i].title,
-                url: this.siteCollections[i].url,
-                search: '',
-                focus: false,
-                admins:  testAdminData.admins,
-                users: testAdminData.users
-              });
-            }
-            this.isLoading = false;
-          }
-        } else{
-          (function(that){
-            new Promise(function(resolve, reject){
-              that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Admins', preposition: false, target: '', url: '', type: 'warning'});
-              that.getSiteCollectionsAdmins().then(function(data){
-                adminsArr = data;
-                that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
-                resolve();
-              });
-            }).then(function(result){
-                var i;
-                for(i = 0; i < that.siteCollections.length; i++){
-                  if(typeof adminsArr[i] === 'undefined'){
-                    continue;
-                  }
-                  that.siteCollectionsArr.push({
-                    title: that.siteCollections[i].title,
-                    url: that.siteCollections[i].url,
-                    search: '',
-                    focus: false,
-                    admins:  adminsArr[i],
-                    users:  []
-                  });
-                }
-                that.isLoading = false;
-              });
-            })(this);
-          }
-        }
-      return this.isLoadingSiteCollections.status;
+    getTestUserData: function(){
+      var users = this.$lodash.sampleSize(this.testUserProfiles, Math.floor(Math.random() * this.testUserProfiles.length) + 1);
+      return users;
     },
     getSiteCollectionsAdmins: function(){
       this.metrics.numFailed = 0;
@@ -293,6 +221,10 @@ export default {
       var promise;
       (function(that){
         promise = new Promise(function(resolve, reject){
+          if(that.isTesting){
+            message.status="done"
+            resolve(that.getTestAdminData());
+          } else {
           that.getSiteCollectionAdmins(siteCollection, function(results){
             message.status="done"
             resolve(results);
@@ -301,6 +233,7 @@ export default {
             message.error = {expanded: false, message: error.stack, title: error.message};
             resolve();
           });
+          }
         });
       })(this);
       return promise;
@@ -373,8 +306,62 @@ export default {
     this.scrollTop = this.$refs.adminTree.$el.offsetTop + this.$refs.adminTree.$el.offsetParent.offsetTop;
   },
   created: function(){
-    this.getIsLoadingSiteCollections();
-  }
+    var adminsArr;
+    var usersArr;
+    (function(that){
+        new Promise(function(resolve, reject){
+          if(that.isTesting){
+            that.messages.push({date: new Date(), verb: that.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
+            setTimeout(function(){
+              //populate items for current type and populate availabe items for the opposing type
+              //re-select previously selected item if its available
+              //trigger select change for selected item if it exists, else clear selected item
+              that.siteCollections = [{
+                title:'Home',
+                url: 'https://localhost:8080/#/',
+                origin: 'https://localhost:8080'},
+                {title:  'Engineering', url: 'https://localhost:8080/#/sites/eng', origin: 'https://localhost:8080'}, {title: 'Quality Assurance', url: 'https://localhost:8080/#/sites/qa', origin: 'https://localhost:8080'}];
+                  that.messages.push({date: new Date(), verb: that.actions.Finished, preposition: ' ', hasError: false, text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
+                resolve();
+            },1000);
+          } else {
+            that.getSiteCollections(function(siteCollections){
+              that.siteCollections = siteCollections;
+                that.messages.push({date: new Date(), verb: that.actions.Finished, preposition: ' ', hasError: false, text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
+                resolve();
+            }, function(error){
+                that.messages.push({date: new Date(), verb: that.actions.Failed, preposition: ' ', hasError: true, message: error.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'error'});
+                resolve();
+            });
+          }
+    }).then(function(result){
+      return new Promise(function(resolve, reject){
+        that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Admins', preposition: false, target: '', url: '', type: 'warning'});
+          that.getSiteCollectionsAdmins().then(function(data){
+            that.adminsArr = data;
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Admins',  preposition: false, target: '', url: '', type: 'info'});
+            resolve();
+          });
+      }).then(function(result){
+          var i;
+          for(i = 0; i < that.siteCollections.length; i++){
+            if(typeof that.adminsArr[i] === 'undefined'){
+              continue;
+            }
+            that.siteCollectionsArr.push({
+              title: that.siteCollections[i].title,
+              url: that.siteCollections[i].url,
+              search: '',
+              focus: false,
+              admins:  that.adminsArr[i],
+              users:  that.isTesting ? that.getTestUserData() : []
+            });
+          }
+          that.isLoading = false;
+        });
+          });
+      })(this);
+    }
 }
 </script>
 

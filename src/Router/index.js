@@ -13,10 +13,20 @@ export default new VueRouter({
     component: UserGroupManagement,
     name: 'Home',
     props: (function (route){
-      return{
-        url: route.query.url,
-        loginname: route.query.loginname
+      var props = {
+
       };
+      if(route.query.hasOwnProperty('url')){
+        props.initialSiteCollectionUrl = route.query.url;
+      }
+      if(route.query.hasOwnProperty('loginname')){
+        props.initialSelectedItem = route.query.loginname;
+      }
+      if(route.query.hasOwnProperty('type')){
+        props.initialType = route.query.type;
+      }
+
+      return props;
     })
     },
     {

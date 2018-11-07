@@ -6,7 +6,7 @@
       this.progress = 0;
       this.failedItems = [];
       this.metrics.start = new Date();
-      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type.users ? 'Groups' : 'Users'), target: this.selectedItem.Title,  url: this.siteCollection.url,  type: 'warning'});
+      this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Saving ' + (this.type == 'users' ? 'Groups' : 'Users'), target: this.selectedItem.Title,  url: this.siteCollection.url,  type: 'warning'});
       this.saveIndex = 0;
       //reset errored out items
       this.$lodash.forEach(this.failedItems, function(o){
@@ -29,7 +29,7 @@
           });
         }).then(function(result){
           that.saveItemsSync(that.newItems).then(function(result){
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Saving ' + (that.type == 'users' ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.LoginName, url: that.siteCollection.url, type: 'info'});
             that.isSaving = false;
             that.metrics.end = new Date();
             that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
@@ -71,15 +71,15 @@
     },
     saveItemAsync: function(item, messageList){
       var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-      var preposition = item.operation == 'add' ? (this.type.user ? 'for' : 'to') : (this.type.user ? 'for' :'from');
+      var preposition = item.operation == 'add' ? (this.type == 'users' ? 'for' : 'to') : (this.type == 'users'? 'for' :'from');
       messageList.push({status: 'pending', url: this.siteCollection.url, target: this.selectedItem.Title, operation: operationText + ' ' + item.Title, error: {expanded: false, message: '', title: ''}});
       var message = messageList[messageList.length - 1];
       var promise;
       (function(that){
         promise = new Promise(function(resolve, reject){
-          that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? item.Id : that.selectedItem.Id, that.type.groups ? item : that.selectedItem,function(results){
+          that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type == 'users' ? item.Id : that.selectedItem.Id, that.type == 'groups' ? item : that.selectedItem,function(results){
             var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-            var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
+            var preposition = item.operation == 'add' ? (that.type == 'users' ? 'for' : 'to') : (that.type == 'users' ? 'for' :'from');
             that.metrics.numSuccesses++;
             item.isNew = false;
             item.hasError = false;
@@ -88,7 +88,7 @@
             return resolve();
           }, function(error){
             var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-            var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
+            var preposition = item.operation == 'add' ? (that.type == 'users' ? 'for' : 'to') : (that.type == 'users' ? 'for' :'from');
             item.hasError = true;
             that.failedItems.push(item);
             message.status = 'done';
@@ -118,7 +118,7 @@
       for(i = 0; i < items.length; i++){
         item = items[i];
         operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-        preposition = item.operation == 'add' ? (this.type.user ? 'for' : 'to') : (this.type.user ? 'for' :'from');
+        preposition = item.operation == 'add' ? (this.type == 'users' ? 'for' : 'to') : (this.type == 'users' ? 'for' :'from');
         messageList.push({status: 'pending', url: this.siteCollection.url, target: this.selectedItem.Title, operation: operationText + ' ' + item.Title, error: {expanded: false, message: '', title: ''}});
       }
       return (function(that){
@@ -133,8 +133,8 @@
       return  (function(that){
         return new Promise(function(resolve, reject){
           var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-          var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
-        that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type.users ? item.Id : that.selectedItem.Id, that.type.groups ? item : that.selectedItem,function(results){
+          var preposition = item.operation == 'add' ? (that.type == 'users' ? 'for' : 'to') : (that.type == 'users' ? 'for' :'from');
+        that[item.operation == 'add' ? 'addUserToGroup' : 'removeUserFromGroup'](that.siteCollection, that.digest, that.type == 'users' ? item.Id : that.selectedItem.Id, that.type == 'groups' ? item : that.selectedItem,function(results){
         message.status = 'done';
         that.metrics.numSuccesses++;
         item.isNew = false;
@@ -143,7 +143,7 @@
         return resolve();
       }, function(error){
         var operationText = item.operation.charAt(0).toUpperCase() +  item.operation.slice(1);
-        var preposition = item.operation == 'add' ? (that.type.user ? 'for' : 'to') : (that.type.user ? 'for' :'from');
+        var preposition = item.operation == 'add' ? (that.type == 'users' ? 'for' : 'to') : (that.type == 'users' ? 'for' :'from');
         item.hasError = true;
         that.failedItems.push(item);
         //that.messages.push({date: new Date(), verb: that.actions.Failed, text:  operationText + ' ' + item.Title, preposition: preposition, hasError: true, message: error.message, target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
@@ -162,7 +162,7 @@
       new Promise(function(resolve, reject){
         that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Users', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
         that.getUsersForSiteCollection(function(data){
-          if(that.type.users){
+          if(that.type == 'users'){
             that.items = data;
           } else {
             that.availableItems = data;
@@ -181,7 +181,7 @@
         return new Promise(function(resolve, reject){
           that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Groups', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
           that.getGroupsForSiteCollection(that.siteCollection, function(data){
-            if(that.type.users){
+            if(that.type == 'users'){
               that.availableItems = data;
               that.originalAvailableItems = data;
               that.assignedItems = [];
@@ -202,7 +202,7 @@
         //We'll go ahead and just resolve if the type that we're working with is group.
         return new Promise(function(resolve, reject){
           var currentItem;
-          if(that.selectedItem !== null && that.type.users){
+          if(that.selectedItem !== null && that.type == 'users'){
             that.checkIfUserExists(that.selectedItem.LoginName);
           }
           resolve();
@@ -256,12 +256,12 @@
     })(this);
   },
   getItem: function(callback){
-    this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'warning'});
+    this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Fetching ' + (this.type == 'users' ? 'Groups' : 'Users'), preposition: 'for', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'warning'});
     this.isLoading = true;
     (function(that){
       if(that.isTesting){
         setTimeout(function(){
-          that.assignedItems =  that.$lodash.sampleSize(that.type.users ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
+          that.assignedItems =  that.$lodash.sampleSize(that.type == 'users' ? that.testGroups : that.testUsers, Math.floor(Math.random() * 10) + 1);
           that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
           //remove assigned items from available
           that.availableItems = that.$lodash.partition(that.originalAvailableItems, function(o){
@@ -269,16 +269,16 @@
               return assignedItem.Id === o.Id;
             }) === undefined;
           })[0];
-          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url,  type: 'info'});
+          that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type == 'users' ? 'Groups' : 'Users'), preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url,  type: 'info'});
           that.isLoading = false
           if(callback){
             callback();
           }
         },1000);
       } else {
-        if(that.type.users){
+        if(that.type == 'users'){
           that.getGroups(that.siteCollection, that.selectedItem.Id, function(groups){
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type == 'users' ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
             that.isLoading = false;
             that.assignedItems = groups;
             that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
@@ -293,12 +293,12 @@
               error.message = error.error.message.value;
             }
             console.log(error);
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, message: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type == 'users' ? 'Groups' : 'Users'), hasError: true, message: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
             that.isLoading = false;
           });
         } else {
           that.getUsers(that.siteCollection, that.selectedItem.Id, function(users){
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
+            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Fetching ' + (that.type == 'users' ? 'Groups' : 'Users'),  preposition: 'for', target: that.selectedItem.Title,  url: that.siteCollection.url, type: 'info'});
             that.isLoading = false;
             that.assignedItems = users;
             that.originalAssignedItems = JSON.parse(JSON.stringify(that.assignedItems));
@@ -311,7 +311,7 @@
               callback();
             }
           }, function(error){
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type.users ? 'Groups' : 'Users'), hasError: true, message: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
+            that.messages.push({date: new Date(), verb: that.actions.Failed, text: 'Fetching ' + (that.type -= 'users' ? 'Groups' : 'Users'), hasError: true, message: error.message,  preposition: 'for', target: that.selectedItem.Title, url: that.siteCollection.url, type: 'error'});
             that.isLoading = false;
           });
         }

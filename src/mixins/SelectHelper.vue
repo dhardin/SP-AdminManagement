@@ -14,10 +14,8 @@
         default: 0
       },
       type: {
-        type: Object,
-        default: function(){
-          return {users: true, groups: false}
-        }
+        type: String,
+        default: 'users'
       },
       isSaving: {
         type: Boolean,

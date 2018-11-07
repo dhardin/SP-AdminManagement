@@ -1,10 +1,10 @@
 <template>
   <v-card class="flexcard" :style="{overflow: 'hidden'}">
     <v-card-title primary-title>
-      <h4 class="grey--text text--darken-2">Current {{type.users  ? 'Groups' : 'Users'}}</h4>
+      <h4 class="grey--text text--darken-2">Current <span class="capitalize">{{type}}</span></h4>
     </v-card-title>
     <div>
-      <Checkbox label="Show Description" @toggle-checked="toggleDescription" v-if="type.users"></Checkbox>
+      <Checkbox label="Show Description" @toggle-checked="toggleDescription" v-if="type == 'users'"></Checkbox>
       <div :style="{position: 'relative'}">
         <v-text-field
         @keyup="searchText"
@@ -133,5 +133,8 @@ export default {
 }
 .slide-leave-active {
   transition: all .5s;
+}
+.capitalize {
+  text-transform: capitalize;
 }
 </style>

@@ -2,10 +2,20 @@
   <v-container fluid grid-list-md>
     <v-layout row wrap class="full-height">
       <v-flex :xs6="!maximize" :xs12="maximize" :order-xs2="!maximize" :order-xs1="maximize">
-        <Console default-message="To start, please select a site collection." :maximize="maximize" :is-item-selected="isItemSelected" :type="type" :is-saving="isSaving" :is-loading="isLoading || this.isLoadingSiteCollections.status" :save-progress="progress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
+        <Console
+        :showDefaultMessage="(siteCollection == null || selectedItem == null)"
+        :defaultMessage="siteCollection == null ? 'Please select a site collection.' : (selectedItem == null ? 'Please select a ' + type.substring(0, type.length - 1) : '')"
+        :maximize="maximize" :is-item-selected="isItemSelected"
+        :is-saving="isSaving"
+        :is-loading="isLoading" :save-progress="progress" :is-site-collection-selected="isSiteCollectionSelected" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
-        <Info @toggle-site-admin="toggleSiteAdmin(user, siteCollection)" @get-site-collections-for-user="getSiteCollectionsGroupsForUser" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" @copy-dialog-opened="copyDialogOpened" :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>
+        <Info :siteCollections="siteCollections"
+        :initialSiteCollection="siteCollection"
+        :initialType="type"
+        :initialSelectedItem="selectedItem"
+        @type-changed="typeChanged"
+        @site-collection-changed="siteCollectionChanged" @toggle-site-admin="toggleSiteAdmin(user, siteCollection)" @get-site-collections-for-user="getSiteCollectionsGroupsForUser" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" @copy-dialog-opened="copyDialogOpened" :type="type" :update-selected-item="updateSelectedItem" :site-collection-has-item="siteCollectionHasItem" :is-saving="isSaving" :is-loading="isLoading" :site-collection="siteCollection" :is-site-collection-selected="isSiteCollectionSelected" :items="items" :assigned-items="assignedItems" :new-items="newItems"  @save="save" @item-changed="itemChanged" @purge-user="purgeUser"></Info>
       </v-flex>
       <v-flex xs6 order-xs3 >
         <SelectAvailable :type="type" :num-selected="itemsSelected.available" :site-collection-has-item="siteCollectionHasItem"  :is-any-selected="isAnyAvailableSelected" :is-item-selected="isItemSelected" :selected-item="selectedItem" :is-saving="isSaving || copyDialogOpen" :is-loading="isLoading || copyDialogOpen" :is-site-collection-selected="isSiteCollectionSelected" :items="availableItems" @give-all="giveAll" @give-selected="giveSelected" @clear-selected="clearSelected" @select-item="selectItem"></SelectAvailable>
@@ -51,20 +61,17 @@ export default {
         }
       }
     },
-    siteCollection: {
-      type: Object,
-      default: function(){
-        return {
-          title: '',
-          url:  ''
-        }
-      }
+    initialType: {
+      type: String,
+      default: 'users'
     },
-    siteCollections: {
-      type: Array,
-      default: function(){
-        return [];
-      }
+    initialSiteCollectionUrl: {
+      type: String,
+      default: ''
+    },
+    initialSelectedItem: {
+      type: String,
+      default: ''
     },
     isTesting: {
       type: Boolean,
@@ -74,14 +81,6 @@ export default {
       type: Boolean,
       default: false
     },
-    type: {
-      type: Object,
-      default: function(){
-        return {users: true, groups: false}
-      }
-    },
-    url: '',
-    loginname: ''
   },
   watch: {
     selectedAvailable: {
@@ -110,44 +109,84 @@ export default {
     siteCollection: {
       handler: function(newVal, oldVal){
         if(this.siteCollection == null){
-          this.$router.push({ query: {}});
           return;
         }
+        this.$router.push({ query: this.query});
         if(this.siteCollection !== null){
           (function(that){
             new Promise(function(resolve, reject){
               that.getData(function(){
+                if(that.selectedItem !== null && that.initialSelectedItem.length > 0){
+                  that.selectedItem = that.$lodash.find(that.items, function(o){
+                      return o.LoginName == that.initialSelectedItem;
+                  });
+                }
                 resolve();
               });
             }).then(function(result){
-              if(that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '')){
-                that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : '', loginname: that.selectedItem !== null ? that.selectedItem.LoginName : ''}});
-              } else {
-                that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : ''}});
+              return new Promise(function(resolve, reject){
+                if(that.selectedItem == null){
+                  return;
+                }
+                that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
+                that.getDigest(that.siteCollection, function(data){
+                  that.digest = data;
+                  that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Digest', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
+                  resolve();
+                }, function(error){
+                  that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Digest', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
+                  resolve();
+                });
+              });
+            }).then(function(result){
+              if(that.selectedItem == null){
+                return;
               }
+              /*  if(that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '')){
+                  that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : '', loginname: that.selectedItem !== null ? that.selectedItem.LoginName : ''}});
+                } else {
+                  that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : ''}});
+                }*/
+                  that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Ensuring User Exists', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
+              that.ensureUser(that.siteCollection, that.digest, that.selectedItem.LoginName, function(data){
+                  that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Ensuring User Exists', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
+                //that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '');
+                console.log(data);
+                that.$router.push({query: that.query});
+              }, function(error){
+                    that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Ensuring User Exists', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
+              })
             });
           })(this);
         }
       },
       deep: true
     },
-    selectedItem: {
-      handler: function(newVal, oldVal){
-        this.$router.push({ query: { url: this.siteCollection.url,loginname: this.selectedItem !== null ? this.selectedItem.LoginName : ''}});
-        this.clearSelected('available');
-        this.clearSelected('assigned');
-      },
-      deep: true
-    },
     type: {
       handler: function(newVal, oldVal){
+        this.$router.push({query: this.query});
+      }
+    },
+    selectedItem: {
+      handler: function(newVal, oldVal){
+        this.$router.push({ query: this.query});
         this.clearSelected('available');
         this.clearSelected('assigned');
-        if(this.isSiteCollectionSelected){
-          this.getData();
-        }
       },
       deep: true
+    }
+  },
+  computed: {
+    query: function(){
+      var query = {};
+      if(this.siteCollection !== null){
+        query.url = this.siteCollection.url;
+      }
+      if(this.selectedItem !== null){
+        query.loginname = this.selectedItem.LoginName;
+      }
+      query.type = this.type;
+      return query;
     }
   },
   data: function() {
@@ -174,9 +213,12 @@ export default {
         start: null,
         end: null
       },
+      siteCollections: [],
       savingIndex: 0,
       updateProgressInterval: false,
       selectedItem: null,
+      siteCollection: null,
+      type: this.initialType,
       digest: null,
       siteCollectionHasItem: true,
       snackbar: {
@@ -199,6 +241,7 @@ export default {
       messages: [],//[{type: 'table', headers: ['url', 'target', 'status'], rows: [{status: 'pending', url: '/home', target: ''}, {status: 'error', error: {expanded: false, message: 'some error', title: 'Unable to reach domain'}, url: '/blah', target: ''}]}],
       selectedAvailable: {},
       selectedAssigned: {},
+      consoleMessage: 'Please select a site collection',
       actions: {
         Starting: 'Starting',
         Finished: 'Finished',
@@ -208,6 +251,10 @@ export default {
     };
   },
   methods: {
+    typeChanged: function(type){
+      this.type = type;
+      this.getData();
+    },
     copyDialogOpened: function(isOpened){
       this.copyDialogOpen = isOpened;
     },
@@ -239,30 +286,48 @@ export default {
             this.items.push(this.selectedItem);
             this.messages.push({date: new Date(), verb: this.actions.Failed, text:  'Fetching ' + (this.type.users ? 'Groups' : 'Users'), preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
             return false;
-
           }
         }
       }
       return false;
     },
-    getIsLoadingSiteCollections: function(val){
-      var siteCollectionSelected;
-      if(this.isLoadingSiteCollections.status){
-        this.messages.push({date: new Date(), verb: this.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
-      } else {
-        this.messages.push({date: new Date(), verb: this.actions.Finished, preposition: ' ', hasError: this.isLoadingSiteCollections.hasError, message: this.isLoadingSiteCollections.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
-        if(this.url != ''){
-          //double check that site collection exists
-          (function(that){
-            siteCollectionSelected = that.$lodash.find(that.siteCollections, function(o){
-              return o.url == that.url;
-            });
-          })(this);
-          if(siteCollectionSelected){
-            this.$emit('select-site-collection', siteCollectionSelected);
-          }
+    getSiteCollections: function(){
+      (function(that){
+        if(that.isTesting){
+          that.messages.push({date: new Date(), verb: that.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
+          setTimeout(function(){
+            //populate items for current type and populate availabe items for the opposing type
+            //re-select previously selected item if its available
+            //trigger select change for selected item if it exists, else clear selected item
+            that.siteCollections = [{
+              title:'Home',
+              url: 'https://localhost:8080/#/',
+              origin: 'https://localhost:8080'},
+              {title:  'Engineering', url: 'https://localhost:8080/#/sites/eng', origin: 'https://localhost:8080'}, {title: 'Quality Assurance', url: 'https://localhost:8080/#/sites/qa', origin: 'https://localhost:8080'}];
+            that.isLoading = false;
+            if(that.initialSiteCollectionUrl.length > 0){
+              that.siteCollection = that.$lodash.find(that.siteCollections, function(o){
+                return o.url == that.initialSiteCollectionUrl;
+              });
+            }
+          },1000);
+        } else {
+          that.getSiteCollections(function(siteCollections){
+            var i;
+            that.siteCollections = siteCollections;
+            that.isLoading = false;
+              that.messages.push({date: new Date(), verb: that.actions.Finished, preposition: ' ', hasError: that.isLoadingSiteCollections.hasError, message: that.isLoadingSiteCollections.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'info'});
+              if(that.initialSiteCollectionUrl.length > 0){
+                that.siteCollection = that.$lodash.find(that.siteCollections, function(o){
+                  return o.url == that.initialSiteCollectionUrl;
+                });
+              }
+          }, function(error){
+            that.isLoading = false;
+              that.messages.push({date: new Date(), verb: that.actions.Failed, preposition: ' ', hasError: true, message: error.message,  text: 'Fetching Site Collections' , url: window.location.origin, type: 'error'});
+          });
         }
-      }
+      })(this);
     },
     clearSelected: function(type){
       var key;
@@ -271,6 +336,9 @@ export default {
         o.selected = false;
       });
       this.itemsSelected[type] = 0;
+    },
+    siteCollectionChanged: function(item){
+      this.siteCollection = item;
     },
     itemChanged: function(item){
       var i;
@@ -395,8 +463,7 @@ clearConsole: function(){
 }
 },
 created: function(){
-  this.toggle_select = this.type.users ? 0 : 1;
-  this.getIsLoadingSiteCollections();
+  this.getSiteCollections();
 }
 }
 </script>

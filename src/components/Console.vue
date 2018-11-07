@@ -87,10 +87,9 @@
                   <div v-if="item.hasError" class="message red--text text--accent-1">Error: {{item.message}}</div>
                 </v-list-tile-content>
               </template>
-              <span class="blinking-cursor" v-if="!isLoading && !isSaving && messages.length > 0 && isSiteCollectionSelected && isItemSelected">|</span>
+              <span class="blinking-cursor" v-if="!isLoading && !isSaving && messages.length > 0 && !showDefaultMessage">|</span>
             </v-list>
-            <span class="message" v-if="!isSiteCollectionSelected && !isLoading && !isSaving"> {{defaultMessage}} <span class="blinking-cursor">|</span></span>
-            <span class="message" v-if="!isItemSelected && isSiteCollectionSelected && !isLoading && !isSaving"> Please select a {{type.user ? 'group' : 'user'}}. <span class="blinking-cursor">|</span></span>
+            <span class="message" v-if=" !isLoading && !isSaving && showDefaultMessage"> {{defaultMessage}} <span class="blinking-cursor">|</span></span>
             <transition name="fade" v-if="!isIE">
             <div
             :style="{position: 'sticky', bottom: '20px'}" v-if="!isBottomScroll">
@@ -153,6 +152,10 @@ export default {
       type: String,
       default: '100%'
     },
+    showDefaultMessage:{
+      type: Boolean,
+      default: false
+    },
     top: {
       type: String,
       default: '0'
@@ -192,12 +195,6 @@ export default {
     messages: {
       type: Array,
       default: []
-    },
-    type: {
-      type: Object,
-      default: function(){
-        return {users: true, groups: false}
-      }
     }
   },
   data: function() {
@@ -262,7 +259,11 @@ export default {
         var i;
         var key;
         for(i = 0; i < item.headers.length; i++){
-          match = o[item.headers[i].value].toLowerCase().indexOf(search.toLowerCase()) > -1;
+          key = item.headers[i].value;
+          if(!o.hasOwnProperty(key) || typeof o[key] === 'undefined'){
+            continue;
+          }
+          match = o[key].toLowerCase().indexOf(search.toLowerCase()) > -1;
           if(match){
             break;
           }

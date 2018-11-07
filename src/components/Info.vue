@@ -1,6 +1,6 @@
 <template>
 <div class="flexcard" :style="{width: '100%', 'min-height': '480px'}">
-  <v-card class="grow flexcard" :style="{'overflow': 'hidden'}">
+  <v-card class="grow flexcard" >
     <transition name="card-swap">
     <div v-if="copyDialog==false" class="grow flexcard">
     <v-card-text class="grow">
@@ -8,8 +8,14 @@
         <v-layout fill-height>
           <v-flex xs12 align-end flexbox>
             <v-form>
-              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" :label="'Select ' + (type.users ? 'User' : 'Group')" light inactiveColor="#000"></SearchSelect>
-              <div v-if="type.users == true">
+                <SearchSelect :disabled="isSaving || isLoading" v-model="siteCollection" @change="itemChanged" :items="siteCollections" item-value="title" return-object item-text="title" label="Select Site Collection" light inactiveColor="#000"></SearchSelect>
+                <v-radio-group v-model="type" row :disabled="isSaving || isLoading">
+                   <v-radio key="users" label="Users" value="users"></v-radio>
+                   <v-radio key="groups" label="Groups" value="groups"></v-radio>
+                 </v-radio-group>
+                 <div v-if="siteCollection != null">
+              <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" :label="'Select ' + (type == 'users' ? 'User' : 'Group')" light inactiveColor="#000"></SearchSelect>
+              <div v-if="type == 'users'">
                 <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
                 <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
                 <Checkbox :disabled="selectedItem == null || isSaving || isLoading || !isSiteCollectionSelected" @toggle-checked="toggleIsSiteAdmin" :isChecked="selectedItem !== null ? selectedItem.IsSiteAdmin : false">Is Site Admin</Checkbox>
@@ -18,6 +24,7 @@
                 <v-text-field label="Owner" readonly disabled :value="selectedItem !== null ? selectedItem.OwnerTitle: ''"></v-text-field>
                 <v-textarea label="Description" readonly auto-grow rows="1" disabled :value="selectedItem !== null ? selectedItem.Description: ''"></v-textarea>
               </div>
+            </div>
             </v-form>
           </v-flex>
         </v-layout>
@@ -126,12 +133,30 @@ export default {
     items: {
       type: Array
     },
-    type: {
+    initialType: {
+      type: String,
+      default: ''
+    },
+    initialSelectedItem: {
+      type: Object,
+      default: null
+    },
+    initialSiteCollection: {
+      type: Object,
+      default: function(){
+        return {
+          url: '',
+          title: '',
+          origin: ''
+        }
+      }
+    },
+    /*type: {
       type: Object,
       default: function(){
         return {users: true, groups: false}
       }
-    },
+    },*/
     isSaving: {
       type: Boolean,
       default: false
@@ -143,6 +168,12 @@ export default {
     siteCollectionHasItem: {
       type: Boolean,
       default: false
+    },
+    siteCollections: {
+      type: Array,
+      default: function(){
+        return []
+      }
     },
     isSiteCollectionSelected: {
       type: Boolean,
@@ -174,6 +205,8 @@ export default {
       selectedItemToCopyTo: null,
       dialog: false,
       copyDialog: false,
+      type: this.initialType.length > 0 ? this.initialType : 'users',
+      siteCollection: null,
       isPurging: false
     };
   },
@@ -187,6 +220,18 @@ export default {
       },
       deep: true
     },
+    initialSiteCollection: {
+      handler: function(newVal, oldVal){
+          this.siteCollection = newVal;
+      },
+      deep: true
+    },
+    siteCollection: {
+      handler: function(newVal, oldVal){
+        this.$emit('site-collection-changed', newVal);
+      },
+      deep: true
+    },
     updateSelectedItem: {
       handler: function(newVal, oldVal){
         this.selectedItem = newVal;
@@ -197,6 +242,7 @@ export default {
       handler: function(newVal, oldVal){
           //clear out selected since type changed
           this.selectedItem = null;
+          this.$emit('type-changed', newVal);
       },
       deep: true
     },

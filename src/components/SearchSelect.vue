@@ -45,12 +45,14 @@
 </div>
       </v-flex>
     </v-autocomplete>
-    <svg role="img" title="drop down" class="close" @click="clear" v-if="value != null && !active" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}">
+    <span :style="{ cursor: !disabled ? 'pointer' : 'default'}">
+    <svg role="img" title="drop down" class="close" @click="!disabled ? clear() : false" v-if="value != null && !active" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}">
       <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_close_24px" />
     </svg>
-    <svg role="img" @click="dropdownClick" title="drop down" class="dropdown" :class="{active: active == true, inactive: active == false}" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}">
+    <svg role="img" @click="!disabled ? dropdownClick() : false" title="drop down" class="dropdown" :class="{active: active == true, inactive: active == false}" :style="{fill: active == true ? activeColor : inactiveColor, opacity: disabled == true ? .38 : .87}">
       <use xlink:href="src/assets/svg-sprite-navigation-symbol.svg#ic_arrow_drop_down_24px" />
     </svg>
+  </span>
   </div>
 </template>
 
@@ -233,7 +235,6 @@ svg.close {
   position: absolute;
   right: 30px;
   top: 5px;
-  cursor: pointer;
 }
 svg.dropdown.inactive {
   transition: all .2s;
