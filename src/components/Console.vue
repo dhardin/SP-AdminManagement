@@ -1,5 +1,5 @@
 <template>
-  <v-card class="flexcard" :min-height="maximize ? '800px' : '480px'" :height="height" :style="{position:position, top:top}" :width="width">
+  <v-card class="flexcard" :min-height="maximize ? '800px' : '480px'" :height="height" :style="{position:position, top:top}" :width="maximize ?'100%' : width">
     <v-card-title primary-title>
       <h3 class="grey--text text--darken-2">Console</h3>
       <v-btn :ripple="false" flat class="resize-btn" small right @click="resize"><div v-if="!maximize" class="maximize">

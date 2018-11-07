@@ -2,7 +2,7 @@
   <v-container fluid grid-list-md ref="container">
     <v-layout row wrap class="full-height">
       <v-flex :xs6="!maximize" :xs12="maximize" :order-xs2="!maximize" :order-xs1="maximize" >
-        <Console ref="console" :width="consoleWidth" :height='consoleHeight +"px"' :position="consolePosition" :top="scrollTop + 'px'" :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
+        <Console ref="console" :width="consoleWidth" :height='consoleHeight +"px"' :position="consolePosition" :top=" maximize ? 'inherit' : scrollTop + 'px'" :maximize="maximize" :is-item-selected="isItemSelected" :is-saving="isSaving" :is-loading="isLoading" :save-progress="progress" :messages="messages" @clear-console="clearConsole" @resize="resize"></Console>
       </v-flex>
       <v-flex  :xs6="!maximize" :xs12="maximize" :order-xs1="!maximize" :order-xs2="maximize">
         <admin-tree id="admin-tree" ref="adminTree" @toggle-site-admin="toggleSiteAdmin" :is-saving="isSaving" :is-loading="isLoading" :is-testing="isTesting" :site-collections="siteCollections" :site-collections-admins="siteCollectionsArr"></admin-tree>
@@ -102,7 +102,11 @@ export default {
       return (navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true ); //IF IE > 10
     },
     consolePosition: function(){
-      return this.isIE ? 'fixed' : 'sticky';
+      if(this.maximize){
+        return 'relative';
+      } else {
+        return this.isIE ? 'fixed' : 'sticky';
+      }
     }
   },
   methods: {
@@ -285,8 +289,8 @@ export default {
       if(!this.isIE){
         this.consoleWidth =  '100%';
       } else {
-
-        console.log(this.$refs.adminTree.$el);
+        console.log(this.$refs.console.$el.offsetWidth + 'px')
+        console.log(this.$refs.adminTree.$el.offsetWidth + 'px');
         this.consoleWidth =  this.$refs.adminTree.$el.offsetWidth + 'px';
       }
     },
@@ -301,7 +305,14 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   mounted: function(){
-    this.updateConsoleWidth();
+      this.updateConsoleWidth();
+      //since our sidebar was most likely open when we navigated to this pages
+      //this would result in a smaller console. We'll need to recalc the width
+    (function(that){
+      setTimeout(function(){
+      that.updateConsoleWidth();
+    },200);
+    })(this);
     this.updateConsoleHeight();
     this.scrollTop = this.$refs.adminTree.$el.offsetTop + this.$refs.adminTree.$el.offsetParent.offsetTop;
   },
