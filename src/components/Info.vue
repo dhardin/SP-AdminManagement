@@ -9,7 +9,7 @@
           <v-flex xs12 align-end flexbox>
             <v-form>
                 <SearchSelect :disabled="isSaving || isLoading" v-model="siteCollection" @change="itemChanged" :items="siteCollections" item-value="title" return-object item-text="title" label="Select Site Collection" light inactiveColor="#000"></SearchSelect>
-                <v-radio-group v-model="type" row :disabled="isSaving || isLoading">
+                <v-radio-group v-model="type" row :disabled="isSaving || isLoading" color="#f00">
                    <v-radio key="users" label="Users" value="users"></v-radio>
                    <v-radio key="groups" label="Groups" value="groups"></v-radio>
                  </v-radio-group>
@@ -32,8 +32,8 @@
     </v-card-text>
     <v-card-actions>
       <v-btn :ripple="false" flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
-        <v-btn :ripple="false"  flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" v-if="type.users">Copy</v-btn>
-      <v-dialog :persistent="true" id="purge-warning" v-model="dialog"  width="500" v-if="type.users" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
+        <v-btn :ripple="false"  flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" v-if="type == 'users'">Copy</v-btn>
+      <v-dialog :persistent="true" id="purge-warning" v-model="dialog"  width="500" v-if="type == 'users'" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
         <v-btn :ripple="false" flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
         <v-card :style="{ overflow: 'hidden'}">
                 <v-card-title
@@ -110,7 +110,7 @@
       <v-btn :ripple="false" flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :href="csv" @click="downloadCSV" download="download.csv">Export</v-btn>
     </v-card-actions>
   </div>
-    <Copy :is-loading="isLoading" @get-site-collections-for-user="getSiteCollectionsForUser" :items="items" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" :type="type" @copy-items="copyItems" @close-copy="closeCopy" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :label="'Select ' + (type.users ? 'User' : 'Group') + ' To Copy To'" v-else></Copy>
+    <Copy :is-loading="isLoading" @get-site-collections-for-user="getSiteCollectionsForUser" :items="items" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" :type="type" @copy-items="copyItems" @close-copy="closeCopy" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :label="'Select ' + (type == 'users' ? 'User' : 'Group') + ' To Copy To'" v-else></Copy>
   </transition>
   </v-card>
 
@@ -249,7 +249,7 @@ export default {
     siteCollectionHasItem: {
       handler: function(newVal, oldVal){
         //clear current item if group and site collection doesn't have a match
-        if(this.isSiteCollectionSelected && !newVal && this.type.groups){
+        if(this.isSiteCollectionSelected && !newVal && this.type == 'groups'){
           this.selectedItem = null;
         }
       }
@@ -281,7 +281,7 @@ export default {
       this.$emit('purge-user', purgeAll);
     },
     getExportOptions: function(){
-      return this.type.groups
+      return this.type == 'groups'
       ? {
           Title: {displayText: 'Title'},
           loginName: {displayText: 'Login Name'},

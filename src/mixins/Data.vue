@@ -166,11 +166,13 @@ export default {
     });
   },
   ensureUser: function(siteCollection, digest, userLoginName, callback, errorCallback){
-    return axios.post(siteCollection.url + "/_api/web/ensureuser",
-    {
+    return axios({
+      url: siteCollection.url + "/_api/web/ensureuser",
+      method: 'post',
       headers: {
-        "accept": "application/json;odata=verbose",
-          "X-RequestDigest": digest
+        "accept": "application/json; odata=verbose",
+        "content-type": "application/json; odata=verbose",
+        "X-RequestDigest": digest
       },
        data: JSON.stringify({ 'logonName': userLoginName }),
     }).then(function (response) {
