@@ -291,7 +291,7 @@ export default {
       }
       return false;
     },
-    getSiteCollections: function(){
+    getSiteCollectionData: function(){
       (function(that){
         if(that.isTesting){
           that.messages.push({date: new Date(), verb: that.actions.Starting, preposition: ' ', text: 'Fetching Site Collections' , url: window.location.origin, type: 'warning'});
@@ -463,7 +463,7 @@ clearConsole: function(){
 }
 },
 created: function(){
-  this.getSiteCollections();
+  this.getSiteCollectionData();
 }
 }
 </script>
