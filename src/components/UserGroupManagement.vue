@@ -3,7 +3,7 @@
     <v-layout row wrap class="full-height">
       <v-flex :xs6="!maximize" :xs12="maximize" :order-xs2="!maximize" :order-xs1="maximize">
         <Console
-        :showDefaultMessage="(siteCollection == null || selectedItem == null && !selectedItemExists))"
+        :showDefaultMessage="(siteCollection == null || (selectedItem == null && !selectedItemExists))"
         :defaultMessage="siteCollection == null ? 'Please select a site collection.' : (selectedItem == null ? 'Please select a ' + type.substring(0, type.length - 1) : '')"
         :maximize="maximize" :is-item-selected="isItemSelected"
         :is-saving="isSaving"
