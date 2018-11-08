@@ -3,7 +3,7 @@
     <v-layout row wrap class="full-height">
       <v-flex :xs6="!maximize" :xs12="maximize" :order-xs2="!maximize" :order-xs1="maximize">
         <Console
-        :showDefaultMessage="(siteCollection == null || selectedItem == null)"
+        :showDefaultMessage="(siteCollection == null || selectedItem == null && !selectedItemExists))"
         :defaultMessage="siteCollection == null ? 'Please select a site collection.' : (selectedItem == null ? 'Please select a ' + type.substring(0, type.length - 1) : '')"
         :maximize="maximize" :is-item-selected="isItemSelected"
         :is-saving="isSaving"
@@ -171,41 +171,7 @@ export default {
                 that.selectedItemExists = typeof that.selectedItem != 'undefined';
                 resolve();
               });
-            });  /* .then(function(result){
-              return new Promise(function(resolve, reject){
-                if(that.selectedItem == null || that.type == 'groups'){
-                  return;
-                }
-                that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
-                that.getDigest(that.siteCollection, function(data){
-                  that.digest = data;
-                  that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Digest', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
-                  resolve();
-                }, function(error){
-                  that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Digest', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
-                  resolve();
-                });
-              });
-            }).then(function(result){
-              if(that.selectedItem == null || that.type == 'groups'){
-                return;
-              }
-             if(that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '')){
-              that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : '', loginname: that.selectedItem !== null ? that.selectedItem.LoginName : ''}});
-            } else {
-            that.$router.push({ query: { url: that.siteCollection !== null ? that.siteCollection.url : ''}});
-          }*/
-        /*  that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Ensuring User Exists', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
-          that.ensureUser(that.siteCollection, that.digest, that.selectedItem.LoginName, function(user){
-            that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Ensuring User Exists', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
-            //that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '');
-            //now that we have ensured the user in the site collection, add them to the users dropdown
-            that.items.push(that.selectedItem);
-            that.$router.push({query: that.query});
-          }, function(error){
-            that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Ensuring User Exists', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
-          });
-        });*/
+            });
       })(this);
     }
   },
@@ -319,7 +285,7 @@ methods: {
         resolve();
       });
     }).then(function(result){
-    that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Creating User', target: this.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
+    that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Creating User', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
       that.ensureUser(that.siteCollection, that.digest, user.LoginName, function(user){
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Creating User', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
         //that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '');
@@ -341,36 +307,6 @@ copyDialogOpened: function(isOpened){
 },
 resize: function(){
   this.maximize = !this.maximize;
-},
-
-checkIfUserExists: function(loginName){
-  var currentItem;
-  if(loginName.length > 0){
-    currentItem = this.$lodash.find(this.items, function(o){
-      if(o !== undefined && o.hasOwnProperty('Id')){
-        return o.LoginName == loginName;
-      } else {
-        return false;
-      }
-    });
-    //since we found a match, we'll update the selected user to the current items
-    //this is due to the user IDs not being the same between site collections
-    if(currentItem != undefined){
-      this.updateSelectedItem = currentItem;
-      this.selectedItem = currentItem;
-    }
-    if(this.selectedItem !== null){
-      this.siteCollectionHasItem = currentItem !== undefined;
-      if(  this.siteCollectionHasItem){
-        return true;
-      } else {
-        this.items.push(this.selectedItem);
-        this.messages.push({date: new Date(), verb: this.actions.Failed, text:  '', preposition: 'for', hasError: true, message: 'Site collection does not contain user.', target: this.selectedItem.Title, url: this.siteCollection.url, type: 'error'});
-        return false;
-      }
-    }
-  }
-  return false;
 },
 getSiteCollectionData: function(){
   (function(that){
