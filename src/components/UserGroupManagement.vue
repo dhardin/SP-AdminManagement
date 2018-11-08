@@ -29,7 +29,7 @@
         @save="save"
         @type-changed="typeChanged"
         @site-collection-changed="siteCollectionChanged"
-        @toggle-site-admin="toggleSiteAdmin(user, siteCollection)"
+        @toggle-site-admin="toggleSiteAdmin(selectedItem, siteCollection)"
         @get-site-collections-for-user="getSiteCollectionsGroupsForUser"
         @copy-dialog-opened="copyDialogOpened"
         @item-changed="itemChanged"
