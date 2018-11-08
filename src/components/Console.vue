@@ -1,5 +1,5 @@
 <template>
-  <v-card class="flexcard" :min-height="maximize ? '800px' : '480px'" :height="height" :style="{position:position, top:top}" :width="maximize ?'100%' : width">
+  <v-card class="flexcard" :height="height" :style="{position:position, top:top, 'min-height':(maximize ?  '600px' : '480px')}" :width="maximize ? '100%' : width">
     <v-card-title primary-title>
       <h3 class="grey--text text--darken-2">Console</h3>
       <v-btn :ripple="false" flat class="resize-btn" small right @click="resize"><div v-if="!maximize" class="maximize">
@@ -16,8 +16,8 @@
     <v-card-text class="">
       <v-container fluid>
         <v-layout>
-          <v-flex xs12 align-end flexbox>
-            <div class="console blue-grey darken-4" @scroll="onScroll" ref="consoleMessages" :style="{height: maximize ? '400px' : '200px', position: 'relative'}">
+          <v-flex xs12 align-end >
+            <div class="console blue-grey darken-4" @scroll="onScroll" ref="consoleMessages" :style="{position: 'absolute', bottom: '80px', top: '60px', left:'24px', right:'24px'}">
               <v-list dark class="blue-grey darken-4">
                 <template v-for="(item, index) in messages">
                   <v-list-tile-content :class="{'block-flex': isIE}">
@@ -125,16 +125,12 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-container fluid>
-      <v-layout >
-        <v-flex xs12 align-end flexbox>
-          <v-progress-linear :indeterminate="(isLoading || isSaving) && (saveProgress == 100 || saveProgress == 0)" v-model="saveProgress" :color="saveProgress >= 100 ? 'success' : 'info'"></v-progress-linear>
-        </v-flex>
-      </v-layout>
-    </v-container>
   </v-card-text>
-  <v-card-actions :style="{position: 'absolute', bottom: 0}">
+  <v-card-actions :style="{position: 'absolute', bottom: 0, left: 0, right:0, display: 'block'}">
+    <v-progress-linear :style="{width: 'auto'}" class="mx-4" :indeterminate="(isLoading || isSaving) && (saveProgress == 100 || saveProgress == 0)" v-model="saveProgress" :color="saveProgress >= 100 ? 'success' : 'info'"></v-progress-linear>
+    <div>
     <v-btn :ripple="false"  flat color="pink" @click="clear" :disabled="isSaving || messages.length == 0">Clear</v-btn>
+    </div>
   </v-card-actions>
 </v-card>
 
