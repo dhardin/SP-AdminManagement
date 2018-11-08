@@ -318,8 +318,7 @@ methods: {
         that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Digest', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
         resolve();
       });
-    });
-  }).then(function(result){
+    }).then(function(result){
     that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Creating User', target: this.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
       that.ensureUser(that.siteCollection, that.digest, user.LoginName, function(user){
         that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Creating User', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
@@ -330,6 +329,7 @@ methods: {
       }, function(error){
         that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Creating User', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
       });
+    });
   })(this);
 },
 typeChanged: function(type){
