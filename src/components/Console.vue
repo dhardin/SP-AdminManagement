@@ -133,7 +133,7 @@
       </v-layout>
     </v-container>
   </v-card-text>
-  <v-card-actions>
+  <v-card-actions :style="{position: 'absolute', bottom: 0}">
     <v-btn :ripple="false"  flat color="pink" @click="clear" :disabled="isSaving || messages.length == 0">Clear</v-btn>
   </v-card-actions>
 </v-card>

@@ -18,7 +18,17 @@
               <div v-if="type == 'users'">
                 <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
                 <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
-                <Checkbox :disabled="selectedItem == null || isSaving || isLoading || !isSiteCollectionSelected" @toggle-checked="toggleIsSiteAdmin" :isChecked="selectedItem !== null ? selectedItem.IsSiteAdmin : false">Is Site Admin</Checkbox>
+                <Checkbox :disabled="!selectedItemExists || selectedItem == null || isSaving || isLoading || !isSiteCollectionSelected" @toggle-checked="toggleIsSiteAdmin" :isChecked="selectedItem !== null ? selectedItem.IsSiteAdmin : false">Is Site Admin</Checkbox>
+                <v-alert
+                    :value="true"
+                    color="amber darken-4"
+                    icon=""
+                    transition="scale-transition"
+                    v-if="!selectedItemExists && selectedItem != null"
+                  >
+                   Selected user does not exist in site collection.
+                   <v-btn outline dark small color="white" @click="createUser">Create User</v-btn>
+                  </v-alert>
               </div>
               <div v-else>
                 <v-text-field label="Owner" readonly disabled :value="selectedItem !== null ? selectedItem.OwnerTitle: ''"></v-text-field>
@@ -31,10 +41,10 @@
       </v-container>
     </v-card-text>
     <v-card-actions>
-      <v-btn :ripple="false" flat color="pink" @click="save" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
-        <v-btn :ripple="false"  flat color="pink" @click="copyDialog=true" slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" v-if="type == 'users'">Copy</v-btn>
+      <v-btn :ripple="false" flat color="pink" @click="save" :disabled="!selectedItemExists || isSaving || isLoading  || !isSiteCollectionSelected || newItems.length == 0 || selectedItem.Title.length == 0">Save</v-btn>
+        <v-btn :ripple="false"  flat color="pink" @click="copyDialog=true" slot="activator" :disabled="!selectedItemExists || isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" v-if="type == 'users'">Copy</v-btn>
       <v-dialog :persistent="true" id="purge-warning" v-model="dialog"  width="500" v-if="type == 'users'" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">
-        <v-btn :ripple="false" flat color="pink"   slot="activator" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
+        <v-btn :ripple="false" flat color="pink"   slot="activator" :disabled="!selectedItemExists || isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null">Purge</v-btn>
         <v-card :style="{ overflow: 'hidden'}">
                 <v-card-title
                   class="headline grey lighten-2"
@@ -107,7 +117,7 @@
                 </v-card-actions>
               </v-card>
       </v-dialog>
-      <v-btn :ripple="false" flat color="pink" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :href="csv" @click="downloadCSV" download="download.csv">Export</v-btn>
+      <v-btn :ripple="false" flat color="pink" :disabled="!selectedItemExists || isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :href="csv" @click="downloadCSV" download="download.csv">Export</v-btn>
     </v-card-actions>
   </div>
     <Copy :is-loading="isLoading" @get-site-collections-for-user="getSiteCollectionsForUser" :items="items" :available-users-site-collection-groups="availableUsersSiteCollectionGroups" :type="type" @copy-items="copyItems" @close-copy="closeCopy" :disabled="isSaving || isLoading  || !isSiteCollectionSelected || selectedItem == null" :label="'Select ' + (type == 'users' ? 'User' : 'Group') + ' To Copy To'" v-else></Copy>
@@ -179,6 +189,10 @@ export default {
       type: Boolean,
       default: false
     },
+    selectedItemExists: {
+      type: Boolean,
+      default: true
+    },
     assignedItems: {
       type: Array,
       default: []
@@ -219,6 +233,13 @@ export default {
         this.itemChanged(newVal);
       },
       deep: true
+    },
+    selectedItemExists: {
+      handler: function(newVal, oldVal){
+        if(newVal == false){
+          this.items.push(this.selectedItem);
+        }
+      }
     },
     initialSiteCollection: {
       handler: function(newVal, oldVal){
@@ -261,6 +282,9 @@ export default {
     }
   },
   methods: {
+    createUser: function(){
+      this.$emit('create-user', this.selectedItem);
+    },
     toggleIsSiteAdmin: function(){
       this.$emit('toggle-site-admin', this.selectedItem);
     },

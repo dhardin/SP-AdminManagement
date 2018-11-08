@@ -196,20 +196,20 @@
             that.isLoading = false;
           });
         });
-      }).then(function(result){
+      })/* .then(function(result){
         //now we'll go ahead and try and match the currently selected user
         //with the one that exists in the new site collection.
         //We'll go ahead and just resolve if the type that we're working with is group.
-        return new Promise(function(resolve, reject){
+       return new Promise(function(resolve, reject){
           var currentItem;
           if(that.selectedItem !== null && that.type == 'users'){
             that.checkIfUserExists(that.selectedItem.LoginName);
           }
           resolve();
         });
-      }).then(function(result){
+      })*/.then(function(result){
         that.isLoading = false;
-        that.$emit('site-collection-selected', true);
+        //that.$emit('site-collection-selected', true);
         if(callback){
           callback();
         }
@@ -223,7 +223,7 @@
           //populate items for current type and populate availabe items for the opposing type
           //re-select previously selected item if its available
           //trigger select change for selected item if it exists, else clear selected item
-          callback(that.testUsers);
+          callback(that.$lodash.sampleSize(that.testUsers, Math.floor(Math.random() * 30 ) + 1));
         },1000);
       } else {
         that.getUsers(that.siteCollection, false, function(users){
@@ -461,6 +461,9 @@
           that.messages.push({type: 'notification', text: 'Successes: ' + that.metrics.numSuccesses});
           that.messages.push({type: 'notification', text: 'Fails: ' + that.metrics.numFailed});
           that.messages.push({type: 'notification', text: 'Completed in ' + (that.metrics.end.getTime() - that.metrics.start.getTime())/1000 + ' seconds.'})
+          //reset user permissions in UI
+          that.giveAll('assigned');
+          that.selectedItemExists = false;
         });
       });
     })(this);
