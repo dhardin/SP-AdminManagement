@@ -171,7 +171,7 @@ export default {
                 that.selectedItemExists = typeof that.selectedItem != 'undefined';
                 resolve();
               });
-            })  /* .then(function(result){
+            });  /* .then(function(result){
               return new Promise(function(resolve, reject){
                 if(that.selectedItem == null || that.type == 'groups'){
                   return;
@@ -304,16 +304,31 @@ data: function() {
 },
 methods: {
   createUser: function(user){
-    this.messages.push({date: new Date(), verb: this.actions.Starting, text: 'Ensuring User Exists', target: this.siteCollection.title, url: this.siteCollection.url, type: 'warning'});
     (function(that){
+    new Promise(function(resolve, reject){
+      if(user == null || typeof user === 'undefined'){
+        return;
+      }
+      that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Fetching Digest', target: that.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
+      that.getDigest(that.siteCollection, function(data){
+        that.digest = data;
+        that.messages.push({date: new Date(), verb: that.actions.Finished, text:  'Fetching Digest', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
+        resolve();
+      }, function(error){
+        that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Fetching Digest', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
+        resolve();
+      });
+    });
+  }).then(function(result){
+    that.messages.push({date: new Date(), verb: that.actions.Starting, text: 'Creating User', target: this.siteCollection.title, url: that.siteCollection.url, type: 'warning'});
       that.ensureUser(that.siteCollection, that.digest, user.LoginName, function(user){
-        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Ensuring User Exists', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
+        that.messages.push({date: new Date(), verb: that.actions.Finished, text: 'Creating User', target: that.siteCollection.title, url: that.siteCollection.url, type: 'info'});
         //that.checkIfUserExists(that.selectedItem != null ? that.selectedItem.LoginName : that.loginname != null ? that.loginname: '');
         //now that we have ensured the user in the site collection, add them to the users dropdown
         //that.items.push(user);
         that.selectedItem = user;
       }, function(error){
-        that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Ensuring User Exists', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
+        that.messages.push({date: new Date(), verb: that.actions.Failed, text:  'Creating User', hasError: true, message: error.message, target: that.siteCollection.title, url: that.siteCollection.url, type: 'error'});
       });
   })(this);
 },
