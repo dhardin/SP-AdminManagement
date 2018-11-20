@@ -8,7 +8,12 @@
         <v-layout fill-height>
           <v-flex xs12 align-end flexbox>
             <v-form>
-                <SearchSelect :disabled="isSaving || isLoading" v-model="siteCollection" @change="itemChanged" :items="siteCollections" item-value="title" return-object item-text="title" label="Select Site Collection" light inactiveColor="#000"></SearchSelect>
+                <SearchSelect :disabled="isSaving || isLoading" v-model="siteCollection" @change="itemChanged" :items="siteCollections" item-value="title" return-object item-text="title" label="Select Site Collection" light inactiveColor="#000"  :has-slot="true" :has-custom-filter="true" :filterProperties="['title', 'url']">
+                  <v-list-tile-content slot="foo" slot-scope="item">
+                  <v-list-tile-title>{{item.item.title}}</v-list-tile-title>
+                    <v-list-tile-sub-title>{{item.item.url.replace(item.item.origin, '')}}</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </SearchSelect>
                 <v-radio-group v-model="type" row :disabled="isSaving || isLoading" color="#f00">
                    <v-radio key="users" label="Users" value="users"></v-radio>
                    <v-radio key="groups" label="Groups" value="groups"></v-radio>

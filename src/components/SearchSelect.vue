@@ -202,13 +202,18 @@ export default {
           var i;
           var property;
           var searchText = search.toLowerCase();
+          var matchesProperty = false;
           if(!that.hasCustomFilter){
             return o[that.itemText].toLowerCase().indexOf(searchText) > -1;
           } else {
             for(i = 0; i < that.filterProperties.length; i++){
               property = that.filterProperties[i];
-              return o.hasOwnProperty(property) && o[property].toLowerCase().indexOf(searchText) > -1;
+              matchesProperty = o.hasOwnProperty(property) && o[property].toLowerCase().indexOf(searchText) > -1;
+              if(matchesProperty){
+                return true;
+              }
             }
+            return matchesProperty;
           }
         });
       })(this);

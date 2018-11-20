@@ -100,6 +100,7 @@
              small
              absolute
              right
+             bottom
              @click="goToEnd"
              class="goToEndBtn"
             >Go to End</v-btn>
