@@ -17,8 +17,6 @@
                 <v-radio-group v-model="type" row :disabled="isSaving || isLoading" color="#f00">
                     <Radio :disabled="isSaving || isLoading" @toggle-checked="type = 'users'" :isChecked="type == 'users'">Users</Radio>
                     <Radio :disabled="isSaving || isLoading" @toggle-checked="type = 'groups'" :isChecked="type == 'groups'">Groups</Radio>
-                   <!--<v-radio key="users" label="Users" value="users"></v-radio>
-                   <v-radio key="groups" label="Groups" value="groups"></v-radio>-->
                  </v-radio-group>
                  <div v-if="siteCollection != null">
               <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" :label="'Select ' + (type == 'users' ? 'User' : 'Group')" light inactiveColor="#000"></SearchSelect>
