@@ -15,15 +15,18 @@
                   </v-list-tile-content>
                 </SearchSelect>
                 <v-radio-group v-model="type" row :disabled="isSaving || isLoading" color="#f00">
-                   <v-radio key="users" label="Users" value="users"></v-radio>
-                   <v-radio key="groups" label="Groups" value="groups"></v-radio>
+                    <Radio :disabled="isSaving || isLoading" @toggle-checked="type = 'users'" :isChecked="type == 'users'">Users</Radio>
+                    <Radio :disabled="isSaving || isLoading" @toggle-checked="type = 'groups'" :isChecked="type == 'groups'">Groups</Radio>
+                   <!--<v-radio key="users" label="Users" value="users"></v-radio>
+                   <v-radio key="groups" label="Groups" value="groups"></v-radio>-->
                  </v-radio-group>
                  <div v-if="siteCollection != null">
               <SearchSelect :disabled="isSaving || isLoading || !isSiteCollectionSelected" v-model="selectedItem" @change="itemChanged" :items="items" item-value="Title" return-object item-text="Title" :label="'Select ' + (type == 'users' ? 'User' : 'Group')" light inactiveColor="#000"></SearchSelect>
               <div v-if="type == 'users'">
                 <v-text-field label="Login Name" readonly disabled :value="selectedItem !== null ? selectedItem.LoginName: ''"></v-text-field>
                 <v-text-field label="E-mail" readonly disabled :value="selectedItem !== null ? selectedItem.Email : ''"></v-text-field>
-                <Checkbox :disabled="!selectedItemExists || selectedItem == null || isSaving || isLoading || !isSiteCollectionSelected" @toggle-checked="toggleIsSiteAdmin" :isChecked="selectedItem !== null ? selectedItem.IsSiteAdmin : false">Is Site Admin</Checkbox>
+                <Checkbox :disabled="!selectedItemExists || selectedItem == null || isSaving || isLoading || !isSiteCollectionSelected" @toggle-checked="toggleIsSiteAdmin" :isChecked="selectedItem !== null ? selectedItem.IsSiteAdmin === true
+                 : false">Is Site Admin</Checkbox>
                 <v-alert
                     :value="true"
                     color="amber darken-4"
@@ -137,12 +140,14 @@
 import SearchSelect from './SearchSelect'
 import Copy from './Copy'
 import Checkbox from './Checkbox.vue'
+import Radio from './Radio.vue'
 
 export default {
   components: {
     SearchSelect: SearchSelect,
     Copy: Copy,
-    Checkbox: Checkbox
+    Checkbox: Checkbox,
+    Radio: Radio
   },
  props:{
     items: {
@@ -291,6 +296,7 @@ export default {
       this.$emit('create-user', this.selectedItem);
     },
     toggleIsSiteAdmin: function(){
+      this.selectedItem.IsSiteAdmin = !this.selectedItem.IsSiteAdmin;
       this.$emit('toggle-site-admin', this.selectedItem);
     },
     copyItems: function(selectedItem, items){

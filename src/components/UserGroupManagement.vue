@@ -199,7 +199,7 @@ computed: {
     if(this.siteCollection !== null){
       query.url = this.siteCollection.url;
     }
-    if(this.selectedItem !== null){
+    if(this.selectedItem !== null && typeof this.selectedItem != 'undefined'){
       query.loginname = this.selectedItem.LoginName;
     }
     query.type = this.type;
